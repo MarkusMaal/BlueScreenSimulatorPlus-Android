@@ -112,6 +112,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
 
         binding.executeButton.setOnClickListener(view1 -> {
             switch (bluescreens.get((int)winspin.getSelectedItemId()).GetString("os")) {
+                case "Windows 8/8.1":
                 case "Windows 10":
                 case "Windows 11":
                     Intent i = new Intent(view1.getContext(), Win11BSOD.class);
