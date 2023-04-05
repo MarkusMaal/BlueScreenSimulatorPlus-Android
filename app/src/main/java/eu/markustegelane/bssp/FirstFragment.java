@@ -125,6 +125,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
             BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
             b.putSerializable("bluescreen", me);
             b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
+            b.putSerializable("bluescreens", (Serializable) bluescreens);
             s.putExtras(b);
             startActivity(s);
         });
@@ -134,6 +135,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (!locked) {
                     os.SetBool("autoclose", b);
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 }
             }
         });
@@ -142,6 +144,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (!locked) {
                     os.SetBool("green", b);
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 }
             }
         });
@@ -150,6 +153,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (!locked) {
                     os.SetBool("show_description", b);
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 }
             }
         });
@@ -159,6 +163,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (!locked) {
                     os.SetString("code", adapterView.getItemAtPosition(i).toString());
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 }
             }
 
@@ -181,6 +186,16 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
+        blues.set((int)id, modified);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Gson gson = new Gson();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String json = gson.toJson(blues);
+        editor.putString("bluescreens", json);
+        editor.apply();
     }
 
     @Override

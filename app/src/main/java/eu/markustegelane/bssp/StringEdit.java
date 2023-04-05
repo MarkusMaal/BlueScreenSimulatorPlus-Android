@@ -5,11 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -31,6 +36,7 @@ public class StringEdit extends AppCompatActivity {
 
     private FragmentFirstBinding binding;
     BlueScreen os;
+    List<BlueScreen> bsods;
     int os_id;
     Boolean locked = false;
     @Override
@@ -42,6 +48,7 @@ public class StringEdit extends AppCompatActivity {
         Toolbar titleBar = findViewById(R.id.titleBar);
         os = (BlueScreen) bundle.getSerializable("bluescreen");
         os_id = bundle.getInt("bluescreen_id");
+        bsods = (List<BlueScreen>)bundle.getSerializable("bluescreens");
         titleBar.setTitle(os.GetString("friendlyname"));
         Spinner slist = findViewById(R.id.settingList);
 
@@ -72,26 +79,92 @@ public class StringEdit extends AppCompatActivity {
             finish();
         });
 
+        ((Switch)findViewById(R.id.boolValue)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (!locked) {
+                    String selectedItem = ((Spinner)findViewById(R.id.settingList)).getSelectedItem().toString();
+                    String[] fullnamearr = selectedItem.split(" ");
+                    List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
+                    String key = "";
+                    key = String.join(" ", ls.subList(0, ls.size() - 1));
+                    String type = ls.get(ls.size() - 1);
+                    switch (type) {
+                        case "[boolean]":
+                            os.SetBool(key, b);
+                            break;
+                        default:
+                            break;
+                    }
+                    saveSettings(bsods, os, os_id);
+                }
+            }
+        });
+
+        ((EditText)findViewById(R.id.stringValue)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!locked) {
+                    String selectedItem = ((Spinner)findViewById(R.id.settingList)).getSelectedItem().toString();
+                    String[] fullnamearr = selectedItem.split(" ");
+                    List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
+                    String key = "";
+                    key = String.join(" ", ls.subList(0, ls.size() - 1));
+                    String type = ls.get(ls.size() - 1);
+                    switch (type) {
+                        case "[string]":
+                            os.SetString(key, editable.toString());
+                            break;
+                        case "[text]":
+                            os.SetText(key, editable.toString());
+                            break;
+                        case "[title]":
+                            os.SetTitle(key, editable.toString());
+                            break;
+                        default:
+                            break;
+                    }
+                    saveSettings(bsods, os, os_id);
+                }
+            }
+        });
         ((Spinner)findViewById(R.id.settingList)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 locked = true;
                 String selectedItem = adapterView.getItemAtPosition(i).toString();
-                String value = "";
                 String[] fullnamearr = selectedItem.split(" ");
                 List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
                 String key = "";
-                try {
-                    key = String.join(" ", ls.subList(0, ls.size() - 1));
-                } catch (Exception ignored){
-
-                }
+                key = String.join(" ", ls.subList(0, ls.size() - 1));
                 String type = ls.get(ls.size() - 1);
+                Gson gson = new Gson();
+                Type type2 = new TypeToken<Map<String, String>>(){}.getType();
                 switch (type) {
                     case "[string]":
                         findViewById(R.id.boolValue).setVisibility(View.GONE);
                         findViewById(R.id.stringValue).setVisibility(View.VISIBLE);
                         ((EditText)findViewById(R.id.stringValue)).setText(os.GetString(key));
+                        break;
+                    case "[text]":
+                        findViewById(R.id.boolValue).setVisibility(View.GONE);
+                        findViewById(R.id.stringValue).setVisibility(View.VISIBLE);
+                        ((EditText)findViewById(R.id.stringValue)).setText(((Map<String, String>)gson.fromJson(os.GetTexts(), type2)).get(key));
+                        break;
+                    case "[title]":
+                        findViewById(R.id.boolValue).setVisibility(View.GONE);
+                        findViewById(R.id.stringValue).setVisibility(View.VISIBLE);
+                        ((EditText)findViewById(R.id.stringValue)).setText(((Map<String, String>)gson.fromJson(os.GetTitles(), type2)).get(key));
                         break;
                     case "[boolean]":
                         findViewById(R.id.boolValue).setVisibility(View.VISIBLE);
@@ -113,4 +186,14 @@ public class StringEdit extends AppCompatActivity {
         });
     }
 
+
+    public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
+        blues.set((int)id, modified);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String json = gson.toJson(blues);
+        editor.putString("bluescreens", json);
+        editor.apply();
+    }
 }
