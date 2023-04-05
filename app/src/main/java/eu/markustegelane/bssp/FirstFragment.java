@@ -2,7 +2,9 @@ package eu.markustegelane.bssp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +19,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import eu.markustegelane.bssp.databinding.FragmentFirstBinding;
@@ -39,18 +47,30 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        bluescreens.add(new BlueScreen("Windows 1.x/2.x", true));
-        bluescreens.add(new BlueScreen("Windows 3.1x", true));
-        bluescreens.add(new BlueScreen("Windows 9x/Me", true));
-        bluescreens.add(new BlueScreen("Windows CE", true));
-        bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true));
-        bluescreens.add(new BlueScreen("Windows 2000", true));
-        bluescreens.add(new BlueScreen("Windows XP", true));
-        bluescreens.add(new BlueScreen("Windows Vista", true));
-        bluescreens.add(new BlueScreen("Windows 7", true));
-        bluescreens.add(new BlueScreen("Windows 8/8.1", true));
-        bluescreens.add(new BlueScreen("Windows 10", true));
-        bluescreens.add(new BlueScreen("Windows 11", true));
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Gson gson = new Gson();
+        if (sharedPreferences.getString("bluescreens", null) == null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            bluescreens.add(new BlueScreen("Windows 1.x/2.x", true));
+            bluescreens.add(new BlueScreen("Windows 3.1x", true));
+            bluescreens.add(new BlueScreen("Windows 9x/Me", true));
+            bluescreens.add(new BlueScreen("Windows CE", true));
+            bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true));
+            bluescreens.add(new BlueScreen("Windows 2000", true));
+            bluescreens.add(new BlueScreen("Windows XP", true));
+            bluescreens.add(new BlueScreen("Windows Vista", true));
+            bluescreens.add(new BlueScreen("Windows 7", true));
+            bluescreens.add(new BlueScreen("Windows 8/8.1", true));
+            bluescreens.add(new BlueScreen("Windows 10", true));
+            bluescreens.add(new BlueScreen("Windows 11", true));
+            String json = gson.toJson(bluescreens);
+            editor.putString("bluescreens", json);
+            editor.apply();
+        } else {
+            String json = sharedPreferences.getString("bluescreens", null);
+            BlueScreen[] bss = gson.fromJson(json, BlueScreen[].class);
+            bluescreens.addAll(Arrays.asList(bss));
+        }
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
@@ -82,10 +102,6 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
         winspin.setSelection(11);
 
         binding.executeButton.setOnClickListener(view1 -> {
-            Spinner eCodes = (Spinner)view.findViewById(R.id.ecodeSpinner);
-            @SuppressLint("UseSwitchCompatOrMaterialCode") Switch isInsider = (Switch)view.findViewById(R.id.insiderCheck);
-            @SuppressLint("UseSwitchCompatOrMaterialCode") Switch isAutoClose = (Switch)view.findViewById(R.id.autoCloseCheck);
-            @SuppressLint("UseSwitchCompatOrMaterialCode") Switch showDetails = (Switch)view.findViewById(R.id.showDetailsCheck);
             switch (bluescreens.get((int)winspin.getSelectedItemId()).GetString("os")) {
                 case "Windows 10":
                 case "Windows 11":
@@ -101,6 +117,16 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
                             .setAction("Action", null).show();
                     break;
             }
+        });
+
+        binding.settingsButton.setOnClickListener(view1 -> {
+            Intent s = new Intent(view1.getContext(), StringEdit.class);
+            Bundle b = new Bundle();
+            BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
+            b.putSerializable("bluescreen", me);
+            b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
+            s.putExtras(b);
+            startActivity(s);
         });
 
         binding.autoCloseCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

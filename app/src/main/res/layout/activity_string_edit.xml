@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StringEdit">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/titleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:title="@string/settings" />
+
+        <Spinner
+            android:id="@+id/settingList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_weight="0"
+            android:entries="@array/SettingsList"
+            android:minHeight="50dp" />
+
+        <Switch
+            android:id="@+id/switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_margin="20dp"
+            android:layout_weight="0"
+            android:minHeight="10dp"
+            android:text="Switch"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/stringValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_weight="0"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:minHeight="50dp"
+            android:text="1234" />
+
+
+        <!--Pick color Button-->
+
+        <LinearLayout
+            android:id="@+id/colorSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Your picked color is:"
+                android:textSize="18sp" />
+
+            <View
+                android:id="@+id/preview_selected_color"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:background="@android:color/darker_gray" />
+
+            <Button
+                android:id="@+id/pick_color_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/colorpick" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/ok" />
+
+        <!--sample view to preview selected color by user-->
+        <!--by default this has been set to darker gery-->
+        <!--this can be overridden after user choose the
+            color from color picker-->
+        <!--which has been handled in the MainActivity.java-->
+
+        <!--set color button to overwrite the
+            color for GeeksforGeeks text-->
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

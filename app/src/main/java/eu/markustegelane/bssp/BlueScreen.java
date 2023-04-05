@@ -2,7 +2,13 @@ package eu.markustegelane.bssp;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.icu.text.ListFormatter;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Objects;
@@ -22,51 +28,54 @@ public class BlueScreen implements Serializable {
 
     transient Typeface font;
 
-    Serializable titles;
-    Serializable texts;
-    Serializable codefiles;
+    String titles;
+    String texts;
+    String codefiles;
 
-    Serializable bools;
-    Serializable ints;
-    Serializable strings;
-    Serializable progression;
+    String bools;
+    String ints;
+    String strings;
+    String progression;
 
     transient private final Random r;
 
     public BlueScreen(String base_os, boolean autosetup) {
+        Gson gson = new Gson();
         this.r = new Random();
         this.background = Color.argb(255, 0, 0, 0);
         this.foreground = Color.argb(255, 255, 255, 255);
         this.highlight_bg = Color.argb(255, 255, 255, 255);
         this.highlight_fg = Color.argb(255, 0, 0, 0);
         this.os = base_os;
-        this.titles = new Hashtable<String, String>();
-        this.texts = new Hashtable<String, String>();
+        this.titles = gson.toJson(new Hashtable<String, String>());
+        this.texts = gson.toJson(new Hashtable<String, String>());
 
-        this.codefiles = new Hashtable<String, String[]>();
+        this.codefiles = gson.toJson(new Hashtable<String, String[]>());
 
-        this.ints = new Hashtable<String, Integer>();
+        this.ints = gson.toJson(new Hashtable<String, Integer>());
 
-        this.bools = new Hashtable<String, Boolean>();
+        this.bools = gson.toJson(new Hashtable<String, Boolean>());
 
-        this.strings = new Hashtable<String, String>();
+        this.strings = gson.toJson(new Hashtable<String, String>());
 
-        this.progression = new Hashtable<Integer, Integer>();
+        this.progression = gson.toJson(new Hashtable<Integer, Integer>());
 
         this.font = Typeface.create("Lucida Console", Typeface.NORMAL);
         if (autosetup) { SetOSSpecificDefaults(); }
     }
 
-    public Serializable AllBools() { return this.bools; }
-    public Serializable AllInts() { return this.ints; }
-    public Serializable AllStrings() {
+    public String AllBools() { return this.bools; }
+    public String AllInts() { return this.ints; }
+    public String AllStrings() {
         return this.strings;
     }
-    public Serializable AllProgress() { return this.progression; }
+    public String AllProgress() { return this.progression; }
 
     // blue screen properties
     public boolean GetBool(String name) {
-        Map<String, Boolean> bools = (Map<String, Boolean>)this.bools;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Boolean>>(){}.getType();
+        Map<String, Boolean> bools = gson.fromJson(this.bools, type);
         if (bools.containsKey(name)) {
             return Boolean.TRUE.equals(bools.get(name));
         } else {
@@ -76,20 +85,24 @@ public class BlueScreen implements Serializable {
 
 
     public void SetBool(String name, boolean value) {
-        Map<String, Boolean> bools = (Map<String, Boolean>)this.bools;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Boolean>>(){}.getType();
+        Map<String, Boolean> bools = gson.fromJson(this.bools, type);
         if (bools.containsKey(name)) {
             bools.replace(name, value);
         } else {
             bools.put(name, value);
         }
-        this.bools = (Serializable) bools;
+        this.bools = gson.toJson(bools);
     }
 
 
     public String GetString (String name) {
-        Map<String, String> txts = (Map<String, String>)this.texts;
-        Map<String, String> strings = (Map<String, String>)this.strings;
-        Map<String, String> titles = (Map<String, String>)this.titles;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> txts = gson.fromJson(this.texts, type);
+        Map<String, String> strings = gson.fromJson(this.strings, type);
+        Map<String, String> titles = gson.fromJson(this.titles, type);
         switch (name) {
             case "os": return this.os;
             case "ecode1": return this.ecodes[0];
@@ -110,16 +123,20 @@ public class BlueScreen implements Serializable {
     }
 
     public void ClearAllTitleTexts() {
-        this.titles = new Hashtable<String, String>();
-        this.texts = new Hashtable<String, String>();
+        Gson gson = new Gson();
+        this.titles = gson.toJson(new Hashtable<String, String>());
+        this.texts = gson.toJson(new Hashtable<String, String>());
     }
 
     public void ClearProgress() {
-        this.progression = new Hashtable<Integer, Integer>();
+        Gson gson = new Gson();
+        this.progression = gson.toJson(new Hashtable<Integer, Integer>());
     }
 
     public void SetString(String name, String value) {
-        Map<String, String> strings = (Map<String, String>)this.strings;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> strings = gson.fromJson(this.strings, type);
         if ("os".equals(name)) {
             this.os = value;
         } else {
@@ -129,29 +146,37 @@ public class BlueScreen implements Serializable {
                 strings.put(name, value);
             }
         }
-        this.strings = (Serializable) strings;
+        this.strings = gson.toJson(strings);
     }
 
     public void SetTitle(String name, String value) {
-        Map<String, String> titles = (Map<String, String>)this.titles;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> titles = gson.fromJson(this.titles, type);
         titles.replace(name ,value);
-        this.titles = (Serializable) titles;
+        this.titles = gson.toJson(titles);
     }
 
     public void PushTitle(String name, String value) {
-        Map<String, String> titles = (Map<String, String>)this.titles;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> titles = gson.fromJson(this.titles, type);
         titles.put(name, value);
-        this.titles = (Serializable) titles;
+        this.titles = gson.toJson(titles);
     }
     public void SetText(String name, String value) {
-        Map <String, String> texts = (Map<String, String>)this.texts;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> texts = gson.fromJson(this.texts, type);
         texts.replace(name ,value);
-        this.texts = (Serializable) texts;
+        this.texts = gson.toJson(texts);
     }
     public void PushText(String name, String value) {
-        Map <String, String> texts = (Map<String, String>)this.texts;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map <String, String> texts = gson.fromJson(this.texts, type);
         texts.put(name, value);
-        this.texts = (Serializable) texts;
+        this.texts = gson.toJson(texts);
     }
 
     // theming
@@ -195,18 +220,22 @@ public class BlueScreen implements Serializable {
 
     // integers
     public int GetInt(String name) {
-        Map<String, Integer> ints = (Map<String, Integer>) this.ints;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Integer>>(){}.getType();
+        Map<String, Integer> ints = gson.fromJson(this.ints, type);
         return ints.getOrDefault(name, 1);
     }
 
     public void SetInt(String name, int value) {
-        Map<String, Integer> ints = (Map<String, Integer>) this.ints;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Integer>>(){}.getType();
+        Map<String, Integer> ints = gson.fromJson(this.ints, type);
         if (ints.containsKey(name)) {
             ints.replace(name, value);
         } else {
             ints.put(name, value);
         }
-        this.ints = (Serializable) ints;
+        this.ints = gson.toJson(ints);
     }
 
     public void SetFont(String font_family, int style) {
@@ -217,23 +246,27 @@ public class BlueScreen implements Serializable {
         return this.font;
     }
 
-    public Serializable GetTitles() {
+    public String GetTitles() {
         return this.titles;
     }
 
-    public Serializable GetTexts() {
-        return (Serializable)this.texts;
+    public String GetTexts() {
+        return this.texts;
     }
 
 
     // progress keyframes
     public int GetProgression(int name)
     {
-        return ((Map<Integer, Integer>)this.progression).getOrDefault(name, 0);
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<Integer, Integer>>(){}.getType();
+        return ((Map<Integer, Integer>)gson.fromJson(this.progression, type)).getOrDefault(name, 0);
     }
     public void SetProgression(int name, int value)
     {
-        Map<Integer, Integer> progression = (Map<Integer, Integer>) this.progression;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<Integer, Integer>>(){}.getType();
+        Map<Integer, Integer> progression = gson.fromJson(this.progression, type);
         if (progression.containsKey(name))
         {
             progression.replace(name, value);
@@ -242,18 +275,19 @@ public class BlueScreen implements Serializable {
         {
             progression.put(name, value);
         }
-        this.progression = (Serializable) progression;
+        this.progression = gson.toJson(progression);
     }
 
     public void SetAllProgression(int[] keys, int[] values)
     {
+        Gson gson = new Gson();
         Map <Integer, Integer> progression = new Hashtable<Integer, Integer>();
 
         for (int i = 0; i < keys.length; i++)
         {
             progression.put(keys[i], values[i]);
         }
-        this.progression = (Serializable) progression;
+        this.progression = gson.toJson(progression);
     }
 
     //GenAddress uses the last function to generate multiple error address codes
@@ -310,15 +344,17 @@ public class BlueScreen implements Serializable {
 
     public void PushFile(String name, String[] codes)
     {
-        Map<String, String[]> codefiles = (Map<String, String[]>) this.codefiles;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String[]>>(){}.getType();
+        Map<String, String[]> codefiles = gson.fromJson(this.codefiles, type);
         if (!codefiles.containsKey(name))
         {
             codefiles.put(name, codes);
         }
-        this.codefiles = (Serializable) codefiles;
+        this.codefiles = gson.toJson(codefiles);
     }
 
-    public Serializable GetFiles()
+    public String GetFiles()
     {
         return codefiles;
     }
@@ -331,8 +367,10 @@ public class BlueScreen implements Serializable {
     public void RenameFile(String key, String renamed)
     {
         String[] codes;
-        Map<String, String[]> codefiles = (Map<String, String[]>) this.codefiles;
-        for (Map.Entry<String, String[]> kvp : ((Map<String, String[]>)this.GetFiles()).entrySet())
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String[]>>(){}.getType();
+        Map<String, String[]> codefiles = gson.fromJson(this.codefiles, type);
+        for (Map.Entry<String, String[]> kvp : ((Map<String, String[]>)gson.fromJson(this.GetFiles(), type)).entrySet())
         {
             if (Objects.equals(kvp.getKey(), key))
             {
@@ -342,13 +380,15 @@ public class BlueScreen implements Serializable {
                 break;
             }
         }
-        this.codefiles = (Serializable) codefiles;
+        this.codefiles = gson.toJson(codefiles);
     }
 
     public void SetFile(String key, int subcode, String code)
     {
-        Map<String, String[]> codefiles = (Map<String, String[]>) this.codefiles;
-        for (Map.Entry<String, String[]> kvp : ((Map<String, String[]>)this.GetFiles()).entrySet())
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String[]>>(){}.getType();
+        Map<String, String[]> codefiles = gson.fromJson(this.codefiles, type);
+        for (Map.Entry<String, String[]> kvp : ((Map<String, String[]>)gson.fromJson(this.GetFiles(), type)).entrySet())
         {
             if (Objects.equals(key, kvp.getKey()))
             {
@@ -358,7 +398,7 @@ public class BlueScreen implements Serializable {
                 break;
             }
         }
-        this.codefiles = (Serializable) codefiles;
+        this.codefiles = gson.toJson(codefiles);
     }
 
     //GenFile generates a new file for use in Windows NT blue screen

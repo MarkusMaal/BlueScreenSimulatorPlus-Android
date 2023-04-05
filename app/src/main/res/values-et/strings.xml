@@ -14,4 +14,7 @@
     <string name="showDetails">Kuva vea üksikasjad</string>
     <string name="autoClose">Automaatne sulgemine</string>
     <string name="errorCode">Veakood</string>
+    <string name="settings">%s seaded</string>
+    <string name="colorpick">Muud värvi</string>
+    <string name="settingsButton">Seaded</string>
 </resources>

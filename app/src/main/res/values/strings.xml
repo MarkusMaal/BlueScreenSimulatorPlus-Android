@@ -31,7 +31,11 @@
     <string name="insiderPreviewCheck">Preview build</string>
     <string name="showDetails">Display error details</string>
     <string name="autoClose">Auto close</string>
-
+    <string-array name="SettingsList">
+        <item>Setting A</item>
+        <item>Setting B</item>
+        <item>Setting C</item>
+    </string-array>
     <string-array name="ErrorCodes">
         <item>APC_INDEX_MISMATCH (0x00000001)</item>
         <item>DEVICE_QUEUE_NOT_BUSY (0x00000002)</item>
@@ -304,4 +308,8 @@
         <item tools:ignore="Typos">MANUALLY_INITIATED_CRASH1 (0xDEADDEAD)</item>
     </string-array>
     <string name="errorCode">Error code</string>
+    <string name="settings">Settings for %s</string>
+    <string name="colorpick">Change color</string>
+    <string name="settingsButton">Settings</string>
+    <string name="ok" translatable="false">OK</string>
 </resources>

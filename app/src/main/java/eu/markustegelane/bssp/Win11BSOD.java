@@ -19,7 +19,10 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import eu.markustegelane.bssp.BlueScreen;
@@ -128,7 +131,9 @@ public class Win11BSOD extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         BlueScreen me = (BlueScreen)bundle.getSerializable("bluescreen");
-        Map<String, String> texts = (Map<String, String>)me.GetTexts();
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> texts = gson.fromJson(me.GetTexts(), type);
         eu.markustegelane.bssp.databinding.ActivityWin11BsodBinding binding = ActivityWin11BsodBinding.inflate(getLayoutInflater());
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
