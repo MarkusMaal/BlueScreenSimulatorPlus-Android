@@ -101,6 +101,15 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
         // Set selection to 11
         winspin.setSelection(11);
 
+        binding.dispJson.setOnClickListener(view2 -> {
+            Intent jd = new Intent(view2.getContext(), devTextDisplay.class);
+            Bundle b = new Bundle();
+            Gson gson = new Gson();
+            b.putString("json", gson.toJson(bluescreens));
+            jd.putExtras(b);
+            startActivity(jd);
+        });
+
         binding.executeButton.setOnClickListener(view1 -> {
             switch (bluescreens.get((int)winspin.getSelectedItemId()).GetString("os")) {
                 case "Windows 10":

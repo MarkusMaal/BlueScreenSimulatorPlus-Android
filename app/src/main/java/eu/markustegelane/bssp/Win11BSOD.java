@@ -56,6 +56,11 @@ public class Win11BSOD extends AppCompatActivity {
     public static Boolean showDetails = true;
     public static Boolean insiderPreview = true;
 
+    public static Boolean device = true;
+    public static Boolean qr = true;
+    public static Boolean watermark = true;
+    public static Boolean blackscreen = false;
+
     public static int interval = 500;
     public static String errorCode = "IRQL_NOT_LESS_OR_EQUAL (0x0000000a)";
     private View mContentView;
@@ -143,15 +148,21 @@ public class Win11BSOD extends AppCompatActivity {
         autoClose = me.GetBool("autoclose");
         showDetails = me.GetBool("show_description");
         errorCode = me.GetString("code");
+        watermark = me.GetBool("watermark");
+        qr = me.GetBool("qr");
+        device = me.GetBool("device");
+        blackscreen = me.GetBool("blackscreen");
         mVisible = true;
-        TextView techInfo = (TextView)findViewById(R.id.technicalDetails);
-        TextView descripy = (TextView)findViewById(R.id.errorDescription);
+        TextView techInfo = findViewById(R.id.technicalDetails);
+        TextView descripy = findViewById(R.id.errorDescription);
         TextView emoticon = findViewById(R.id.sadSmile);
         TextView progress = findViewById(R.id.errorProgress);
         TextView moreInfo = findViewById(R.id.moreInfo);
         moreInfo.setText(texts.get("Additional information"));
         progress.setText(texts.get("Progress"));
         emoticon.setText(me.GetString("emoticon"));
+        if (!watermark) { binding.waterMark.setVisibility(View.INVISIBLE);}
+        if (!qr) {binding.qrCode.setVisibility(View.GONE);}
         if (autoClose) {
             descripy.setText(texts.get("Information text with dump"));
         } else {
@@ -163,10 +174,19 @@ public class Win11BSOD extends AppCompatActivity {
             techInfo.setText(String.format(texts.get("Error code"), errorCode.split(" ")[1].replace("(", "").replace(")", "")));
         }
         fl.setBackgroundColor(me.GetTheme(true, false));
+        if (blackscreen) {
+            fl.setBackgroundColor(Color.argb(255, 0, 0, 0));
+        }
         if (insiderPreview) {
             fl.setBackgroundColor(Color.argb(255, 0, 128, 0));
-            descripy.setText(getResources().getString(R.string.Win11_Description).replace("device", "Windows Insider Build"));
-
+            if (me.GetString("os").equals("Windows 11")) {
+                descripy.setText(descripy.getText().toString().replace("device", "Windows Insider Build"));
+            } else {
+                descripy.setText(descripy.getText().toString().replace("PC", "Windows Insider Build"));
+            }
+        }
+        if (device) {
+            descripy.setText(descripy.getText().toString().replace("PC", "device"));
         }
         new CountDownTimer(interval * 100L, interval) {
             public void onTick(long millisUntilFinished) {

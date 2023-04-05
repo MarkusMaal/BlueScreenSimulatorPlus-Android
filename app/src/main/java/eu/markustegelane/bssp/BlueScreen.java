@@ -22,6 +22,8 @@ public class BlueScreen implements Serializable {
     private int highlight_bg;
     private int highlight_fg;
 
+
+
     private String[] ecodes = new String[]{"RRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRR"};
 
     private String os;
@@ -448,6 +450,7 @@ public class BlueScreen implements Serializable {
                 PushText("Continue", "ENTER=Continue");
                 PushText("Exit", "ESC=Exit");
                 SetString("code", "0x0000000e");
+                SetInt("scale", 75);
                 break;
             case "Windows 1.x/2.x":
                 SetTheme(RGB(0, 0, 170), RGB(255, 255, 255), false);
@@ -458,6 +461,7 @@ public class BlueScreen implements Serializable {
                 SetString("qr_file", "local:1");
                 SetBool("font_support", false);
                 SetBool("blinkblink", false);
+                SetInt("scale", 75);
                 SetString("qr_file", "local:1");
                 break;
             case "Windows 3.1x":
@@ -470,6 +474,7 @@ public class BlueScreen implements Serializable {
                 SetString("friendlyname", "Windows 3.1 (Text mode, Standard)");
                 SetBool("font_support", false);
                 SetBool("blinkblink", true);
+                SetInt("scale", 75);
                 SetString("screen_mode", "No unresponsive programs");
                 break;
             case "Windows 9x/Me":
@@ -502,6 +507,7 @@ public class BlueScreen implements Serializable {
                 SetFont("Lucida Console", Typeface.NORMAL);
                 SetString("friendlyname", "Windows CE 5.0 and later (750x400, Standard)");
 
+                SetInt("scale", 75);
                 SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
                 break;
             case "Windows NT 3.x/4.0":
@@ -512,6 +518,7 @@ public class BlueScreen implements Serializable {
                 PushText("Stack trace table formatting", "{0} {1} - {2}");
                 PushText("Memory address dump heading", "Address  dword dump   Build [1381]                            - Name");
 
+                SetInt("scale", 75);
                 PushText("Memory address dump table", "{0} {1} {2} {3} {4} {5}           - {6}");
                 PushText("Troubleshooting text", "Restart and set the recovery options in the system control panel\nor the /CRASHDEBUG system start option.");
                 SetInt("blink_speed", 100);
@@ -539,6 +546,7 @@ public class BlueScreen implements Serializable {
                 PushText("Additional troubleshooting information", "Refer to your Getting Started manual for more information on\ntroubleshooting Stop errors.");
                 PushText("File information", "*** Address {0} base at {1}, DateStamp {2} - {3}");
                 SetFont("Lucida Console", Typeface.BOLD);
+                SetInt("scale", 75);
                 SetString("friendlyname", "Windows 2000 Professional/Server Family (640x480, Standard)");
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
                 String[] inspirw2k = { "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
@@ -558,6 +566,7 @@ public class BlueScreen implements Serializable {
                 PushText("Physical memory dump", "Beginning dump of physical memory\nPhysical memory dump complete.");
                 PushText("Technical support", "Contact your system administrator or technical support group for further\nassistance.");
                 SetBool("auto", true);
+                SetInt("scale", 75);
                 SetFont("Lucida Console", Typeface.NORMAL);
                 SetString("friendlyname", "Windows XP (640x480, Standard)");
                 String[] inspirb = { "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
@@ -585,6 +594,7 @@ public class BlueScreen implements Serializable {
                 PushText("Culprit file memory address", "***  {0} - Address {1} base at {2}, DateStamp {3}");
                 PushText("Technical support", "Contact your system admin or technical support group for further assistance.");
                 SetFont("Lucida Console", Typeface.NORMAL);
+                SetInt("scale", 75);
                 SetString("friendlyname", "Windows Vista (640x480, Standard)");
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
 
@@ -611,6 +621,7 @@ public class BlueScreen implements Serializable {
                 PushText("Culprit file memory address", "***  {0} - Address {1} base at {2}, DateStamp {3}");
                 PushText("Technical support", "Contact your system admin or technical support group for further assistance.");
                 SetFont("Consolas", Typeface.NORMAL);
+                SetInt("scale", 75);
                 SetString("friendlyname", "Windows 7 (640x480, ClearType)");
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
 
@@ -632,6 +643,7 @@ public class BlueScreen implements Serializable {
                 SetString("friendlyname", "Windows 8/8.1 (Native, ClearType)");
                 SetInt("margin-x", 9);
                 SetInt("margin-y", 12);
+                SetInt("scale", 75);
 
                 SetBool("autoclose", true);
                 SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
@@ -648,6 +660,7 @@ public class BlueScreen implements Serializable {
                 PushText("Error code", "If you call a support person, give them this info:\n\nStop code: %s");
                 PushText("Progress", "{0}% complete");
                 SetInt("qr_size", 110);
+                SetInt("scale", 75);
                 SetString("qr_file", "local:0");
                 SetFont("Segoe UI Semilight", Typeface.NORMAL);
                 SetTheme(RGB(16, 113, 170), RGB(255, 255, 255), false);
@@ -674,6 +687,7 @@ public class BlueScreen implements Serializable {
                 PushText("Error code", "If you call a support person, give them this info:\n\nStop code: %s");
                 PushText("Progress", "%s%% complete");
                 SetInt("qr_size", 110);
+                SetInt("scale", 75);
                 SetString("qr_file", "local:0");
                 SetFont("Segoe UI Semilight", Typeface.NORMAL);
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
