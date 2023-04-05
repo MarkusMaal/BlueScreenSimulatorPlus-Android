@@ -17,6 +17,7 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -62,6 +63,7 @@ public class Win11BSOD extends AppCompatActivity {
     public static Boolean blackscreen = false;
 
     public static int interval = 500;
+    public static float scale = 0.75f;
     public static String errorCode = "IRQL_NOT_LESS_OR_EQUAL (0x0000000a)";
     private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
@@ -131,7 +133,6 @@ public class Win11BSOD extends AppCompatActivity {
     };
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
@@ -188,6 +189,12 @@ public class Win11BSOD extends AppCompatActivity {
         if (device) {
             descripy.setText(descripy.getText().toString().replace("PC", "device"));
         }
+        scale = (float)me.GetInt("scale") / 100;
+        LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout);
+        ll.setScaleX(scale);
+        ll.setScaleY(scale);
+        ll.setTop(me.GetInt("margin-y"));
+        ll.setPadding(me.GetInt("margin-x"), 0, 0, 0);
         new CountDownTimer(interval * 100L, interval) {
             public void onTick(long millisUntilFinished) {
                 Long progress;

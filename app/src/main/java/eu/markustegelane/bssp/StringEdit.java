@@ -101,6 +101,32 @@ public class StringEdit extends AppCompatActivity {
             }
         });
 
+        ((EditText)findViewById(R.id.integerValue)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!locked) {
+                    String selectedItem = ((Spinner)findViewById(R.id.settingList)).getSelectedItem().toString();
+                    String[] fullnamearr = selectedItem.split(" ");
+                    List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
+                    String key = String.join(" ", ls.subList(0, ls.size() - 1));
+                    String type = ls.get(ls.size() - 1);
+                    if (type.equals("[integer]")) {
+                        os.SetInt(key, Integer.parseInt(editable.toString()));
+                    }
+                    saveSettings(bsods, os, os_id);
+                }
+            }
+        });
         ((EditText)findViewById(R.id.stringValue)).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -154,21 +180,31 @@ public class StringEdit extends AppCompatActivity {
                     case "[string]":
                         findViewById(R.id.boolValue).setVisibility(View.GONE);
                         findViewById(R.id.stringValue).setVisibility(View.VISIBLE);
+                        findViewById(R.id.integerValue).setVisibility(View.GONE);
                         ((EditText)findViewById(R.id.stringValue)).setText(os.GetString(key));
                         break;
                     case "[text]":
                         findViewById(R.id.boolValue).setVisibility(View.GONE);
                         findViewById(R.id.stringValue).setVisibility(View.VISIBLE);
+                        findViewById(R.id.integerValue).setVisibility(View.GONE);
                         ((EditText)findViewById(R.id.stringValue)).setText(((Map<String, String>)gson.fromJson(os.GetTexts(), type2)).get(key));
                         break;
                     case "[title]":
                         findViewById(R.id.boolValue).setVisibility(View.GONE);
                         findViewById(R.id.stringValue).setVisibility(View.VISIBLE);
+                        findViewById(R.id.integerValue).setVisibility(View.GONE);
                         ((EditText)findViewById(R.id.stringValue)).setText(((Map<String, String>)gson.fromJson(os.GetTitles(), type2)).get(key));
+                        break;
+                    case "[integer]":
+                        findViewById(R.id.boolValue).setVisibility(View.GONE);
+                        findViewById(R.id.stringValue).setVisibility(View.GONE);
+                        findViewById(R.id.integerValue).setVisibility(View.VISIBLE);
+                        ((EditText)findViewById(R.id.integerValue)).setText(String.valueOf(os.GetInt(key)));
                         break;
                     case "[boolean]":
                         findViewById(R.id.boolValue).setVisibility(View.VISIBLE);
                         findViewById(R.id.stringValue).setVisibility(View.GONE);
+                        findViewById(R.id.integerValue).setVisibility(View.GONE);
                         ((Switch)findViewById(R.id.boolValue)).setText(key);
                         ((Switch)findViewById(R.id.boolValue)).setChecked(os.GetBool(key));
                         break;
