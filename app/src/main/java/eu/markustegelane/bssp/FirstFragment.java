@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,11 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.markustegelane.bssp.databinding.FragmentFirstBinding;
-public class FirstFragment extends Fragment {
+public class FirstFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private FragmentFirstBinding binding;
 
     public List<BlueScreen> bluescreens = new ArrayList<>();
+
+    private Boolean locked = false;
+
+    BlueScreen os;
 
     @Override
     public View onCreateView(
@@ -51,26 +58,41 @@ public class FirstFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Spinner mySpinner = (Spinner)view.findViewById(R.id.winSpinner);
+        // Get reference to the spinner
+        Spinner winspin = binding.winSpinner;
+
+
+        List<String> friendlyNames = new ArrayList<String>();
+        for (BlueScreen element : bluescreens) {
+            friendlyNames.add(element.GetString("friendlyname"));
+        }
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> catAdapter;
+        catAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, friendlyNames);
+
+
+        // Apply the adapter to the spinner
+        winspin.setAdapter(catAdapter);
+
+        // Set the item selected listener
+        winspin.setOnItemSelectedListener(this);
+
+        // Set selection to 11
+        winspin.setSelection(11);
+
         binding.executeButton.setOnClickListener(view1 -> {
             Spinner eCodes = (Spinner)view.findViewById(R.id.ecodeSpinner);
             @SuppressLint("UseSwitchCompatOrMaterialCode") Switch isInsider = (Switch)view.findViewById(R.id.insiderCheck);
             @SuppressLint("UseSwitchCompatOrMaterialCode") Switch isAutoClose = (Switch)view.findViewById(R.id.autoCloseCheck);
             @SuppressLint("UseSwitchCompatOrMaterialCode") Switch showDetails = (Switch)view.findViewById(R.id.showDetailsCheck);
-            switch (bluescreens.get((int)mySpinner.getSelectedItemId()).GetString("os")) {
+            switch (bluescreens.get((int)winspin.getSelectedItemId()).GetString("os")) {
+                case "Windows 10":
                 case "Windows 11":
                     Intent i = new Intent(view1.getContext(), Win11BSOD.class);
                     Bundle b = new Bundle();
-                    BlueScreen me = bluescreens.get((int)mySpinner.getSelectedItemId());
-                    b.putSerializable("texts", (Serializable) me.GetTexts());
+                    BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
                     b.putSerializable("bluescreen", me);
-                    b.putInt("bg", me.GetTheme(true, false));
-                    b.putInt("fg", me.GetTheme(false, false));
-                    b.putBoolean("insiderPreview", isInsider.isChecked());
-                    b.putBoolean("autoClose", isAutoClose.isChecked());
-                    b.putBoolean("showDetails", showDetails.isChecked());
-                    b.putString("emoticon", me.GetString("emoticon"));
-                    b.putString("errorCode", eCodes.getSelectedItem().toString());
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -80,14 +102,45 @@ public class FirstFragment extends Fragment {
                     break;
             }
         });
-        List<String> friendlyNames = new ArrayList<String>();
-        for (BlueScreen element : bluescreens) {
-            friendlyNames.add(element.GetString("friendlyname"));
-        }
-        ArrayAdapter<String> catAdapter;
-        catAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, friendlyNames);
-        mySpinner.setAdapter(catAdapter);
-        mySpinner.setSelection(11);
+
+        binding.autoCloseCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (!locked) {
+                    os.SetBool("autoclose", b);
+                }
+            }
+        });
+        binding.insiderCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (!locked) {
+                    os.SetBool("green", b);
+                }
+            }
+        });
+        binding.showDetailsCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (!locked) {
+                    os.SetBool("show_description", b);
+                }
+            }
+        });
+
+        binding.ecodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (!locked) {
+                    os.SetString("code", adapterView.getItemAtPosition(i).toString());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         /*inding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,4 +157,37 @@ public class FirstFragment extends Fragment {
         binding = null;
     }
 
+    @Override
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        // Get the selected item
+        locked = true;
+        String selectedItem = adapterView.getItemAtPosition(i).toString();
+        for (BlueScreen element: bluescreens) {
+            if (element.GetString("friendlyname").equals(selectedItem)) {
+                os = element;
+                break;
+            }
+        }
+        Switch ac = binding.autoCloseCheck;
+        Switch green = binding.insiderCheck;
+        Switch details = binding.showDetailsCheck;
+        Spinner eCodeSpin = binding.ecodeSpinner;
+        String ecode = os.GetString("code");
+        ac.setChecked(os.GetBool("autoclose"));
+        green.setChecked(os.GetBool("green"));
+        details.setChecked(os.GetBool("show_description"));
+        for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
+            if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {
+                eCodeSpin.setSelection(j);
+                break;
+            }
+        }
+        locked = false;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        Toast.makeText(adapterView.getContext(), "Wait, how?", Toast.LENGTH_SHORT).show();
+    }
 }

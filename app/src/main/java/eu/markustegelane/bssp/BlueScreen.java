@@ -604,8 +604,8 @@ public class BlueScreen implements Serializable {
                 PushText("Information text with dump", "Your PC ran into a problem and needs to restart. We're just\ncollecting some error info, and then we'll restart for you.");
                 PushText("Information text without dump", "Your PC ran into a problem and needs to restart. We're just\ncollecting some error info, and then you can restart.");
                 PushText("Additional information", "For more information about this issue and possible fixes, visit http://windows.com/stopcode");
-                PushText("Culprit file", "What failed: {0}");
-                PushText("Error code", "If you call a support person, give them this info:\n\nStop code: {0}");
+                PushText("Culprit file", "What failed: %s");
+                PushText("Error code", "If you call a support person, give them this info:\n\nStop code: %s");
                 PushText("Progress", "{0}% complete");
                 SetInt("qr_size", 110);
                 SetString("qr_file", "local:0");

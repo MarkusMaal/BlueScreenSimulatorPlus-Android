@@ -123,6 +123,7 @@ public class Win11BSOD extends AppCompatActivity {
     };
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
@@ -133,10 +134,10 @@ public class Win11BSOD extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
         FrameLayout fl = (FrameLayout)findViewById(R.id.frameLayout1);
-        insiderPreview = bundle.get("insiderPreview").toString().equals("true");
-        autoClose = bundle.get("autoClose").toString().equals("true");
-        showDetails = bundle.get("showDetails").toString().equals("true");
-        errorCode = bundle.get("errorCode").toString();
+        insiderPreview = me.GetBool("green");
+        autoClose = me.GetBool("autoclose");
+        showDetails = me.GetBool("show_description");
+        errorCode = me.GetString("code");
         mVisible = true;
         TextView techInfo = (TextView)findViewById(R.id.technicalDetails);
         TextView descripy = (TextView)findViewById(R.id.errorDescription);
@@ -145,7 +146,7 @@ public class Win11BSOD extends AppCompatActivity {
         TextView moreInfo = findViewById(R.id.moreInfo);
         moreInfo.setText(texts.get("Additional information"));
         progress.setText(texts.get("Progress"));
-        emoticon.setText(bundle.get("emoticon").toString());
+        emoticon.setText(me.GetString("emoticon"));
         if (autoClose) {
             descripy.setText(texts.get("Information text with dump"));
         } else {
@@ -156,7 +157,7 @@ public class Win11BSOD extends AppCompatActivity {
         } else {
             techInfo.setText(String.format(texts.get("Error code"), errorCode.split(" ")[1].replace("(", "").replace(")", "")));
         }
-        fl.setBackgroundColor((int)bundle.get("bg"));
+        fl.setBackgroundColor(me.GetTheme(true, false));
         if (insiderPreview) {
             fl.setBackgroundColor(Color.argb(255, 0, 128, 0));
             descripy.setText(getResources().getString(R.string.Win11_Description).replace("device", "Windows Insider Build"));
