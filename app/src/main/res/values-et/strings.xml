@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BlueScreenSimulatorPlus</string>
+    <string name="action_settings">Seaded</string>
+    <string name="first_fragment_label">Sinise ekraani simulaator pluss</string>
+    <string name="second_fragment_label">Teine fragment</string>
+    <string name="next">Järgmine</string>
+    <string name="previous">Eelmine</string>
+    <string name="hello_first_fragment">Tere, esimene fragment</string>
+    <string name="hello_second_fragment">Tere, teine fragment. Arg: %1$s</string>
+    <string name="os">Operatsioonsüsteem</string>
+    <string name="execute">Simulatsioon</string>
+    <string name="insiderPreviewCheck">Eelvaate järk</string>
+    <string name="showDetails">Kuva vea üksikasjad</string>
+    <string name="autoClose">Automaatne sulgemine</string>
+    <string name="errorCode">Veakood</string>
+</resources>

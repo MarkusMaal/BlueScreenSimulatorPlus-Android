@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FirstFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="40sp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="50dp"
+        tools:layout_editor_absoluteY="50dp">
+
+        <TextView
+            android:id="@+id/osLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/os" />
+
+        <Spinner
+            android:id="@+id/winSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:entries="@array/OperatingSystems"
+            android:labelFor="@id/osLabel"
+            android:minWidth="250dp"
+            android:minHeight="50dp" />
+
+        <TextView
+            android:id="@+id/eCodeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/errorCode" />
+
+        <Spinner
+            android:id="@+id/ecodeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/ErrorCodes"
+            android:labelFor="@id/eCodeLabel"
+            android:minWidth="250dp"
+            android:minHeight="50dp" />
+
+        <Switch
+            android:id="@+id/insiderCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="60sp"
+            android:text="@string/insiderPreviewCheck"
+            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+        <Switch
+            android:id="@+id/showDetailsCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:minHeight="60sp"
+            android:text="@string/showDetails"
+            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+        <Switch
+            android:id="@+id/autoCloseCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:minHeight="60sp"
+            android:text="@string/autoClose"
+            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+        <Button
+            android:id="@+id/executeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/execute" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
