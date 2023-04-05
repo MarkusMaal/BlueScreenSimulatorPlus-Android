@@ -173,7 +173,7 @@ public class Win11BSOD extends AppCompatActivity {
                 Long progress;
                 progress = (Long)((interval * 100L - millisUntilFinished) / interval);
                 TextView progressText = (TextView)findViewById(R.id.errorProgress);
-                progressText.setText(String.format(getResources().getString(R.string.Win11_Progress), progress.toString()));
+                progressText.setText(String.format(texts.get("Progress"), progress.toString()));
             }
 
             public void onFinish() {
