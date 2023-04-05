@@ -63,6 +63,7 @@ public class FirstFragment extends Fragment {
                     Bundle b = new Bundle();
                     BlueScreen me = bluescreens.get((int)mySpinner.getSelectedItemId());
                     b.putSerializable("texts", (Serializable) me.GetTexts());
+                    b.putSerializable("bluescreen", me);
                     b.putInt("bg", me.GetTheme(true, false));
                     b.putInt("fg", me.GetTheme(false, false));
                     b.putBoolean("insiderPreview", isInsider.isChecked());

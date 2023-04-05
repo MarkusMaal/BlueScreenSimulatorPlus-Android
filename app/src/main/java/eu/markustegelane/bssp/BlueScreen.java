@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
+
+@SuppressWarnings("unchecked")
 public class BlueScreen implements Serializable {
     private int background;
     private int foreground;
@@ -18,18 +20,18 @@ public class BlueScreen implements Serializable {
 
     private String os;
 
-    private Typeface font;
+    transient Typeface font;
 
-    Map<String, String> titles;
-    Map<String, String> texts;
-    Map<String, String[]> codefiles;
+    Serializable titles;
+    Serializable texts;
+    Serializable codefiles;
 
-    Map<String, Boolean> bools;
-    Map<String, Integer> ints;
-    Map<String, String> strings;
-    Map<Integer, Integer> progression;
+    Serializable bools;
+    Serializable ints;
+    Serializable strings;
+    Serializable progression;
 
-    private final Random r;
+    transient private final Random r;
 
     public BlueScreen(String base_os, boolean autosetup) {
         this.r = new Random();
@@ -55,29 +57,39 @@ public class BlueScreen implements Serializable {
         if (autosetup) { SetOSSpecificDefaults(); }
     }
 
-    public Map<String, Boolean> AllBools() { return this.bools; }
-    public Map<String, Integer> AllInts() { return this.ints; }
-    public Map<String, String> AllStrings() { return this.strings; }
-    public Map<Integer, Integer> AllProgress() { return this.progression; }
+    public Serializable AllBools() { return this.bools; }
+    public Serializable AllInts() { return this.ints; }
+    public Serializable AllStrings() {
+        return this.strings;
+    }
+    public Serializable AllProgress() { return this.progression; }
 
     // blue screen properties
     public boolean GetBool(String name) {
-        if (this.bools.containsKey(name)) {
-            return Boolean.TRUE.equals(this.bools.get(name));
+        Map<String, Boolean> bools = (Map<String, Boolean>)this.bools;
+        if (bools.containsKey(name)) {
+            return Boolean.TRUE.equals(bools.get(name));
         } else {
             return false;
         }
     }
 
+
     public void SetBool(String name, boolean value) {
-        if (this.bools.containsKey(name)) {
-            this.bools.replace(name, value);
+        Map<String, Boolean> bools = (Map<String, Boolean>)this.bools;
+        if (bools.containsKey(name)) {
+            bools.replace(name, value);
         } else {
-            this.bools.put(name, value);
+            bools.put(name, value);
         }
+        this.bools = (Serializable) bools;
     }
 
+
     public String GetString (String name) {
+        Map<String, String> txts = (Map<String, String>)this.texts;
+        Map<String, String> strings = (Map<String, String>)this.strings;
+        Map<String, String> titles = (Map<String, String>)this.titles;
         switch (name) {
             case "os": return this.os;
             case "ecode1": return this.ecodes[0];
@@ -85,12 +97,12 @@ public class BlueScreen implements Serializable {
             case "ecode3": return this.ecodes[2];
             case "ecode4": return this.ecodes[3];
             default:
-                if (this.strings.containsKey(name)) {
+                if (strings.containsKey(name)) {
                     return strings.get(name);
-                } else if (this.titles.containsKey(name)) {
+                } else if (titles.containsKey(name)) {
                     return titles.get(name);
-                } else if (this.texts.containsKey(name)) {
-                    return texts.get(name);
+                } else if ((txts != null) && (txts.containsKey(name))) {
+                    return txts.get(name);
                 } else {
                     return "";
                 }
@@ -98,40 +110,48 @@ public class BlueScreen implements Serializable {
     }
 
     public void ClearAllTitleTexts() {
-        this.titles.clear();
-        this.texts.clear();
+        this.titles = new Hashtable<String, String>();
+        this.texts = new Hashtable<String, String>();
     }
 
     public void ClearProgress() {
-        this.progression.clear();
+        this.progression = new Hashtable<Integer, Integer>();
     }
 
     public void SetString(String name, String value) {
+        Map<String, String> strings = (Map<String, String>)this.strings;
         if ("os".equals(name)) {
             this.os = value;
         } else {
-            if (this.strings.containsKey(name)) {
-                this.strings.replace(name, value);
+            if (strings.containsKey(name)) {
+                strings.replace(name, value);
             } else {
-                this.strings.put(name, value);
+                strings.put(name, value);
             }
         }
+        this.strings = (Serializable) strings;
     }
 
     public void SetTitle(String name, String value) {
-        this.titles.replace(name ,value);
+        Map<String, String> titles = (Map<String, String>)this.titles;
+        titles.replace(name ,value);
+        this.titles = (Serializable) titles;
     }
 
     public void PushTitle(String name, String value) {
-        this.titles.put(name, value);
+        Map<String, String> titles = (Map<String, String>)this.titles;
+        titles.put(name, value);
+        this.titles = (Serializable) titles;
     }
-
     public void SetText(String name, String value) {
-        this.texts.replace(name ,value);
+        Map <String, String> texts = (Map<String, String>)this.texts;
+        texts.replace(name ,value);
+        this.texts = (Serializable) texts;
     }
-
     public void PushText(String name, String value) {
-        this.texts.put(name, value);
+        Map <String, String> texts = (Map<String, String>)this.texts;
+        texts.put(name, value);
+        this.texts = (Serializable) texts;
     }
 
     // theming
@@ -175,15 +195,18 @@ public class BlueScreen implements Serializable {
 
     // integers
     public int GetInt(String name) {
-        return this.ints.getOrDefault(name, 1);
+        Map<String, Integer> ints = (Map<String, Integer>) this.ints;
+        return ints.getOrDefault(name, 1);
     }
 
     public void SetInt(String name, int value) {
-        if (this.ints.containsKey(name)) {
-            this.ints.replace(name, value);
+        Map<String, Integer> ints = (Map<String, Integer>) this.ints;
+        if (ints.containsKey(name)) {
+            ints.replace(name, value);
         } else {
-            this.ints.put(name, value);
+            ints.put(name, value);
         }
+        this.ints = (Serializable) ints;
     }
 
     public void SetFont(String font_family, int style) {
@@ -194,39 +217,43 @@ public class BlueScreen implements Serializable {
         return this.font;
     }
 
-    public Map<String, String> GetTitles() {
+    public Serializable GetTitles() {
         return this.titles;
     }
 
-    public Map<String, String> GetTexts() {
-        return this.texts;
+    public Serializable GetTexts() {
+        return (Serializable)this.texts;
     }
 
 
     // progress keyframes
     public int GetProgression(int name)
     {
-        return this.progression.getOrDefault(name, 0);
+        return ((Map<Integer, Integer>)this.progression).getOrDefault(name, 0);
     }
     public void SetProgression(int name, int value)
     {
-        if (this.progression.containsKey(name))
+        Map<Integer, Integer> progression = (Map<Integer, Integer>) this.progression;
+        if (progression.containsKey(name))
         {
-            this.progression.replace(name, value);
+            progression.replace(name, value);
         }
         else
         {
-            this.progression.put(name, value);
+            progression.put(name, value);
         }
+        this.progression = (Serializable) progression;
     }
 
     public void SetAllProgression(int[] keys, int[] values)
     {
-        this.progression.clear();
+        Map <Integer, Integer> progression = new Hashtable<Integer, Integer>();
+
         for (int i = 0; i < keys.length; i++)
         {
-            this.progression.replace(keys[i], values[i]);
+            progression.put(keys[i], values[i]);
         }
+        this.progression = (Serializable) progression;
     }
 
     //GenAddress uses the last function to generate multiple error address codes
@@ -283,50 +310,55 @@ public class BlueScreen implements Serializable {
 
     public void PushFile(String name, String[] codes)
     {
+        Map<String, String[]> codefiles = (Map<String, String[]>) this.codefiles;
         if (!codefiles.containsKey(name))
         {
             codefiles.put(name, codes);
         }
+        this.codefiles = (Serializable) codefiles;
     }
 
-    public Map<String, String[]> GetFiles()
+    public Serializable GetFiles()
     {
         return codefiles;
     }
 
     public void ClearFiles()
     {
-        codefiles.clear();
+        codefiles = null;
     }
 
     public void RenameFile(String key, String renamed)
     {
         String[] codes;
-        for (Map.Entry<String, String[]> kvp : this.GetFiles().entrySet())
+        Map<String, String[]> codefiles = (Map<String, String[]>) this.codefiles;
+        for (Map.Entry<String, String[]> kvp : ((Map<String, String[]>)this.GetFiles()).entrySet())
         {
             if (Objects.equals(kvp.getKey(), key))
             {
                 codes = kvp.getValue();
-                this.codefiles.remove(key);
+                codefiles.remove(key);
                 this.PushFile(renamed, codes);
                 break;
             }
         }
+        this.codefiles = (Serializable) codefiles;
     }
 
     public void SetFile(String key, int subcode, String code)
     {
-
-        for (Map.Entry<String, String[]> kvp : this.GetFiles().entrySet())
+        Map<String, String[]> codefiles = (Map<String, String[]>) this.codefiles;
+        for (Map.Entry<String, String[]> kvp : ((Map<String, String[]>)this.GetFiles()).entrySet())
         {
             if (Objects.equals(key, kvp.getKey()))
             {
                 String[] codearray = kvp.getValue();
                 codearray[subcode] = code;
-                this.codefiles.replace(key, codearray);
+                codefiles.replace(key, codearray);
                 break;
             }
         }
+        this.codefiles = (Serializable) codefiles;
     }
 
     //GenFile generates a new file for use in Windows NT blue screen

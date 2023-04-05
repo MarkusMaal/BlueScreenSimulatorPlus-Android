@@ -126,7 +126,8 @@ public class Win11BSOD extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
-        Map<String, String> texts = (Map<String, String>) bundle.getSerializable("texts");
+        BlueScreen me = (BlueScreen)bundle.getSerializable("bluescreen");
+        Map<String, String> texts = (Map<String, String>)me.GetTexts();
         eu.markustegelane.bssp.databinding.ActivityWin11BsodBinding binding = ActivityWin11BsodBinding.inflate(getLayoutInflater());
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
