@@ -122,7 +122,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
                     startActivity(i);
                     break;
                 default:
-                    Snackbar.make(view, "Not implemented yet!", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, R.string.notImplemented, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     break;
             }
