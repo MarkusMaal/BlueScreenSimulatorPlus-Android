@@ -131,6 +131,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
                     i.putExtras(b);
                     startActivity(i);
                     break;
+                case "Windows 9x/Me":
                 case "Windows XP":
                 case "Windows Vista":
                 case "Windows 7":
