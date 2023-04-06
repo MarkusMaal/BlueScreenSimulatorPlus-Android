@@ -122,6 +122,8 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
                     i.putExtras(b);
                     startActivity(i);
                     break;
+                case "Windows XP":
+                case "Windows Vista":
                 case "Windows 7":
                     i = new Intent(view1.getContext(), Win7BSOD.class);
                     b = new Bundle();
@@ -129,6 +131,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
                     b.putSerializable("bluescreen", me);
                     i.putExtras(b);
                     startActivity(i);
+                    break;
                 default:
                     Snackbar.make(view, R.string.notImplemented, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();

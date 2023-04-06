@@ -47,7 +47,7 @@
             android:ems="10"
             android:inputType="numberDecimal"
             android:text="1"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <EditText
             android:id="@+id/stringValue"
@@ -58,7 +58,8 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:minHeight="50dp"
-            android:text="1234" />
+            android:text="1234"
+            android:visibility="gone" />
 
 
         <!--Pick color Button-->

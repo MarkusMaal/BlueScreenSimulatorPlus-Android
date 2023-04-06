@@ -164,7 +164,7 @@ public class StringEdit extends AppCompatActivity {
                 }
             }
         });
-        ((Spinner)findViewById(R.id.settingList)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        slist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 locked = true;

@@ -1,19 +1,13 @@
 package eu.markustegelane.bssp;
 
 import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
-
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.MotionEvent;
@@ -21,11 +15,17 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.time.format.FormatStyle;
 import java.util.Map;
 
 import eu.markustegelane.bssp.databinding.ActivityWin7BsodBinding;
@@ -52,8 +52,11 @@ public class Win7BSOD extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
+    public static int interval = 500;
     private final Handler mHideHandler = new Handler(Looper.myLooper());
     private View mContentView;
+    private String memcodes;
+    Map<String, String> texts;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -110,25 +113,59 @@ public class Win7BSOD extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         BlueScreen me = (BlueScreen)bundle.getSerializable("bluescreen");
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
-        Map<String, String> texts = gson.fromJson(me.GetTexts(), type);
         binding = ActivityWin7BsodBinding.inflate(getLayoutInflater());
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
+        String thirdword = me.GenHex(16, me.GetCodes()[2]);
+        memcodes = "0x" + me.GenHex(16, me.GetCodes()[0]) + "," + "0x" + me.GenHex(16, me.GetCodes()[1]) + "," + "0x" + thirdword + ",0\nx" + me.GenHex(16, me.GetCodes()[3]);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        texts = gson.fromJson(me.GetTexts(), type);
+        DrawCanvas(0, me);
+
+        new CountDownTimer(interval * 100L, interval) {
+            public void onTick(long millisUntilFinished) {
+                int progress;
+                progress = (int) ((interval * 100 - millisUntilFinished) / interval);
+                DrawCanvas(progress, me);
+            }
+
+            public void onFinish() {
+                if (me.GetBool("autoclose")) {
+                    finish();
+                } else {
+                    DrawCanvas(100, me);
+                }
+            }
+        }.start();
+        //binding.bsodWindow.setScaleX(((float)me.GetInt("scale")) / 100);
+        //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
+    }
+
+    private void DrawCanvas(int progress, BlueScreen me) {
         int w = 640, h = 480;
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(w, h, conf);
         Canvas canvas = new Canvas (bmp);
-        String yourText = "\n" + texts.get("A problem has been detected...") + "\n\n" + me.GetString("code").split(" ")[0] + "\n\n" + texts.get("Troubleshooting introduction") + "\n\n" + texts.get("Troubleshooting") + "\n\n" + texts.get("Technical information") + "\n\n" + String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), "MEMCODES") + "\n\n\n" + texts.get("Collecting data for crash dump");
+        String yourText = "\n";
+        yourText += texts.get("A problem has been detected...");
+        yourText += "\n\n" + me.GetString("code").split(" ")[0];
+        yourText += "\n\n" + texts.get("Troubleshooting introduction");
+        yourText += "\n\n" + texts.get("Troubleshooting") + "\n\n";
+        yourText += texts.get("Technical information") + "\n\n";
+        yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
+        yourText += "\n\n\n" + texts.get("Collecting data for crash dump") + "\n";
+        yourText += texts.get("Initializing crash dump") + "\n" + texts.get("Begin dump") + "\n";
+        yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", String.valueOf(progress)));
         int i = 0;
         Paint tPaint = new Paint();
         tPaint.setColor(me.GetTheme(true, false));
         canvas.drawRect(0, 0, 640, 480, tPaint);
         for (String line: yourText.split("\n")) {
             tPaint.setTextSize(16);
-            Typeface typeface = ResourcesCompat.getFont(this, R.font.ubuntu);
+            Typeface typeface = ResourcesCompat.getFont(this, R.font.inconsolata);
             tPaint.setAntiAlias(true);
             tPaint.setTypeface(typeface);
             tPaint.setColor(me.GetTheme(false, false));
@@ -140,8 +177,6 @@ public class Win7BSOD extends AppCompatActivity {
             //canvas.drawBitmap(bmp, 0f, 0f, null);
             i++;
         }
-
-
         binding.bsodWindow.setImageBitmap(bmp);
     }
 

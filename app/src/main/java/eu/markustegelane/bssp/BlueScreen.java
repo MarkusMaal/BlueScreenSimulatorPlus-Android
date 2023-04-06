@@ -325,7 +325,7 @@ public class BlueScreen implements Serializable {
         {
             int temp = r.nextInt(15);
             char lette = ' ';
-            if ((inspir + inspir).substring(i, 1).equals("R"))
+            if ((inspir + inspir).charAt(i) == 'R')
             {
                 if (temp < 10) { lette = (Integer.toString(temp)).charAt(0); }
                 if (temp == 10) { lette = 'A'; }
@@ -337,7 +337,7 @@ public class BlueScreen implements Serializable {
             }
             else
             {
-                lette = ((inspir + inspir).substring(i, 1)).charAt(0);
+                lette = (inspir + inspir).charAt(i);
             }
             output.append(lette);
         }
