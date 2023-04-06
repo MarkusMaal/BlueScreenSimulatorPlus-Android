@@ -325,7 +325,7 @@ public class BlueScreen implements Serializable {
         {
             int temp = r.nextInt(15);
             char lette = ' ';
-            if ((inspir + inspir).substring(i, 1).equals("R"))
+            if ((inspir + inspir).charAt(i) == 'R')
             {
                 if (temp < 10) { lette = (Integer.toString(temp)).charAt(0); }
                 if (temp == 10) { lette = 'A'; }
@@ -337,7 +337,7 @@ public class BlueScreen implements Serializable {
             }
             else
             {
-                lette = ((inspir + inspir).substring(i, 1)).charAt(0);
+                lette = (inspir + inspir).charAt(i);
             }
             output.append(lette);
         }
@@ -611,14 +611,14 @@ public class BlueScreen implements Serializable {
                 PushText("Troubleshooting introduction", "If this is the first time you've seen this Stop error screen,\nrestart your computer. If this screen appears again, follow\nthese steps:");
                 PushText("Troubleshooting", "Check to make sure any new hardware or software is properly installed.\nIf this is a new installation, ask your hardware or software manufacturer\nfor any Windows updates you might need.\n\nIf problems continue, disable or remove any newly installed hardware\nor software. Disable BIOS memory options such as caching or shadowing.\nIf you need to use Safe mode to remove or disable components, restart\nyour computer, press F8 to select Advanced Startup Options, and then\nselect Safe Mode.");
                 PushText("Technical information", "Technical information:");
-                PushText("Technical information formatting", "*** STOP: {0} ({1})");
+                PushText("Technical information formatting", "*** STOP: %s (%s)");
                 PushText("Collecting data for crash dump", "Collecting data for crash dump ...");
                 PushText("Initializing crash dump", "Initializing disk for crash dump ...");
                 PushText("Begin dump", "Beginning dump of physical memory.");
                 PushText("End dump", "Physical memory dump complete.");
-                PushText("Physical memory dump", "Dumping physical memory to disk:{0}");
+                PushText("Physical memory dump", "Dumping physical memory to disk:%s");
                 PushText("Culprit file", "The problem seems to be caused by the following file: ");
-                PushText("Culprit file memory address", "***  {0} - Address {1} base at {2}, DateStamp {3}");
+                PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
                 PushText("Technical support", "Contact your system admin or technical support group for further assistance.");
                 SetFont("Consolas", Typeface.NORMAL);
                 SetInt("scale", 75);
@@ -635,9 +635,9 @@ public class BlueScreen implements Serializable {
                 break;
             case "Windows 8/8.1":
                 SetString("emoticon", ":(");
-                PushText("Information text with dump", "Your PC ran into a problem and needs to restart. We're just\ncollecting some error info, and then you can restart. ({0}%\ncomplete)");
+                PushText("Information text with dump", "Your PC ran into a problem and needs to restart. We're just\ncollecting some error info, and then you can restart. (%s%%\ncomplete)");
                 PushText("Information text without dump", "Your PC ran into a problem that it couldn't\nhandle and now it needs to restart.");
-                PushText("Error code", "You can search for the error online: {0}");
+                PushText("Error code", "You can search for the error online: %s");
                 SetFont("Segoe UI Semilight", Typeface.NORMAL);
                 SetTheme(RGB(16, 113, 170), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 8/8.1 (Native, ClearType)");

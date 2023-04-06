@@ -195,12 +195,24 @@ public class Win11BSOD extends AppCompatActivity {
         ll.setScaleY(scale);
         ll.setTop(me.GetInt("margin-y"));
         ll.setPadding(me.GetInt("margin-x"), 0, 0, 0);
+        if (me.GetString("os").equals("Windows 8/8.1")) {
+            binding.errorProgress.setVisibility(View.GONE);
+            binding.qrCode.setVisibility(View.GONE);
+            binding.moreInfo.setVisibility(View.GONE);
+            binding.linLay1.setPadding(0, -20, 0, 0);
+        }
         new CountDownTimer(interval * 100L, interval) {
             public void onTick(long millisUntilFinished) {
                 Long progress;
                 progress = (Long)((interval * 100L - millisUntilFinished) / interval);
                 TextView progressText = (TextView)findViewById(R.id.errorProgress);
-                progressText.setText(String.format(texts.get("Progress"), progress.toString()));
+                if (me.GetString("os").equals("Windows 8/8.1")) {
+                    if (autoClose) {
+                        descripy.setText(String.format(texts.get("Information text with dump"), progress.toString()));
+                    }
+                } else {
+                    progressText.setText(String.format(texts.get("Progress"), progress.toString()));
+                }
             }
 
             public void onFinish() {
