@@ -79,6 +79,15 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Get reference to the spinner
+        Bundle pb = getActivity().getIntent().getExtras();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int selection = 0;
+        if (pb != null) {
+            selection = pb.getInt("id");
+        } else if (sharedPreferences.getInt("selectedItem", -1) != -1) {
+            selection = sharedPreferences.getInt("selectedItem", -1);
+        }
         Spinner winspin = binding.winSpinner;
 
 
@@ -98,8 +107,8 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
         // Set the item selected listener
         winspin.setOnItemSelectedListener(this);
 
-        // Set selection to 11
-        winspin.setSelection(11);
+        // Set selection
+        winspin.setSelection(selection);
 
         binding.dispJson.setOnClickListener(view2 -> {
             Intent jd = new Intent(view2.getContext(), devTextDisplay.class);
@@ -218,6 +227,13 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
         editor.apply();
     }
 
+    public void saveSelection(int index) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("selectedItem", index);
+        editor.apply();
+    }
+
     @Override
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -238,6 +254,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
         ac.setChecked(os.GetBool("autoclose"));
         green.setChecked(os.GetBool("green"));
         details.setChecked(os.GetBool("show_description"));
+        saveSelection(i);
         for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
             if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {
                 eCodeSpin.setSelection(j);

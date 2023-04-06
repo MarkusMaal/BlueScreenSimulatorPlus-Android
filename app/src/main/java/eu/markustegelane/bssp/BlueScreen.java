@@ -486,8 +486,8 @@ public class BlueScreen implements Serializable {
                 PushTitle("System is busy", "System is busy. ");
                 PushTitle("Warning", "WARNING!");
                 PushText("System error", "An error has occurred. To continue:\n\nPress Enter to return to Windows, or\n\nPress CTRL + ALT + DEL to restart your computer. If you do this,\nyou will lose any unsaved information in all open applications.\n\nError: {0}");
-                PushText("Application error", "A fatal exception {2} has occurred at {0}:{1}. The current\napplication will be terminated.\n\n* Press any key to terminate current application\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in all applications.");
-                PushText("Driver error", "A fatal exception {2} has occurred at {0}:{1} in VXD VMM(01) +\n{2}. The current application will be terminated.\n\n* Press any key to terminate current application\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in all applications.");
+                PushText("Application error", "A fatal exception %s has occurred at %s:%s. The current\napplication will be terminated.\n\n* Press any key to terminate current application\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in all applications.");
+                PushText("Driver error", "A fatal exception %s has occurred at %s:%s in VXD VMM(01) +\n%s. The current application will be terminated.\n\n* Press any key to terminate current application\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in all applications.");
                 PushText("System is busy", "The system is busy waiting for the Close Program dialog box to be\ndisplayed. You can wait and see if it appears, or you can restart\nyour computer.\n\n* Press any key to return to Windows and wait.\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in programs that are running.");
                 PushText("System is unresponsive", "The system is either busy or has become unstable. You can wait and\nsee if it becomes available again, or you can restart your computer.\n\n* Press any key to return to Windows and wait.\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in programs that are running.");
                 PushText("Prompt", "Press any key to continue");
@@ -501,8 +501,8 @@ public class BlueScreen implements Serializable {
                 PushText("A problem has occurred...", "A problem has occurred and Windows CE has been shut down to prevent damage to your\ncomputer.");
                 PushText("CTRL+ALT+DEL message", "If you will try to restart your computer, press Ctrl+Alt+Delete.");
                 PushText("Technical information", "Technical information:");
-                PushText("Technical information formatting", "*** STOP: {0} ({1})");
-                PushText("Restart message", "The computer will restart automatically\nafter {0} seconds.");
+                PushText("Technical information formatting", "*** STOP: %s (%s)");
+                PushText("Restart message", "The computer will restart automatically\nafter %s seconds.");
                 SetInt("timer", 30);
                 SetFont("Lucida Console", Typeface.NORMAL);
                 SetString("friendlyname", "Windows CE 5.0 and later (750x400, Standard)");
@@ -512,14 +512,14 @@ public class BlueScreen implements Serializable {
                 break;
             case "Windows NT 3.x/4.0":
                 SetTheme(RGB(0, 0, 160), RGB(170, 170, 170), false);
-                PushText("Error code formatting", "*** STOP: {0} ({1})");
-                PushText("CPUID formatting", "CPUID: {0} 6.3.3 irql:lf SYSVER 0xf0000565");
+                PushText("Error code formatting", "*** STOP: %s (%s)");
+                PushText("CPUID formatting", "CPUID: %s 6.3.3 irql:lf SYSVER 0xf0000565");
                 PushText("Stack trace heading", "Dll Base DateStmp - Name");
-                PushText("Stack trace table formatting", "{0} {1} - {2}");
+                PushText("Stack trace table formatting", "%s %s - %s");
                 PushText("Memory address dump heading", "Address  dword dump   Build [1381]                            - Name");
 
                 SetInt("scale", 75);
-                PushText("Memory address dump table", "{0} {1} {2} {3} {4} {5}           - {6}");
+                PushText("Memory address dump table", "%s %s %s %s %s %s           - %s");
                 PushText("Troubleshooting text", "Restart and set the recovery options in the system control panel\nor the /CRASHDEBUG system start option.");
                 SetInt("blink_speed", 100);
                 SetString("friendlyname", "Windows NT 4.0/3.x (Text mode, Standard)");
@@ -540,11 +540,11 @@ public class BlueScreen implements Serializable {
                 SetBool("stack_trace", true);
                 break;
             case "Windows 2000":
-                PushText("Error code formatting", "*** STOP: {0} ({1})");
+                PushText("Error code formatting", "*** STOP: %s (%s)");
                 PushText("Troubleshooting introduction", "If this is the first time you've seen this Stop error screen,\nrestart your computer. If this screen appears again, follow\nthese steps: ");
                 PushText("Troubleshooting text", "Check for viruses on your computer. Remove any newly installed\nhard drives or hard drive controllers. Check your hard drive\nto make sure it is properly configured and terminated.\nRun CHKDSK /F to check for hard drive corruption, and then\nrestart your computer.");
                 PushText("Additional troubleshooting information", "Refer to your Getting Started manual for more information on\ntroubleshooting Stop errors.");
-                PushText("File information", "*** Address {0} base at {1}, DateStamp {2} - {3}");
+                PushText("File information", "*** Address %s base at %s, DateStamp %s - %s");
                 SetFont("Lucida Console", Typeface.BOLD);
                 SetInt("scale", 75);
                 SetString("friendlyname", "Windows 2000 Professional/Server Family (640x480, Standard)");
@@ -561,7 +561,7 @@ public class BlueScreen implements Serializable {
                 PushText("Troubleshooting introduction", "If this is the first time you've seen this Stop error screen,\nrestart your computer. If this screen appears again, follow\nthese steps:");
                 PushText("Troubleshooting", "Check to make sure any new hardware or software is properly installed.\nIf this is a new installation, ask your hardware or software manufacturer\nfor any Windows updates you might need.\n\nIf problems continue, disable or remove any newly installed hardware\nor software. Disable BIOS memory options such as caching or shadowing.\nIf you need to use Safe mode to remove or disable components, restart\nyour computer, press F8 to select Advanced Startup Options, and then\nselect Safe Mode.");
                 PushText("Technical information", "Technical information:");
-                PushText("Technical information formatting", "*** STOP: {0} ({1})");
+                PushText("Technical information formatting", "*** STOP: %s (%s)");
                 PushText("Culprit file", "The problem seems to be caused by the following file: ");
                 PushText("Physical memory dump", "Beginning dump of physical memory\nPhysical memory dump complete.");
                 PushText("Technical support", "Contact your system administrator or technical support group for further\nassistance.");
@@ -584,14 +584,14 @@ public class BlueScreen implements Serializable {
                 PushText("Troubleshooting introduction", "If this is the first time you've seen this Stop error screen,\nrestart your computer. If this screen appears again, follow\nthese steps:");
                 PushText("Troubleshooting", "Check to make sure any new hardware or software is properly installed.\nIf this is a new installation, ask your hardware or software manufacturer\nfor any Windows updates you might need.\n\nIf problems continue, disable or remove any newly installed hardware\nor software. Disable BIOS memory options such as caching or shadowing.\nIf you need to use Safe mode to remove or disable components, restart\nyour computer, press F8 to select Advanced Startup Options, and then\nselect Safe Mode.");
                 PushText("Technical information", "Technical information:");
-                PushText("Technical information formatting", "*** STOP: {0} ({1})");
+                PushText("Technical information formatting", "*** STOP: %s (%s)");
                 PushText("Collecting data for crash dump", "Collecting data for crash dump ...");
                 PushText("Initializing crash dump", "Initializing disk for crash dump ...");
                 PushText("Begin dump", "Beginning dump of physical memory.");
                 PushText("End dump", "Physical memory dump complete.");
-                PushText("Physical memory dump", "Dumping physical memory to disk:{0}");
+                PushText("Physical memory dump", "Dumping physical memory to disk:%s");
                 PushText("Culprit file", "The problem seems to be caused by the following file: ");
-                PushText("Culprit file memory address", "***  {0} - Address {1} base at {2}, DateStamp {3}");
+                PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
                 PushText("Technical support", "Contact your system admin or technical support group for further assistance.");
                 SetFont("Lucida Console", Typeface.NORMAL);
                 SetInt("scale", 75);

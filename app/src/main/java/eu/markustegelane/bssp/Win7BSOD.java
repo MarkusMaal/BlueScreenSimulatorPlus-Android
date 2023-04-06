@@ -52,7 +52,7 @@ public class Win7BSOD extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
-    public static int interval = 500;
+    public static int interval = 100;
     private final Handler mHideHandler = new Handler(Looper.myLooper());
     private View mContentView;
     private String memcodes;
@@ -117,26 +117,50 @@ public class Win7BSOD extends AppCompatActivity {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
-        String thirdword = me.GenHex(16, me.GetCodes()[2]);
-        memcodes = "0x" + me.GenHex(16, me.GetCodes()[0]) + "," + "0x" + me.GenHex(16, me.GetCodes()[1]) + "," + "0x" + thirdword + ",0\nx" + me.GenHex(16, me.GetCodes()[3]);
+        int len = 16;
+        if (me.GetString("os").equals("Windows XP")) {
+            len = 8;
+        }
+        String thirdword = me.GenHex(len, me.GetCodes()[2]);
+        memcodes = "0x" + me.GenHex(len, me.GetCodes()[0]) + "," + "0x" + me.GenHex(len, me.GetCodes()[1]) + ",";
+        if (!me.GetString("os").equals("Windows XP")) {
+            memcodes += "0x" + thirdword + ",0\nx" + me.GenHex(len, me.GetCodes()[3]);
+        } else {
+            memcodes += "0x" + thirdword + ",0x" + me.GenHex(len, me.GetCodes()[3]);
+        }
 
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String>>(){}.getType();
         texts = gson.fromJson(me.GetTexts(), type);
-        DrawCanvas(0, me);
+        DrawCanvas(0, me, 0);
 
         new CountDownTimer(interval * 100L, interval) {
             public void onTick(long millisUntilFinished) {
                 int progress;
                 progress = (int) ((interval * 100 - millisUntilFinished) / interval);
-                DrawCanvas(progress, me);
+                DrawCanvas(progress, me, 0);
             }
 
             public void onFinish() {
                 if (me.GetBool("autoclose")) {
                     finish();
                 } else {
-                    DrawCanvas(100, me);
+                    switch (me.GetString("os"))
+                    {
+                        case "Windows 7":
+                            if (!me.GetBool("showfile")) {
+                                DrawCanvas(100, me, -8);
+                            } else {
+                                DrawCanvas(100, me, -64);
+                            }
+                            break;
+                        case "Windows Vista":
+                            DrawCanvas(100, me, -8);
+                        case "Windows XP":
+                            DrawCanvas(100, me, 0);
+                        default:
+                            break;
+                    }
                 }
             }
         }.start();
@@ -144,7 +168,7 @@ public class Win7BSOD extends AppCompatActivity {
         //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
     }
 
-    private void DrawCanvas(int progress, BlueScreen me) {
+    private void DrawCanvas(int progress, BlueScreen me, int shift) {
         int w = 640, h = 480;
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(w, h, conf);
@@ -155,10 +179,25 @@ public class Win7BSOD extends AppCompatActivity {
         yourText += "\n\n" + texts.get("Troubleshooting introduction");
         yourText += "\n\n" + texts.get("Troubleshooting") + "\n\n";
         yourText += texts.get("Technical information") + "\n\n";
-        yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
-        yourText += "\n\n\n" + texts.get("Collecting data for crash dump") + "\n";
-        yourText += texts.get("Initializing crash dump") + "\n" + texts.get("Begin dump") + "\n";
-        yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", String.valueOf(progress)));
+        switch (me.GetString("os")) {
+            case "Windows XP":
+                yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
+                yourText += "\n\n\n";
+                yourText += texts.get("Physical memory dump") + "\n" + texts.get("Technical support");
+                break;
+            default:
+                yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
+                yourText += "\n\n\n" + texts.get("Collecting data for crash dump") + "\n";
+                yourText += texts.get("Initializing crash dump") + "\n" + texts.get("Begin dump") + "\n";
+                yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", String.valueOf(progress)));
+                break;
+        }
+        if (!me.GetString("os").equals("Windows XP")) {
+            if (progress == 100) {
+                yourText += "\n" + texts.get("End dump");
+                yourText += "\n" + texts.get("Technical support");
+            }
+        }
         int i = 0;
         Paint tPaint = new Paint();
         tPaint.setColor(me.GetTheme(true, false));
@@ -173,7 +212,7 @@ public class Win7BSOD extends AppCompatActivity {
             float height = tPaint.measureText("yY");
             float width = tPaint.measureText(line);
             float x_coord = 0;
-            canvas.drawText(line, x_coord, height + 15f * i, tPaint); // 15f is to put space between top edge and the text, if you want to change it, you can
+            canvas.drawText(line, x_coord, (height + 15f * i) + shift, tPaint); // 15f is to put space between top edge and the text, if you want to change it, you can
             //canvas.drawBitmap(bmp, 0f, 0f, null);
             i++;
         }
