@@ -32,4 +32,6 @@
     <string name="screenMode">Režiim</string>
     <string name="culprit">Probleemne fail</string>
     <string name="showACPI">Kuva ACPI viga</string>
+    <string name="unsupportedDevice">Selle seadme Android versioon, ei toeta kindlaid joonistamisfunktsioone, mis on vajalikud selle sinise ekraani kuvamiseks.</string>
+    <string name="unsupportedTitle">Seda seadet ei toetata</string>
 </resources>

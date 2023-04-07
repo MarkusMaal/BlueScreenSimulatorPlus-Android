@@ -166,6 +166,9 @@ public class Win11BSOD extends AppCompatActivity {
         TextView emoticon = findViewById(R.id.sadSmile);
         TextView progress = findViewById(R.id.errorProgress);
         TextView moreInfo = findViewById(R.id.moreInfo);
+        descripy.setHorizontallyScrolling(true);
+        techInfo.setHorizontallyScrolling(true);
+        emoticon.setHorizontallyScrolling(true);
         moreInfo.setText(texts.get("Additional information"));
         progress.setText(texts.get("Progress"));
         emoticon.setText(me.GetString("emoticon"));

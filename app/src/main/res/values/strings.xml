@@ -548,4 +548,6 @@
     <string name="screenMode">Mode</string>
     <string name="culprit">Culprit file</string>
     <string name="showACPI">Show ACPI error</string>
+    <string name="unsupportedDevice">The version of Android this device is using, doesn\'t support certain drawing functions, which are required by this blue screen.</string>
+    <string name="unsupportedTitle">Unsupported device</string>
 </resources>

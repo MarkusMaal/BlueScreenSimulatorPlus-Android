@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout1"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
     android:layout_centerHorizontal="true"
@@ -35,7 +35,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="411dp"
         android:layout_gravity="clip_horizontal|center|center_horizontal|fill_horizontal|center_vertical"
         android:foregroundGravity="fill_horizontal|clip_horizontal|center_horizontal"
@@ -60,9 +60,11 @@
             android:id="@+id/errorDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="clip_horizontal"
             android:layout_marginTop="30sp"
-            android:layout_marginRight="70sp"
             android:fontFamily="@font/ubuntu_light"
+            android:foregroundGravity="clip_horizontal"
+            android:gravity="clip_horizontal"
             android:text="@string/Win11_Description"
             android:textColor="@color/white"
             android:textSize="23sp" />
@@ -72,7 +74,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30sp"
-            android:layout_marginRight="70sp"
             android:fontFamily="@font/ubuntu_light"
             android:text="@string/Win11_Progress"
             android:textColor="@color/white"

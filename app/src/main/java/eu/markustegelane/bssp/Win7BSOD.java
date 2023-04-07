@@ -1,6 +1,10 @@
 package eu.markustegelane.bssp;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,12 +19,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -63,6 +69,12 @@ public class Win7BSOD extends AppCompatActivity {
     private final Handler mHideHandler = new Handler(Looper.myLooper());
     private View mContentView;
     private String memcodes;
+
+    private int caret_x = 0;
+    private int caret_y = 0;
+    private int w;
+    private int h;
+    private Boolean visible = true;
     Map<String, String> texts;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -124,6 +136,7 @@ public class Win7BSOD extends AppCompatActivity {
         binding = ActivityWin7BsodBinding.inflate(getLayoutInflater());
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        binding.bsodWindow.setDrawingCacheEnabled(true);
         setContentView(binding.getRoot());
         if (me.GetString("os").equals("Windows XP") ||
                 me.GetString("os").equals("Windows Vista") ||
@@ -177,6 +190,38 @@ public class Win7BSOD extends AppCompatActivity {
             }.start();
         } else if (me.GetString("os").equals("Windows 9x/Me")) {
             Draw9xCanvas(me);
+            CountDownTimer a = new CountDownTimer(Long.MAX_VALUE, 150) {
+
+                @Override
+                public void onTick(long l) {
+                    visible = !visible;
+                    Bitmap bmp;
+                    try {
+                        bmp = binding.bsodWindow.getDrawingCache();
+                        Canvas canvas = new Canvas(bmp);
+                        Paint cPaint = new Paint();
+                        cPaint.setFilterBitmap(false);
+                        if (visible) {
+                            int r = 255 - Color.red(me.GetTheme(true, false));
+                            int g = 255 - Color.green(me.GetTheme(true, false));
+                            int b = 255 - Color.blue(me.GetTheme(true, false));
+                            cPaint.setColor(Color.rgb(r, g, b));
+                        } else {
+                            cPaint.setColor(me.GetTheme(true, false));
+                        }
+                        canvas.drawRect(caret_x, caret_y, caret_x + w, caret_y + ((float)h/8f), cPaint);
+                        binding.bsodWindow.setImageBitmap(bmp);
+                    } catch (Exception ignored) {
+                        cancel();
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            };
+            a.start();
         }
         //binding.bsodWindow.setScaleX(((float)me.GetInt("scale")) / 100);
         //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
@@ -184,6 +229,12 @@ public class Win7BSOD extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void Draw9xCanvas(BlueScreen me) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        };
         Bitmap rasters = BitmapFactory.decodeResource(getResources(), R.drawable.rasters3);
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String>>() {
@@ -195,37 +246,48 @@ public class Win7BSOD extends AppCompatActivity {
         rasters.setPremultiplied(false);
         rasters.setHasAlpha(false);
         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
-        Bitmap bmp = Bitmap.createBitmap(1150, 640, conf);
+        int x_offset = 150;
+        String firstcode = me.GenAddress(1, 2, false).replace("0x", "");
+        String[] codes = me.GenAddress(4, 4, false).replace("0x", "").split(", ");
+        String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
+        Bitmap bmp = Bitmap.createBitmap(x_offset * 2 + "* Press CTRL + ALT + DEL again to restart your computer. You will".length() * (rasters.getWidth() / alphabet.length()), 900, conf);
         bmp.setPremultiplied(false);
         bmp.setHasAlpha(false);
         Canvas canvas = new Canvas(bmp);
-        String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
         Map<Character, Bitmap> alphabetPics = new Hashtable<>();
-        int w = 16;
+        w = rasters.getWidth() / alphabet.length();
         int x = 0;
-        int h = rasters.getHeight();
+        h = rasters.getHeight();
         int i = 0;
         for (char c: alphabet.toCharArray()) {
             if ((i > 4) && (i % 2 == 1) && (i < 15)) {
-                x += 2;
+                x += 1;
             }
             if ((i > 14) && (i % 2 == 0) && (i < 28)) {
                 x += 2;
             }
-            if ((i > 31) && (i % 2 == 0) && (i < 36)) {
-                x += 3;
-            }
-            if ((i > 35) && (i % 2 == 1) && (i < 50)) {
-                x += 2;
-            }
-            if ((i > 50) && (i % 2 == 0) && (i < 58)) {
-                x += 2;
-            }
-            if ((i > 57) && (i % 2 == 1) && (i < 64)) {
-                x += 2;
-            }
-            if ((i > 65) && (i % 2 == 0)) {
-                x += 2;
+            switch (i) {
+                case 68:
+                    x += 2;
+                    break;
+                case 29:
+                    x -= 2;
+                    break;
+                case 30:
+                    x += 4;
+                    break;
+                case 33:
+                case 34:
+                case 40:
+                case 56:
+                case 62:
+                case 67:
+                    x += 3;
+                    break;
+                case 46:
+                case 52:
+                    x += 5;
+                    break;
             }
             if (x > rasters.getWidth() - w) {
                 x = rasters.getWidth() - w - 2;
@@ -235,50 +297,78 @@ public class Win7BSOD extends AppCompatActivity {
             x += w;
             i++;
         }
-        String windowsText = titles.get("Main");
-        String[] errorMessage = txts.get("Driver error").split("\n");
+        String windowsText = titles.get("System is busy");
+        String[] errorMessage = String.format(txts.get("System is busy"), firstcode, codes[1], codes[2]).split("\n");
         int y_offset = bmp.getHeight() / 2 - (h * (4 + errorMessage.length)) / 2;
-        int x_offset = 50;
         Paint tPaint = new Paint();
         tPaint.setFilterBitmap(false);
         tPaint.setColor(me.GetTheme(true, false));
+        int backBox_x = (bmp.getWidth() / 2 - (windowsText.length() * w) / 2) - 20;
+        int backBox_y = y_offset - 4;
+        int backBox_w = backBox_x + (w * windowsText.length() + 40);
+        int backBox_h = backBox_y + h + 8;
         canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
-        bmp = DrawText(bmp.getWidth() / 2 - (windowsText.length() * w) / 2, y_offset, w, h, alphabetPics, bmp, windowsText, me.GetTheme(true, true),me.GetTheme(false, true));
+        Paint bPaint = new Paint();
+        bPaint.setFilterBitmap(false);
+        bPaint.setColor(me.GetTheme(true, true));
+        canvas.drawRect(backBox_x, backBox_y, backBox_w, backBox_h, bPaint);
+        String prompt = txts.get("Prompt");
+        int i1 = y_offset + h + h + (errorMessage.length + 1) * h;
+        caret_x = (bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w) + (txts.get("Prompt").length() * w) + 10;
+        caret_y = i1 + (h - h/8) - 6;
+        caret_x += x_offset + w * 5 - 3;
+        caret_y += y_offset - 2* h - h * 0.6;
         int k = 0;
         for (String line: errorMessage) {
-            bmp = DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
             DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
+            if (bmp == null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getWindow().getContext());
+                builder.setMessage(R.string.unsupportedDevice).setPositiveButton(R.string.ok, dialogClickListener).setTitle(R.string.unsupportedTitle).show();
+                return;
+            }
+            bmp = DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
             k += 1;
         }
-        String prompt = txts.get("Prompt");
-        bmp = DrawText(bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w, y_offset + h + h + (k+1)*h, w, h, alphabetPics, bmp, prompt, me.GetTheme(false, false), me.GetTheme(true, false));
+        bmp = DrawText(bmp.getWidth() / 2 - (windowsText.length() * w) / 2, y_offset, w, h, alphabetPics, bmp, windowsText, me.GetTheme(true, true),me.GetTheme(false, true));
+
+        bmp = DrawText(bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w, i1, w, h, alphabetPics, bmp, prompt, me.GetTheme(false, false), me.GetTheme(true, false));
+
 
         binding.bsodWindow.setImageBitmap(bmp);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private Bitmap DrawText(int offset_x, int offset_y, int w, int h, Map<Character, Bitmap> alphabetPics, Bitmap original, String text, int bg, int fg) {
-        int x = offset_x;
-        int y = offset_y;
-        alphabetPics = ColorizeAlphabet(alphabetPics, bg, fg);
-        Bitmap newBitmap =  Bitmap.createBitmap(original.getWidth(), original.getHeight(),Bitmap.Config.ARGB_8888,false);
-        Canvas canvas = new Canvas(newBitmap);
-        DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
-        canvas.setDrawFilter(filter);
-        canvas.drawBitmap(original, 0, 0, null);
-        for (String line: text.split("\n")) {
-            for (Character c: line.toCharArray()) {
-                try {
-                    canvas.drawBitmap(alphabetPics.get(c), x, y, null);
-                } catch (Exception ignored){
-                    canvas.drawBitmap(alphabetPics.get('?'), x, y, null);
-                }
-                x+=w;
+        try {
+            int x = offset_x;
+            int y = offset_y;
+            alphabetPics = ColorizeAlphabet(alphabetPics, bg, fg);
+            Bitmap newBitmap = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                newBitmap = Bitmap.createBitmap(original.getWidth(), original.getHeight(), Bitmap.Config.ARGB_8888, false);
             }
-            x = offset_x;
-            y+=h;
+            if (newBitmap == null) {
+                return null;
+            }
+            Canvas canvas = new Canvas(newBitmap);
+            DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
+            canvas.setDrawFilter(filter);
+            canvas.drawBitmap(original, 0, 0, null);
+            for (String line : text.split("\n")) {
+                for (Character c : line.toCharArray()) {
+                    try {
+                        canvas.drawBitmap(alphabetPics.get(c), x, y, null);
+                    } catch (Exception ignored) {
+                        canvas.drawBitmap(alphabetPics.get('?'), x, y, null);
+                    }
+                    x += w;
+                }
+                x = offset_x;
+                y += h;
+            }
+            return newBitmap;
+        } catch (Exception e){
+            return null;
         }
-        return newBitmap;
     }
 
     private Map<Character, Bitmap> ColorizeAlphabet(Map<Character, Bitmap> source, int bg, int fg) {
@@ -294,7 +384,7 @@ public class Win7BSOD extends AppCompatActivity {
             currentLetter.getPixels(pixels, 0, width, 0, 0, width, height);
 
             for(int x = 0; x < pixels.length; ++x) {
-                pixels[x] = (Color.red(pixels[x]) < 90) ? Color.rgb(17, 17, 17) : pixels[x];
+                pixels[x] = (Color.red(pixels[x]) < 129) ? Color.rgb(17, 17, 17) : pixels[x];
                 pixels[x] = (pixels[x] != Color.rgb(17, 17, 17)) ? fg : pixels[x];
                 pixels[x] = (pixels[x] == Color.rgb(17, 17, 17)) ? bg : pixels[x];
             }
