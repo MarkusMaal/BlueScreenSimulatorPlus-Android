@@ -23,4 +23,13 @@
     <string name="ntEdit">NT koodiredaktor</string>
     <string name="advOption">Täpsemad valikud</string>
     <string name="showPars">Kuva parameetrid</string>
+    <string name="showFile">Kuva probleemne fail</string>
+    <string name="serverEdition">Serveri sinine ekraan</string>
+    <string name="amdProcessor">AMD protsessor</string>
+    <string name="showStackTrace">Kuva kuhila jälg</string>
+    <string name="blinkCursor">Vilkuv kursor</string>
+    <string name="playSound">Esita heli</string>
+    <string name="screenMode">Režiim</string>
+    <string name="culprit">Probleemne fail</string>
+    <string name="showACPI">Kuva ACPI viga</string>
 </resources>

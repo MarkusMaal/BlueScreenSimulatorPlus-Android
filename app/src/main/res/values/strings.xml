@@ -539,4 +539,13 @@
     <string name="ntEdit">NT code editor</string>
     <string name="advOption">Advanced options</string>
     <string name="showPars">Show parameters</string>
+    <string name="showFile">Show culprit file</string>
+    <string name="serverEdition">Server blue screen</string>
+    <string name="amdProcessor">AMD processor</string>
+    <string name="showStackTrace">Show stack trace</string>
+    <string name="blinkCursor">Blinking cursor</string>
+    <string name="playSound">Play sound</string>
+    <string name="screenMode">Mode</string>
+    <string name="culprit">Culprit file</string>
+    <string name="showACPI">Show ACPI error</string>
 </resources>

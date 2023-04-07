@@ -211,6 +211,16 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
+        binding.serverScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if ((!locked) && (os != null)) {
+                    os.SetBool("server", b);
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                }
+            }
+        });
+
         binding.ecodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -287,6 +297,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 NotImplemented();
             }
         });
+
+        binding.advancedOptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotImplemented();
+            }
+        });
         /*inding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -341,8 +358,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Switch green = binding.insiderCheck;
         Switch details = binding.showDetailsCheck;
         Switch pars = binding.showParCodes;
+        Switch server = binding.serverScreen;
 
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
+        server.setVisibility(View.GONE);
         ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE);
         switch (os.GetString("os")) {
             case "Windows 11":
@@ -352,6 +371,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 details.setVisibility(View.VISIBLE);
                 pars.setVisibility(View.VISIBLE);
                 parEdit.setVisibility(View.VISIBLE);
+                server.setVisibility(View.VISIBLE);
                 break;
             case "Windows 8/8.1":
                 ac.setVisibility(View.VISIBLE);
@@ -366,6 +386,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             case "Windows 2000":
                 ntEdit.setVisibility(View.VISIBLE);
                 parEdit.setVisibility(View.VISIBLE);
+                details.setVisibility(View.VISIBLE);
+                if (os.GetString("os").equals("Windows 7") || os.GetString("os").equals("Windows Vista")) {
+                    ac.setVisibility(View.VISIBLE);
+                }
                 break;
             case "Windows 9x/Me":
                 parEdit.setVisibility(View.VISIBLE);
@@ -380,6 +404,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         green.setChecked(os.GetBool("green"));
         details.setChecked(os.GetBool("show_description"));
         pars.setChecked(os.GetBool("extracodes"));
+        server.setChecked(os.GetBool("server"));
         saveSelection(i);
         for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
             if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {

@@ -105,7 +105,18 @@
                     android:minHeight="60sp"
                     android:text="@string/showPars"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/serverScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="false"
+                    android:minHeight="60sp"
+                    android:text="@string/serverEdition"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
             </com.google.android.flexbox.FlexboxLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

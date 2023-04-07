@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -65,6 +66,7 @@ public class Win11BSOD extends AppCompatActivity {
     public static Boolean qr = true;
     public static Boolean watermark = true;
     public static Boolean blackscreen = false;
+    public static Boolean server = false;
 
     public static int interval = 500;
     public static float scale = 0.75f;
@@ -157,6 +159,7 @@ public class Win11BSOD extends AppCompatActivity {
         qr = me.GetBool("qr");
         device = me.GetBool("device");
         blackscreen = me.GetBool("blackscreen");
+        server = me.GetBool("server");
         mVisible = true;
         TextView techInfo = findViewById(R.id.technicalDetails);
         TextView descripy = findViewById(R.id.errorDescription);
@@ -166,6 +169,9 @@ public class Win11BSOD extends AppCompatActivity {
         moreInfo.setText(texts.get("Additional information"));
         progress.setText(texts.get("Progress"));
         emoticon.setText(me.GetString("emoticon"));
+        if (server) {
+            emoticon.setVisibility(View.GONE);
+        }
         if (!watermark) { binding.waterMark.setVisibility(View.INVISIBLE);}
         if (!qr) {binding.qrCode.setVisibility(View.GONE);}
         if (autoClose) {
@@ -197,8 +203,14 @@ public class Win11BSOD extends AppCompatActivity {
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout);
         ll.setScaleX(scale);
         ll.setScaleY(scale);
-        ll.setTop(me.GetInt("margin-y"));
-        ll.setPadding(me.GetInt("margin-x"), 0, 0, 0);
+        if (server) {
+            ll.setVerticalGravity(Gravity.TOP);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
+            params.gravity = Gravity.TOP;
+            ll.setLayoutParams(params);
+        }
+        //ll.setTop(me.GetInt("margin-y"));
+        ll.setPadding(me.GetInt("margin-x"), me.GetInt("margin-y"), 0, 0);
         if (me.GetString("os").equals("Windows 8/8.1")) {
             binding.errorProgress.setVisibility(View.GONE);
             binding.qrCode.setVisibility(View.GONE);
