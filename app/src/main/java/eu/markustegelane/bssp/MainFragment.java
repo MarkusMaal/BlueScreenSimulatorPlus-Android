@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -334,10 +335,45 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 break;
             }
         }
+        Button ntEdit = binding.ntCodeEditButton;
+        Button parEdit = binding.codeEditButton;
         Switch ac = binding.autoCloseCheck;
         Switch green = binding.insiderCheck;
         Switch details = binding.showDetailsCheck;
         Switch pars = binding.showParCodes;
+
+        ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
+        ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE);
+        switch (os.GetString("os")) {
+            case "Windows 11":
+            case "Windows 10":
+                ac.setVisibility(View.VISIBLE);
+                green.setVisibility(View.VISIBLE);
+                details.setVisibility(View.VISIBLE);
+                pars.setVisibility(View.VISIBLE);
+                parEdit.setVisibility(View.VISIBLE);
+                break;
+            case "Windows 8/8.1":
+                ac.setVisibility(View.VISIBLE);
+                details.setVisibility(View.VISIBLE);
+                pars.setVisibility(View.VISIBLE);
+                parEdit.setVisibility(View.VISIBLE);
+                break;
+            case "Windows 7":
+            case "Windows Vista":
+            case "Windows XP":
+            case "Windows NT 3.x/4.0":
+            case "Windows 2000":
+                ntEdit.setVisibility(View.VISIBLE);
+                parEdit.setVisibility(View.VISIBLE);
+                break;
+            case "Windows 9x/Me":
+                parEdit.setVisibility(View.VISIBLE);
+                break;
+            default:
+                details.setVisibility(View.VISIBLE);
+                break;
+        }
         Spinner eCodeSpin = binding.ecodeSpinner;
         String ecode = os.GetString("code");
         ac.setChecked(os.GetBool("autoclose"));

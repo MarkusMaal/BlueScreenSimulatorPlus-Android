@@ -58,41 +58,54 @@
                 android:minWidth="250dp"
                 android:minHeight="50dp" />
 
-            <Switch
-                android:id="@+id/insiderCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:minHeight="60sp"
-                android:text="@string/insiderPreviewCheck"
-                tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
-            <Switch
-                android:id="@+id/autoCloseCheck"
+            <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
-                android:minHeight="60sp"
-                android:text="@string/autoClose"
-                tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                app:alignContent="flex_start"
+                app:alignItems="flex_start"
+                app:flexWrap="wrap">
 
-            <Switch
-                android:id="@+id/showDetailsCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:minHeight="60sp"
-                android:text="@string/showDetails"
-                tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/insiderCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:gravity="center"
+                    android:minHeight="60sp"
+                    android:text="@string/insiderPreviewCheck"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
-            <Switch
-                android:id="@+id/showParCodes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:minHeight="60sp"
-                android:text="@string/showPars"
-                tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/autoCloseCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:text="@string/autoClose"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+                <Switch
+                    android:id="@+id/showDetailsCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:text="@string/showDetails"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+                <Switch
+                    android:id="@+id/showParCodes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="false"
+                    android:minHeight="60sp"
+                    android:text="@string/showPars"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+            </com.google.android.flexbox.FlexboxLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -140,7 +153,6 @@
                         android:layout_weight="1"
                         android:text="@string/advOption" />
                 </com.google.android.flexbox.FlexboxLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -155,26 +167,40 @@
                         android:layout_weight="0"
                         android:text="@string/developer" />
 
-                    <Button
-                        android:id="@+id/dispJson"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="Display JSON data (DEV)" />
 
-                    <Button
-                        android:id="@+id/resetSettings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="Reset all settings (DEV)" />
 
-                    <Button
-                        android:id="@+id/settingsButton"
+                    <com.google.android.flexbox.FlexboxLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:text="@string/settingsButton" />
+                        app:alignContent="flex_start"
+                        app:alignItems="flex_start"
+                        app:flexWrap="wrap">
+
+
+                        <Button
+                            android:id="@+id/dispJson"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="Display JSON data (DEV)" />
+
+                        <Button
+                            android:id="@+id/resetSettings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="Reset all settings (DEV)" />
+
+                        <Button
+                            android:id="@+id/settingsButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/settingsButton" />
+                    </com.google.android.flexbox.FlexboxLayout>
 
                 </LinearLayout>
 
