@@ -22,4 +22,5 @@
     <string name="codeEdit">Parameetriredaktor</string>
     <string name="ntEdit">NT koodiredaktor</string>
     <string name="advOption">Täpsemad valikud</string>
+    <string name="showPars">Kuva parameetrid</string>
 </resources>

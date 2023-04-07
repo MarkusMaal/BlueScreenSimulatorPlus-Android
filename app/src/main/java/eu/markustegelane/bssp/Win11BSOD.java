@@ -1,5 +1,7 @@
 package eu.markustegelane.bssp;
 
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
 
 import androidx.appcompat.app.ActionBar;
@@ -100,7 +102,7 @@ public class Win11BSOD extends AppCompatActivity {
             if (actionBar != null) {
                 actionBar.show();
             }
-            mControlsView.setVisibility(View.VISIBLE);
+            mControlsView.setVisibility(VISIBLE);
         }
     };
     private boolean mVisible;
@@ -202,6 +204,15 @@ public class Win11BSOD extends AppCompatActivity {
             binding.qrCode.setVisibility(View.GONE);
             binding.moreInfo.setVisibility(View.GONE);
             binding.linLay1.setPadding(0, -20, 0, 0);
+        }
+
+        if (me.GetBool("extracodes")) {
+            binding.parameters.setVisibility(VISIBLE);
+            binding.parameters.setTextSize((float)me.GetInt("scale") / 9f);
+            binding.parameters.setTextSize((float)me.GetInt("scale") / 9f);
+            String codes = "";
+            codes += me.GenAddress(4, 16, false).replace(", ", "\n");
+            binding.parameters.setText(codes);
         }
 
         new CountDownTimer(interval * 100L, interval) {

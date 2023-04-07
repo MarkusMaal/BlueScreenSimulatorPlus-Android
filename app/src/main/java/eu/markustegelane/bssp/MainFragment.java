@@ -200,6 +200,16 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
+        binding.showParCodes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if ((!locked) && (os != null)) {
+                    os.SetBool("extracodes", b);
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                }
+            }
+        });
+
         binding.ecodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -327,11 +337,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Switch ac = binding.autoCloseCheck;
         Switch green = binding.insiderCheck;
         Switch details = binding.showDetailsCheck;
+        Switch pars = binding.showParCodes;
         Spinner eCodeSpin = binding.ecodeSpinner;
         String ecode = os.GetString("code");
         ac.setChecked(os.GetBool("autoclose"));
         green.setChecked(os.GetBool("green"));
         details.setChecked(os.GetBool("show_description"));
+        pars.setChecked(os.GetBool("extracodes"));
         saveSelection(i);
         for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
             if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {

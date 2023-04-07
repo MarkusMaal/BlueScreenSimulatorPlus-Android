@@ -28,6 +28,7 @@
         android:id="@+id/parameters"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="clip_horizontal|clip_vertical|top"
         android:text="0x0000000000000000\n0x0000000000000000\n0x0000000000000000\n0x0000000000000000"
         android:textColor="@color/white"
         android:visibility="invisible" />

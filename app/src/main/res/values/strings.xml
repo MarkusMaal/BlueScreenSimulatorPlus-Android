@@ -538,4 +538,5 @@
     <string name="codeEdit">Parameter editor</string>
     <string name="ntEdit">NT code editor</string>
     <string name="advOption">Advanced options</string>
+    <string name="showPars">ShowParameters</string>
 </resources>
