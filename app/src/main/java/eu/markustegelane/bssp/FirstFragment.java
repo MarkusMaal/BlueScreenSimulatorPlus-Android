@@ -1,6 +1,8 @@
 package eu.markustegelane.bssp;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -200,6 +202,54 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        locked = true;
+                        bluescreens.clear();
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                        Gson gson = new Gson();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        bluescreens.add(new BlueScreen("Windows 1.x/2.x", true));
+                        bluescreens.add(new BlueScreen("Windows 3.1x", true));
+                        bluescreens.add(new BlueScreen("Windows 9x/Me", true));
+                        bluescreens.add(new BlueScreen("Windows CE", true));
+                        bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true));
+                        bluescreens.add(new BlueScreen("Windows 2000", true));
+                        bluescreens.add(new BlueScreen("Windows XP", true));
+                        bluescreens.add(new BlueScreen("Windows Vista", true));
+                        bluescreens.add(new BlueScreen("Windows 7", true));
+                        bluescreens.add(new BlueScreen("Windows 8/8.1", true));
+                        bluescreens.add(new BlueScreen("Windows 10", true));
+                        bluescreens.add(new BlueScreen("Windows 11", true));
+                        String json = gson.toJson(bluescreens);
+                        editor.putString("bluescreens", json);
+                        editor.putInt("selectedItem", 0);
+                        editor.apply();
+                        Toast.makeText(getContext(), "Settings have been reset. Restarting activity...", Toast.LENGTH_SHORT).show();
+                        Intent i = getActivity().getIntent();
+                        getActivity().finish();
+                        startActivity(i);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        Toast.makeText(getContext(), "No changes to settings have been made", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        };
+
+        binding.resetSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage("Warning: This will reset EVERYTHING and all of your custom preferences will be erased. Are you sure you want to continue?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).setTitle("Reset all settings").show();
             }
         });
 

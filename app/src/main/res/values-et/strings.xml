@@ -18,4 +18,5 @@
     <string name="colorpick">Muud värvi</string>
     <string name="settingsButton">Seaded</string>
     <string name="notImplemented">Pole implementeeritud!</string>
+    <string name="developer">Arendaja valikud</string>
 </resources>

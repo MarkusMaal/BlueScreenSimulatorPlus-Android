@@ -96,6 +96,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_weight="0"
                         android:text="@string/execute" />
 
                     <Button
@@ -114,12 +115,27 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="0"
+                        android:text="@string/developer" />
+
                     <Button
                         android:id="@+id/dispJson"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
                         android:text="Display JSON data (DEV)" />
+
+                    <Button
+                        android:id="@+id/resetSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="Reset all settings (DEV)" />
 
                 </LinearLayout>
 
