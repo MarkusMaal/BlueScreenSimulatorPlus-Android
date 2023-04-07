@@ -1,12 +1,21 @@
 package eu.markustegelane.bssp;
 
+import static android.content.Context.SENSOR_SERVICE;
+import static androidx.fragment.app.FragmentManager.TAG;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,19 +31,15 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import eu.markustegelane.bssp.databinding.FragmentFirstBinding;
-public class FirstFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class MainFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private FragmentFirstBinding binding;
 
@@ -145,8 +150,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
                     startActivity(i);
                     break;
                 default:
-                    Snackbar.make(view, R.string.notImplemented, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    NotImplemented();
                     break;
             }
         });
@@ -165,16 +169,22 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
         binding.autoCloseCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!locked) {
-                    os.SetBool("autoclose", b);
-                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                if ((!locked) && (os != null)) {
+                    try {
+                        os.SetBool("autoclose", b);
+                        saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                    } catch (Exception ignored) {
+                        Intent i = getActivity().getIntent();
+                        getActivity().finish();
+                        startActivity(i);
+                    }
                 }
             }
         });
         binding.insiderCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!locked) {
+                if ((!locked) && (os != null)) {
                     os.SetBool("green", b);
                     saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 }
@@ -183,7 +193,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
         binding.showDetailsCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!locked) {
+                if ((!locked) && (os != null)) {
                     os.SetBool("show_description", b);
                     saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 }
@@ -193,7 +203,7 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
         binding.ecodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!locked) {
+                if ((!locked) && (os != null)) {
                     os.SetString("code", adapterView.getItemAtPosition(i).toString());
                     saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 }
@@ -253,6 +263,19 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
             }
         });
 
+        binding.codeEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotImplemented();
+            }
+        });
+
+        binding.ntCodeEditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotImplemented();
+            }
+        });
         /*inding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -260,6 +283,10 @@ public class FirstFragment extends Fragment implements AdapterView.OnItemSelecte
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
         });*/
+    }
+
+    void NotImplemented() {
+        Toast.makeText(getContext(), R.string.notImplemented, Toast.LENGTH_SHORT).show();
     }
 
     @Override

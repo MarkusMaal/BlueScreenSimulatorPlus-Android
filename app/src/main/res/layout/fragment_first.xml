@@ -4,17 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FirstFragment">
+    tools:context=".MainFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="40sp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.49">
+        app:layout_constraintVertical_bias="0.49"
+        app:layout_constraintVertical_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,17 +62,9 @@
                 android:id="@+id/insiderCheck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:minHeight="60sp"
                 android:text="@string/insiderPreviewCheck"
-                tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-
-            <Switch
-                android:id="@+id/showDetailsCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:minHeight="60sp"
-                android:text="@string/showDetails"
                 tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
             <Switch
@@ -81,33 +76,61 @@
                 android:text="@string/autoClose"
                 tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
+            <Switch
+                android:id="@+id/showDetailsCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:minHeight="60sp"
+                android:text="@string/showDetails"
+                tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.flexbox.FlexboxLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    app:alignContent="flex_start"
+                    app:alignItems="flex_start"
+                    app:flexWrap="wrap">
+
 
                     <Button
                         android:id="@+id/executeButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginEnd="20sp"
                         android:layout_weight="0"
                         android:text="@string/execute" />
 
                     <Button
-                        android:id="@+id/settingsButton"
+                        android:id="@+id/ntCodeEditButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_weight="0"
-                        android:text="@string/settingsButton" />
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:text="@string/ntEdit" />
 
-                </LinearLayout>
+                    <Button
+                        android:id="@+id/codeEditButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:text="@string/codeEdit" />
+
+                    <Button
+                        android:id="@+id/advancedOptionButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:text="@string/advOption" />
+                </com.google.android.flexbox.FlexboxLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -136,6 +159,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
                         android:text="Reset all settings (DEV)" />
+
+                    <Button
+                        android:id="@+id/settingsButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/settingsButton" />
 
                 </LinearLayout>
 

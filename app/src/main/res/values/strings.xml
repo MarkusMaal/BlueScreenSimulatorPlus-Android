@@ -36,6 +36,227 @@
         <item>Setting B</item>
         <item>Setting C</item>
     </string-array>
+    <string-array name="CulpritFiles">
+        <item>ACPI.sys:ACPI Driver for NT</item>
+        <item>acpiex.sys:ACPIEx Driver</item>
+        <item>afd.sys:Ancillary Function Driver for WinSock</item>
+        <item>afunix.sys:AF_UNIX socket provider</item>
+        <item>AgileVpn.sys:RAS Agile Vpn Miniport Call Manager</item>
+        <item>ahcache.sys:Application Compatibility Cache</item>
+        <item>atrfiltr.sys:Example ATR Filter Driver</item>
+        <item>bam.sys:BAM Kernel Driver</item>
+        <item>BasicDisplay.sys:Microsoft Basic Display Driver</item>
+        <item>BasicRender.sys:Microsoft Basic Render Driver</item>
+        <item>BazisVirtualCDBus.sys:WinCDEmu virtual CDROM bus</item>
+        <item>Beep.SYS:BEEP Driver</item>
+        <item>bindflt.sys:Windows Bind Filter Driver</item>
+        <item>BOOTVID.dll:VGA Boot Driver</item>
+        <item>bowser.sys:NT Lan Manager Datagram Receiver Driver</item>
+        <item>buttrfly.sys:Butterfly Device Driver</item>
+        <item>cdd.dll:Canonical Display Driver</item>
+        <item>cdrom.sys:SCSI CD-ROM Driver</item>
+        <item>CEA.sys:Event Aggregation Kernel Mode Library</item>
+        <item>CI.dll:Code Integrity Module</item>
+        <item>CimFS.SYS:</item>
+        <item>CLASSPNP.SYS:SCSI Class System Dll</item>
+        <item>cldflt.sys:Cloud Files Mini Filter Driver</item>
+        <item>CLFS.SYS:Common Log File System Driver</item>
+        <item>clipsp.sys:CLIP Service</item>
+        <item>cmimcext.sys:Kernel Configuration Manager Initial Configuration Extension Host Export Driver</item>
+        <item>cng.sys:Kernel Cryptography, Next Generation</item>
+        <item>CompositeBus.sys:Multi-Transport Composite Bus Enumerator</item>
+        <item>condrv.sys:Console Driver</item>
+        <item>crashdmp.sys:Crash Dump Driver</item>
+        <item>dfsc.sys:DFS Namespace Client Driver</item>
+        <item>disk.sys:PnP Disk Driver</item>
+        <item>drmk.sys:Microsoft Trusted Audio Drivers</item>
+        <item>dump_diskdump.sys:</item>
+        <item>dump_dumpfve.sys:</item>
+        <item>dump_storahci.sys:</item>
+        <item>dxgkrnl.sys:DirectX Graphics Kernel</item>
+        <item>dxgmms2.sys:DirectX Graphics MMS</item>
+        <item>EMVSCARD.sys:USB Smart Card Reader</item>
+        <item>example.sys:Example Driver</item>
+        <item>fastfat.SYS:Fast FAT File System Driver</item>
+        <item>filecrypt.sys:Windows sandboxing and encryption filter</item>
+        <item>fileinfo.sys:FileInfo Filter Driver</item>
+        <item>FLTMGR.SYS:Microsoft Filesystem Filter Manager</item>
+        <item>fltrshy.sys:Filter Management Driver</item>
+        <item>Fs_Rec.sys:File System Recognizer Driver</item>
+        <item>fvevol.sys:BitLocker Drive Encryption Driver</item>
+        <item>fwpkclnt.sys:FWP/IPsec Kernel-Mode API</item>
+        <item>gdrv2.sys:GIGA-BYTE NonPnP Driver</item>
+        <item>gpuenergydrv.sys:GPU Energy Kernel Driver</item>
+        <item>gt680x.sys:USB Scanner Driver</item>
+        <item>hal.dll:Hardware Abstraction Layer DLL</item>
+        <item>hcmon.sys:VMware USB monitor</item>
+        <item>HDAudBus.sys:High Definition Audio Bus Driver</item>
+        <item>HIDCLASS.SYS:Hid Class Library</item>
+        <item>HIDPARSE.SYS:Hid Parsing Library</item>
+        <item>hidusb.sys:USB Miniport Driver for Input Devices</item>
+        <item>hl3eng.sys:A game that doesn\'t and will never exist</item>
+        <item>HTTP.sys:HTTP Protocol Stack</item>
+        <item>hvservice.sys:Hypervisor Boot Driver</item>
+        <item>hvsocket.sys:Microsoft Hyper-V Socket Provider</item>
+        <item>iaLPSS2i_GPIO2_CNL.sys:Intel(R) Serial IO GPIO Driver v2</item>
+        <item>id10t.sys:ID10T Device Driver</item>
+        <item>intelpep.sys:Intel Power Engine Plugin</item>
+        <item>intelppm.sys:Processor Device Driver</item>
+        <item>IntelTA.sys:Intel Telemetry Driver</item>
+        <item>iorate.sys:I/O rate control Filter</item>
+        <item>kbdclass.sys:Keyboard Class Driver</item>
+        <item>kbdhid.sys:HID Keyboard Filter Driver</item>
+        <item>kd.dll:Local Kernel Debugger</item>
+        <item>kdnic.sys:Microsoft Kernel Debugger Network Miniport</item>
+        <item>ks.sys:Kernel CSA Library</item>
+        <item>ksecdd.sys:Kernel Security Support Provider Interface</item>
+        <item>ksecpkg.sys:Kernel Security Support Provider Interface Packages</item>
+        <item>ksthunk.sys:Kernel Streaming WOW Thunk Service</item>
+        <item>kwhite.sys:Kitty White</item>
+        <item>lltdio.sys:Link-Layer Topology Mapper I/O Driver</item>
+        <item>luafv.sys:LUA File Virtualization Filter Driver</item>
+        <item>LXCORE.SYS:LX Core</item>
+        <item>lxss.sys:LXSS</item>
+        <item>mmcss.sys:MMCSS Driver</item>
+        <item>monitor.sys:Monitor Driver</item>
+        <item>mouclass.sys:Mouse Class Driver</item>
+        <item>mouhid.sys:HID Mouse Filter Driver</item>
+        <item>mountmgr.sys:Mount Point Manager</item>
+        <item>mpsdrv.sys:Microsoft Protection Service Driver</item>
+        <item>mrxsmb.sys:Windows NT SMB Minirdr</item>
+        <item>mrxsmb20.sys:Longhorn SMB 2.0 Redirector</item>
+        <item>Msfs.SYS:Mailslot driver</item>
+        <item>msgpioclx.sys:GPIO Class Extension Driver</item>
+        <item>msisadrv.sys:ISA Driver</item>
+        <item>mslldp.sys:Microsoft Link-Layer Discovery Protocol Driver</item>
+        <item>msquic.sys:Windows QUIC Driver</item>
+        <item>msrpc.sys:Kernel Remote Procedure Call Provider</item>
+        <item>mssmbios.sys:System Management BIOS Driver</item>
+        <item>mup.sys:Multiple UNC Provider Driver</item>
+        <item>myfault.sys:Not my fault</item>
+        <item>ndis.sys:Network Driver Interface Specification (NDIS)</item>
+        <item>ndiscap.sys:Microsoft NDIS Packet Capture Filter Driver</item>
+        <item>ndistapi.sys:NDIS 3.0 connection wrapper driver</item>
+        <item>NdisVirtualBus.sys:Microsoft Virtual Network Adapter Enumerator</item>
+        <item>ndiswan.sys:MS PPP Framing Driver (Strong Encryption)</item>
+        <item>NDProxy.sys:NDIS Proxy</item>
+        <item>Ndu.sys:Windows Network Data Usage Monitoring Driver</item>
+        <item>netbios.sys:NetBIOS interface driver</item>
+        <item>netbt.sys:MBT Transport driver</item>
+        <item>NETIO.SYS:Network I/O Subsystem</item>
+        <item>Npfs.SYS:NPFS Driver</item>
+        <item>npsvctrig.sys:Named pipe service triggers</item>
+        <item>nsiproxy.sys:NSI Proxy</item>
+        <item>Ntfs.sys:NT File System Driver</item>
+        <item>ntosext.sys:NTOS extension host driver</item>
+        <item>ntoskrnl.exe:NT Kernel &amp; System</item>
+        <item>Null.SYS:NULL Driver</item>
+        <item>nvhda64v.sys:NVIDIA HDMI Audio Driver</item>
+        <item>nvlddmkm.sys:NVIDIA Windows Kernel Mode Driver, Version 461.40</item>
+        <item>NvModuleTracker.sys:Process and module monitoring driver</item>
+        <item>nvvad64v.sys:NVIDIA Virtual Audio Driver</item>
+        <item>nvvhci.sys:Virtual USB Host Controller driver</item>
+        <item>pacer.sys:QoS Packet Scheduler</item>
+        <item>partmgr.sys:Partition driver</item>
+        <item>pci.sys:NT Plug and Play PCI Enumerator</item>
+        <item>pcw.sys:Performance Counters for Windows Driver</item>
+        <item>pdc.sys:Power Dependency Coordinator Driver</item>
+        <item>peauth.sys:Protected Environment Authentication and Authorization Export Driver</item>
+        <item>portcls.sys:Port Class (Class Driver for Port/Miniport Devices)</item>
+        <item>PSHED.dll:Platform Specific Hardware Error Driver</item>
+        <item>rarity.sys:Rarity</item>
+        <item>rasl2tp.sys:RAS L2TP mini-port/call-manager driver</item>
+        <item>raspppoe.sys:RAS PPPoE mini-port/call-manager driver</item>
+        <item>raspptp.sys:Peer-to-Peer Tunneling Protocol</item>
+        <item>rassstp.sys:RAS SSTP Miniport Call Manager</item>
+        <item>rdbss.sys:Redirected Drive Buffering SubSystem Driver</item>
+        <item>rdpbus.sys:Microsoft RDP Bus Device driver</item>
+        <item>rdpvideominiport.sys:Microsoft RDP Video Miniport driver</item>
+        <item>rdyboost.sys:ReadyBoost Driver</item>
+        <item>rspndr.sys:Link-Layer Topology Responder Driver for NDIS 6</item>
+        <item>rt640x64.sys:Realtek 8125/8136/8168/8169 NDIS 6.40 64-bit Driver</item>
+        <item>RTKVHD64.sys:Realtek(r) High Definition Audio Function Driver</item>
+        <item>scfilter.sys:Microsoft Smart Card Reader Filter Driver</item>
+        <item>SgrmAgent.sys:System Guard Runtime Monitor Agent Driver</item>
+        <item>SleepStudyHelper.sys:Sleep Study Helper</item>
+        <item>SMCLIB.SYS:Smart Card Driver Library</item>
+        <item>spaceport.sys:Storage Spaces Driver</item>
+        <item>srv2.sys:Smb 2.0 Server driver</item>
+        <item>srvnet.sys:Server Network driver</item>
+        <item>storahci.sys:MS AHCI Storport Miniport Driver</item>
+        <item>storport.sys:Microsoft Storage Port Driver</item>
+        <item>storqosflt.sys:Storage QoS Filter</item>
+        <item>storvsp.sys:Storage vsp Driver</item>
+        <item>sweden.sys:Blue And Yellow</item>
+        <item>swenum.sys:Plug and Play Software Device Enumerator</item>
+        <item>tardis.sys:Tardis</item>
+        <item>tbs.sys:Export driver for kernel mode TPM API</item>
+        <item>tcpip.sys:TCP/IP driver</item>
+        <item>tcpipreg.sys:TCP/IP Registry Compatibility Driver</item>
+        <item>TDI.SYS:TDI Wrapper</item>
+        <item>tdx.sys:TDI Translation Driver</item>
+        <item>TeeDriverW10x64.sys:Intel(R) Management Engine Interface</item>
+        <item>tm.sys:Kernel Transaction Manager Driver</item>
+        <item>tmeter.sys:NDIS helper driver</item>
+        <item>ucx01000.sys:USB Controller Extension</item>
+        <item>UEFI.sys:UEFI Driver for NT</item>
+        <item>umbus.sys:User-Mode Bus Enumerator</item>
+        <item>umpass.sys:Generic pass-through driver</item>
+        <item>usbaudio.sys:USB Audio Class Driver</item>
+        <item>usbccgp.sys:USB Common Class Generic Parent Driver</item>
+        <item>USBD.SYS:Universal Serial Bus Driver</item>
+        <item>UsbHub3.sys:USB3 HUB Driver</item>
+        <item>USBSTOR.SYS:USB Mass Storage Class Driver</item>
+        <item>usbvideo.sys:USB Video Class Driver</item>
+        <item>USBXHCI.SYS:USB XHCI Driver</item>
+        <item>VBoxDrv.sys:VirtualBox Support Driver</item>
+        <item>VBoxNetLwf.sys:VirtualBox NDIS 6.0 Lightweight Filter Driver</item>
+        <item>VBoxUSBMon.sys:VirtualBox USB Monitor Driver</item>
+        <item>vdrvroot.sys:Virtual Drive Root Enumerator</item>
+        <item>vfpext.sys:Microsoft Azure VFP Extension</item>
+        <item>Vid.sys:Microsoft Hyper-V Virtualization Infrastructure Driver</item>
+        <item>vmbkmclr.sys:Hyper-V VMBus Root KMCL</item>
+        <item>vmbusr.sys:Microsoft Hyper-V Virtual Machine Bus Root Driver</item>
+        <item>vmci.sys:VMware PCI VMCI Bus Device</item>
+        <item>vmm.sys:Virtual Machine Monitor</item>
+        <item>VMNET.SYS:VMware virtual network driver (64-bit)</item>
+        <item>vmnetadapter.sys:VMware virtual network adapter driver (64-bit)</item>
+        <item>vmnetbridge.sys:VMware bridge driver (64-bit)</item>
+        <item>vmnetuserif.sys:VMware network application interface driver (64-bit)</item>
+        <item>VmsProxy.sys:VMSWITCH Proxy Driver</item>
+        <item>VmsProxyHNic.sys:VmSwitch NIC Proxy Driver</item>
+        <item>vmswitch.sys:Microsoft® Network Virtualization Service Provider</item>
+        <item>vmx86.sys:VMware kernel driver</item>
+        <item>volmgr.sys:Volume Manager Driver</item>
+        <item>volmgrx.sys:Volume Manager Extension Driver</item>
+        <item>volsnap.sys:Volume Shadow Copy driver</item>
+        <item>volume.sys:Volume driver</item>
+        <item>vpcivsp.sys:Virtual PCI VSP Driver</item>
+        <item>vsock.sys:VMware vSockets Service</item>
+        <item>vwififlt.sys:Virtual WiFi Filter Driver</item>
+        <item>wanarp.sys:MS Remote Access and Routing ARP Driver</item>
+        <item>watchdog.sys:Watchdog Driver</item>
+        <item>wcifs.sys:Windows Container Isolation FS Filter Driver</item>
+        <item>Wdf01000.sys:Kernel Mode Driver Framework Runtime</item>
+        <item>WdFilter.sys:Microsoft antimalware file system filter driver</item>
+        <item>WDFLDR.SYS:Kernel Mode Driver Framework Loader</item>
+        <item>WdNisDrv.sys:Windows Defender Network Stream Filter</item>
+        <item>werkernel.sys:Windows Error Reporting Kernel Driver</item>
+        <item>wfplwfs.sys:WFP NDIS 6.30 Lightweight Filter Dsriver</item>
+        <item>win32k.sys:Multi-User Win32 Driver</item>
+        <item>win32kbase.sys:Win32 base kernel driver</item>
+        <item>win32kfull.sys:Full/Desktop Win32k Kernel Driver</item>
+        <item>WindowsTrustedRT.sys:Windows Trusted Runtime Interface Driver</item>
+        <item>WindowsTrustedRTProxy.sys:Windows Trusted Runtime Service Proxy Driver</item>
+        <item>winhvr.sys:Windows Hypervisor Root Interface Driver</item>
+        <item>wmiacpi.sys:Windows Management Interface for ACPI</item>
+        <item>WMILIB.SYS:WMILIB WMI support library Dll</item>
+        <item>Wof.sys:Windows Overlay Filter</item>
+        <item>WpdUpFltr.sys:Windows Portable Device Upper Class Filter Driver</item>
+        <item>WppRecorder.sys:WPP Trace Recorder</item>
+        <item>ws2ifsl.sys:Winsock2 IFS Layer</item>
+        <item>WUDFRd.sys:Windows Driver Foundation - User-mode Driver Framework Reflector</item>
+    </string-array>
     <string-array name="ErrorCodes">
         <item>APC_INDEX_MISMATCH (0x00000001)</item>
         <item>DEVICE_QUEUE_NOT_BUSY (0x00000002)</item>
@@ -314,4 +535,7 @@
     <string name="ok" translatable="false">OK</string>
     <string name="notImplemented">Not implemented yet!</string>
     <string name="developer">Developer options</string>
+    <string name="codeEdit">Parameter editor</string>
+    <string name="ntEdit">NT code editor</string>
+    <string name="advOption">Advanced options</string>
 </resources>

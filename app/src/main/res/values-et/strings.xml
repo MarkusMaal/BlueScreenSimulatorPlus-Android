@@ -19,4 +19,7 @@
     <string name="settingsButton">Seaded</string>
     <string name="notImplemented">Pole implementeeritud!</string>
     <string name="developer">Arendaja valikud</string>
+    <string name="codeEdit">Parameetriredaktor</string>
+    <string name="ntEdit">NT koodiredaktor</string>
+    <string name="advOption">Täpsemad valikud</string>
 </resources>

@@ -19,6 +19,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -201,17 +203,23 @@ public class Win11BSOD extends AppCompatActivity {
             binding.moreInfo.setVisibility(View.GONE);
             binding.linLay1.setPadding(0, -20, 0, 0);
         }
+
         new CountDownTimer(interval * 100L, interval) {
             public void onTick(long millisUntilFinished) {
                 Long progress;
                 progress = (Long)((interval * 100L - millisUntilFinished) / interval);
                 TextView progressText = (TextView)findViewById(R.id.errorProgress);
-                if (me.GetString("os").equals("Windows 8/8.1")) {
-                    if (autoClose) {
-                        descripy.setText(String.format(texts.get("Information text with dump"), progress.toString()));
+                try {
+                    if (me.GetString("os").equals("Windows 8/8.1")) {
+                        if (autoClose) {
+                            descripy.setText(String.format(texts.get("Information text with dump"), progress.toString()));
+                        }
+                    } else {
+                        progressText.setText(String.format(texts.get("Progress"), progress.toString()));
                     }
-                } else {
-                    progressText.setText(String.format(texts.get("Progress"), progress.toString()));
+                } catch (Exception e) {
+                    Toast.makeText(getWindow().getContext(), "Error occoured:\n" + e.toString(), Toast.LENGTH_SHORT).show();
+                    cancel();
                 }
             }
 
