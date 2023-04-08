@@ -22,9 +22,11 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +40,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import eu.markustegelane.bssp.databinding.ActivityWin7BsodBinding;
@@ -246,11 +250,11 @@ public class Win7BSOD extends AppCompatActivity {
         rasters.setPremultiplied(false);
         rasters.setHasAlpha(false);
         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
-        int x_offset = 150;
+        int x_offset = 50;
         String firstcode = me.GenAddress(1, 2, false).replace("0x", "");
         String[] codes = me.GenAddress(4, 4, false).replace("0x", "").split(", ");
         String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
-        Bitmap bmp = Bitmap.createBitmap(x_offset * 2 + "* Press CTRL + ALT + DEL again to restart your computer. You will".length() * (rasters.getWidth() / alphabet.length()), 900, conf);
+        Bitmap bmp = Bitmap.createBitmap(640, 320, conf);
         bmp.setPremultiplied(false);
         bmp.setHasAlpha(false);
         Canvas canvas = new Canvas(bmp);
@@ -259,35 +263,14 @@ public class Win7BSOD extends AppCompatActivity {
         int x = 0;
         h = rasters.getHeight();
         int i = 0;
+        String shiftOne = "bctuvwxy1360:,.+*!-";
+        String shiftTwo = "BEGIKMOQSUWYaegijmoqs~479(/' ";
         for (char c: alphabet.toCharArray()) {
-            if ((i > 4) && (i % 2 == 1) && (i < 15)) {
+            if (shiftOne.indexOf(c) != -1) {
                 x += 1;
             }
-            if ((i > 14) && (i % 2 == 0) && (i < 28)) {
+            if (shiftTwo.indexOf(c) != -1) {
                 x += 2;
-            }
-            switch (i) {
-                case 68:
-                    x += 2;
-                    break;
-                case 29:
-                    x -= 2;
-                    break;
-                case 30:
-                    x += 4;
-                    break;
-                case 33:
-                case 34:
-                case 40:
-                case 56:
-                case 62:
-                case 67:
-                    x += 3;
-                    break;
-                case 46:
-                case 52:
-                    x += 5;
-                    break;
             }
             if (x > rasters.getWidth() - w) {
                 x = rasters.getWidth() - w - 2;
@@ -298,7 +281,19 @@ public class Win7BSOD extends AppCompatActivity {
             i++;
         }
         String windowsText = titles.get("System is busy");
-        String[] errorMessage = String.format(txts.get("System is busy"), firstcode, codes[1], codes[2]).split("\n");
+        String[] errorMessage;
+        List<String> test_Message = new ArrayList<String>();
+        for  (char letter: alphabet.toCharArray()) {
+            switch (letter) {
+                case 'f':
+                case ':':
+                    test_Message.add("\n");
+                    break;
+            }
+            test_Message.add("?" + letter);
+        }
+        errorMessage = String.join("", test_Message).split("\n");
+        //String[] errorMessage = String.format(txts.get("System is busy"), firstcode, codes[1], codes[2]).split("\n");
         int y_offset = bmp.getHeight() / 2 - (h * (4 + errorMessage.length)) / 2;
         Paint tPaint = new Paint();
         tPaint.setFilterBitmap(false);
