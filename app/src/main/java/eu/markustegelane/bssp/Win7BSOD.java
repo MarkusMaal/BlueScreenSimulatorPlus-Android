@@ -79,6 +79,10 @@ public class Win7BSOD extends AppCompatActivity {
     private int w;
     private int h;
     private Boolean visible = true;
+
+    private Bitmap BufferA;
+    private Bitmap BufferB;
+
     Map<String, String> texts;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -140,7 +144,7 @@ public class Win7BSOD extends AppCompatActivity {
         binding = ActivityWin7BsodBinding.inflate(getLayoutInflater());
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        binding.bsodWindow.setDrawingCacheEnabled(true);
+        binding.bsodWindow.setDrawingCacheEnabled(false);
         setContentView(binding.getRoot());
         if (me.GetString("os").equals("Windows XP") ||
                 me.GetString("os").equals("Windows Vista") ||
@@ -192,29 +196,21 @@ public class Win7BSOD extends AppCompatActivity {
                     }
                 }
             }.start();
-        } else if (me.GetString("os").equals("Windows 9x/Me")) {
+        } else if (me.GetString("os").equals("Windows 9x/Me") ||
+                   me.GetString("os").equals("Windows 3.1x")) {
             Draw9xCanvas(me);
-            CountDownTimer a = new CountDownTimer(Long.MAX_VALUE, 150) {
+            CountDownTimer a = new CountDownTimer(Long.MAX_VALUE, me.GetInt("blink_speed")) {
 
                 @Override
                 public void onTick(long l) {
                     visible = !visible;
                     Bitmap bmp;
                     try {
-                        bmp = binding.bsodWindow.getDrawingCache();
-                        Canvas canvas = new Canvas(bmp);
-                        Paint cPaint = new Paint();
-                        cPaint.setFilterBitmap(false);
                         if (visible) {
-                            int r = 255 - Color.red(me.GetTheme(true, false));
-                            int g = 255 - Color.green(me.GetTheme(true, false));
-                            int b = 255 - Color.blue(me.GetTheme(true, false));
-                            cPaint.setColor(Color.rgb(r, g, b));
+                            binding.bsodWindow.setImageBitmap(BufferB);
                         } else {
-                            cPaint.setColor(me.GetTheme(true, false));
+                            binding.bsodWindow.setImageBitmap(BufferA);
                         }
-                        canvas.drawRect(caret_x, caret_y, caret_x + w, caret_y + ((float)h/8f), cPaint);
-                        binding.bsodWindow.setImageBitmap(bmp);
                     } catch (Exception ignored) {
                         cancel();
                     }
@@ -252,7 +248,7 @@ public class Win7BSOD extends AppCompatActivity {
         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
         int x_offset = 50;
         String firstcode = me.GenAddress(1, 2, false).replace("0x", "");
-        String[] codes = me.GenAddress(4, 4, false).replace("0x", "").split(", ");
+        String[] codes = me.GenAddress(4, 8, false).replace("0x", "").split(", ");
         String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
         Bitmap bmp = Bitmap.createBitmap(640, 320, conf);
         bmp.setPremultiplied(false);
@@ -263,8 +259,8 @@ public class Win7BSOD extends AppCompatActivity {
         int x = 0;
         h = rasters.getHeight();
         int i = 0;
-        String shiftOne = "bctuvwxy1360:,.+*!-";
-        String shiftTwo = "BEGIKMOQSUWYaegijmoqs~479(/' ";
+        String shiftOne = "TWXYZalmnoprsbcwxy1360:,.+*!-";
+        String shiftTwo = "BEGIKMOQSVegijtv~479(/' ";
         for (char c: alphabet.toCharArray()) {
             if (shiftOne.indexOf(c) != -1) {
                 x += 1;
@@ -280,9 +276,16 @@ public class Win7BSOD extends AppCompatActivity {
             x += w;
             i++;
         }
-        String windowsText = titles.get("System is busy");
-        String[] errorMessage;
-        List<String> test_Message = new ArrayList<String>();
+        String windowsText = titles.get("Main");
+        switch (me.GetString("Screen mode")) {
+            case "System is unresponsive":
+                windowsText = titles.get("Warning");
+                break;
+            case "System is busy":
+                windowsText = titles.get("System is busy");
+                break;
+        }
+        /*List<String> test_Message = new ArrayList<String>();
         for  (char letter: alphabet.toCharArray()) {
             switch (letter) {
                 case 'f':
@@ -292,16 +295,25 @@ public class Win7BSOD extends AppCompatActivity {
             }
             test_Message.add("?" + letter);
         }
-        errorMessage = String.join("", test_Message).split("\n");
-        //String[] errorMessage = String.format(txts.get("System is busy"), firstcode, codes[1], codes[2]).split("\n");
+        errorMessage = String.join("", test_Message).split("\n");*/
+        if (me.GetString("Screen mode").equals("")) {
+            me.SetString("Screen mode", "Application error");
+        }
+        String screenText = txts.get(me.GetString("Screen mode"));
+        String[] errorMessage;
+        if (screenText.contains("%s")) {
+            errorMessage = String.format(screenText, firstcode, codes[1].substring(0, 4), codes[2], codes[3]).split("\n");
+        } else {
+            errorMessage = screenText.split("\n");
+        }
         int y_offset = bmp.getHeight() / 2 - (h * (4 + errorMessage.length)) / 2;
         Paint tPaint = new Paint();
         tPaint.setFilterBitmap(false);
         tPaint.setColor(me.GetTheme(true, false));
-        int backBox_x = (bmp.getWidth() / 2 - (windowsText.length() * w) / 2) - 20;
-        int backBox_y = y_offset - 4;
-        int backBox_w = backBox_x + (w * windowsText.length() + 40);
-        int backBox_h = backBox_y + h + 8;
+        int backBox_x = (bmp.getWidth() / 2 - (windowsText.length() * w) / 2) - 10;
+        int backBox_y = y_offset - 2;
+        int backBox_w = backBox_x + (w * windowsText.length() + 20);
+        int backBox_h = backBox_y + h + 4;
         canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
         Paint bPaint = new Paint();
         bPaint.setFilterBitmap(false);
@@ -309,10 +321,8 @@ public class Win7BSOD extends AppCompatActivity {
         canvas.drawRect(backBox_x, backBox_y, backBox_w, backBox_h, bPaint);
         String prompt = txts.get("Prompt");
         int i1 = y_offset + h + h + (errorMessage.length + 1) * h;
-        caret_x = (bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w) + (txts.get("Prompt").length() * w) + 10;
-        caret_y = i1 + (h - h/8) - 6;
-        caret_x += x_offset + w * 5 - 3;
-        caret_y += y_offset - 2* h - h * 0.6;
+        caret_x = (bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w) + (txts.get("Prompt").length() * w) + w / 2;
+        caret_y = i1 + (h - h/4);
         int k = 0;
         for (String line: errorMessage) {
             DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
@@ -328,8 +338,17 @@ public class Win7BSOD extends AppCompatActivity {
 
         bmp = DrawText(bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w, i1, w, h, alphabetPics, bmp, prompt, me.GetTheme(false, false), me.GetTheme(true, false));
 
+        BufferA = bmp.copy(bmp.getConfig(), true);
+        BufferB = bmp.copy(bmp.getConfig(), true);
+        bmp.recycle();
+        bmp = null;
 
-        binding.bsodWindow.setImageBitmap(bmp);
+        canvas = new Canvas(BufferB);
+        Paint cPaint = new Paint();
+        cPaint.setFilterBitmap(false);
+        cPaint.setColor(me.GetTheme(true, true));
+        canvas.drawRect(caret_x, caret_y, caret_x + w, caret_y + ((float)h/8f), cPaint);
+        binding.bsodWindow.setImageBitmap(BufferA);
     }
 
     private Bitmap DrawText(int offset_x, int offset_y, int w, int h, Map<Character, Bitmap> alphabetPics, Bitmap original, String text, int bg, int fg) {

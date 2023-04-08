@@ -221,6 +221,21 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
+        binding.nineXSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if ((!locked) && (os != null)) {
+                    os.SetString("Screen mode", adapterView.getItemAtPosition(i).toString());
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        
         binding.ecodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -354,6 +369,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         }
         Button ntEdit = binding.ntCodeEditButton;
         Button parEdit = binding.codeEditButton;
+        Spinner nineXSpinner = binding.nineXSpinner;
         Switch ac = binding.autoCloseCheck;
         Switch green = binding.insiderCheck;
         Switch details = binding.showDetailsCheck;
@@ -361,7 +377,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Switch server = binding.serverScreen;
 
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
-        server.setVisibility(View.GONE);
+        server.setVisibility(View.GONE); nineXSpinner.setVisibility(View.GONE);
         ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE);
         switch (os.GetString("os")) {
             case "Windows 11":
@@ -393,6 +409,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 break;
             case "Windows 9x/Me":
                 parEdit.setVisibility(View.VISIBLE);
+                nineXSpinner.setVisibility(View.VISIBLE);
                 break;
             default:
                 details.setVisibility(View.VISIBLE);
@@ -409,6 +426,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
             if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {
                 eCodeSpin.setSelection(j);
+                break;
+            }
+        }
+
+        for (int j = 0; j < nineXSpinner.getAdapter().getCount(); j++) {
+            if (nineXSpinner.getItemAtPosition(j).toString().equals(os.GetString("Screen mode"))) {
+                nineXSpinner.setSelection(j);
                 break;
             }
         }

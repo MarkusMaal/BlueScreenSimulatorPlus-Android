@@ -9,6 +9,13 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string-array name="NineXErrors">
+        <item>System error</item>
+        <item>Application error</item>
+        <item>Driver error</item>
+        <item>System is busy</item>
+        <item>System is unresponsive</item>
+    </string-array>
     <string-array name="OperatingSystems">
         <item>Windows 11</item>
         <item>Windows 10</item>
