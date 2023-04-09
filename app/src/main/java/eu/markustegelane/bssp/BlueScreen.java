@@ -317,12 +317,6 @@ public class BlueScreen implements Serializable {
     //inspir is a string where each character represents if the value is fixed or random
     public String GenHex(int lettercount, String inspir)
     {
-        //sleep command is used to make sure that randomization works properly
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         StringBuilder output = new StringBuilder();
         Random r = new Random();
         for (int i = 0; i < lettercount; i++)
