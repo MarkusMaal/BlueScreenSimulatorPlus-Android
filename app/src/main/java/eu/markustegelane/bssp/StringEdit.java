@@ -1,9 +1,5 @@
 package eu.markustegelane.bssp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,11 +9,13 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,12 +23,10 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import eu.markustegelane.bssp.databinding.FragmentFirstBinding;
-import kotlin.Suppress;
 
 public class StringEdit extends AppCompatActivity {
 
@@ -120,8 +116,12 @@ public class StringEdit extends AppCompatActivity {
                     List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
                     String key = String.join(" ", ls.subList(0, ls.size() - 1));
                     String type = ls.get(ls.size() - 1);
-                    if (type.equals("[integer]")) {
-                        os.SetInt(key, Integer.parseInt(editable.toString()));
+                    try {
+                        if (type.equals("[integer]")) {
+                            os.SetInt(key, Integer.parseInt(editable.toString()));
+                        }
+                    } catch (Exception ignored) {
+
                     }
                     saveSettings(bsods, os, os_id);
                 }

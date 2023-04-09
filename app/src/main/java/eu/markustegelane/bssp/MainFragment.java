@@ -1,10 +1,12 @@
 package eu.markustegelane.bssp;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -364,6 +366,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     void ColorChooser(int color, String title, Boolean bg, Boolean hl) {
+        int textColor = Color.BLACK;
+        if (isDarkTheme(getActivity())) {
+            textColor = Color.WHITE;
+        }
         ColorPickerDialogBuilder
                 .with(getContext())
                 .setTitle(title)
@@ -395,7 +401,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 })
                 .showAlphaSlider(false)
                 .showColorEdit(true)
-                .setColorEditTextColor(Color.BLACK)
+                .setColorEditTextColor(textColor)
                 .build()
                 .show();
     }
@@ -404,6 +410,12 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public boolean isDarkTheme(Activity activity) {
+        int currentNightMode = activity.getResources().getConfiguration().uiMode &
+                Configuration.UI_MODE_NIGHT_MASK;
+        return currentNightMode == Configuration.UI_MODE_NIGHT_YES;
     }
 
     public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
