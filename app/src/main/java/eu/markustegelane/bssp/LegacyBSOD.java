@@ -229,11 +229,136 @@ public class LegacyBSOD extends AppCompatActivity {
                 }
             };
             a.start();
+        } else if (me.GetString("os").equals("Windows 2000") ||
+                    me.GetString("os").equals("Windows NT 3.x/4.0")) {
+            DrawNTCanvas(me);
+            CountDownTimer a = new CountDownTimer(Long.MAX_VALUE, me.GetInt("blink_speed")) {
+
+                @Override
+                public void onTick(long l) {
+                    visible = !visible;
+                    Bitmap bmp;
+                    try {
+                        if (visible) {
+                            binding.bsodWindow.setImageBitmap(BufferB);
+                        } else {
+                            binding.bsodWindow.setImageBitmap(BufferA);
+                        }
+                    } catch (Exception ignored) {
+                        cancel();
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            };
         }
         //binding.bsodWindow.setScaleX(((float)me.GetInt("scale")) / 100);
         //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void DrawNTCanvas(BlueScreen me) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        };
+
+        Bitmap rasters = BitmapFactory.decodeResource(getResources(), R.drawable.rasternt);
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        Map <String, String> txts;
+        txts = gson.fromJson(me.GetTexts(), type);
+        rasters.setPremultiplied(false);
+        rasters.setHasAlpha(false);
+        Bitmap.Config conf = Bitmap.Config.ARGB_4444;
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~:,.+*()[]{}/\\-_ ";
+        Bitmap bmp = Bitmap.createBitmap(640, 480, conf);
+        bmp.setPremultiplied(false);
+        bmp.setHasAlpha(false);
+        Canvas canvas = new Canvas(bmp);
+        Map<Character, Bitmap> alphabetPics = new Hashtable<>();
+        w = rasters.getWidth() / alphabet.length();
+        int x = 0;
+        h = rasters.getHeight();
+        int i = 0;
+        String shiftOne = "TWXYZalmnoprsbcwxy1360:,.+*!-";
+        String shiftTwo = "BEGIKMOQSVegijtv~479(/' ";
+        for (char c: alphabet.toCharArray()) {
+            /*if (shiftOne.indexOf(c) != -1) {
+                x += 1;
+            }
+            if (shiftTwo.indexOf(c) != -1) {
+                x += 2;
+            }*/
+            if (x > rasters.getWidth() - w) {
+                x = rasters.getWidth() - w - 2;
+            }
+            alphabetPics.put(c, Bitmap.createBitmap(rasters, x, 0, w, h, new Matrix(), false));
+
+            x += w;
+            i++;
+        }
+        /*List<String> test_Message = new ArrayList<String>();
+        for  (char letter: alphabet.toCharArray()) {
+            switch (letter) {
+                case 'f':
+                case ':':
+                    test_Message.add("\n");
+                    break;
+            }
+            test_Message.add("?" + letter);
+        }
+        errorMessage = String.join("", test_Message).split("\n");*/
+        String[] errorMessage;
+        String myText = "";
+        if (me.GetString("os").equals("Windows 2000")) {
+            myText = String.format(txts.get("Error code formatting"), me.GetString("code").split(" ")[1].substring(1, 11), me.GenAddress(4, 8, false).replace(", ", ",")) + "\n";
+            myText += me.GetString("code").split(" ")[0] + "\n\n";
+            myText += txts.get("Troubleshooting introduction") + "\n\n";
+            myText += txts.get("Troubleshooting text") + "\n\n";
+            myText += txts.get("Additional troubleshooting information") + "\n\n";
+        } else if (me.GetString("os").equals("Windows NT")) {
+
+        }
+        errorMessage = (myText).split("\n");
+        int y_offset = 0;
+        Paint tPaint = new Paint();
+        tPaint.setFilterBitmap(false);
+        tPaint.setColor(me.GetTheme(true, false));
+        canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
+        int i1 = y_offset + h + h + (errorMessage.length + 1) * h;
+        caret_x = 0;
+        caret_y = (h - h/4);
+        int k = 0;
+        for (String line: errorMessage) {
+            bmp = DrawText(0, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false), alphabet);
+            //if (bmp == null) {
+            //    AlertDialog.Builder builder = new AlertDialog.Builder(getWindow().getContext());
+            //    builder.setMessage(R.string.unsupportedDevice).setPositiveButton(R.string.ok, dialogClickListener).setTitle(R.string.unsupportedTitle).show();
+            //    return;
+           // }
+            DrawText(0, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false), alphabet);
+            k += 1;
+        }
+
+        BufferA = bmp.copy(bmp.getConfig(), true);
+        BufferB = bmp.copy(bmp.getConfig(), true);
+        bmp.recycle();
+        bmp = null;
+
+        canvas = new Canvas(BufferB);
+        Paint cPaint = new Paint();
+        cPaint.setFilterBitmap(false);
+        cPaint.setColor(me.GetTheme(true, true));
+        canvas.drawRect(caret_x, caret_y, caret_x + w, caret_y + ((float)h/8f), cPaint);
+        binding.bsodWindow.setImageBitmap(BufferA);
+    }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void Draw9xCanvas(BlueScreen me) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -335,18 +460,18 @@ public class LegacyBSOD extends AppCompatActivity {
         caret_y = i1 + (h - h/4);
         int k = 0;
         for (String line: errorMessage) {
-            bmp = DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
+            bmp = DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false), alphabet);
             if (bmp == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getWindow().getContext());
                 builder.setMessage(R.string.unsupportedDevice).setPositiveButton(R.string.ok, dialogClickListener).setTitle(R.string.unsupportedTitle).show();
                 return;
             }
-            DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
+            DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false), alphabet);
             k += 1;
         }
-        bmp = DrawText(bmp.getWidth() / 2 - (windowsText.length() * w) / 2, y_offset, w, h, alphabetPics, bmp, windowsText, me.GetTheme(false, true),me.GetTheme(true, true));
+        bmp = DrawText(bmp.getWidth() / 2 - (windowsText.length() * w) / 2, y_offset, w, h, alphabetPics, bmp, windowsText, me.GetTheme(false, true),me.GetTheme(true, true), alphabet);
 
-        bmp = DrawText(bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w, i1, w, h, alphabetPics, bmp, prompt, me.GetTheme(false, false), me.GetTheme(true, false));
+        bmp = DrawText(bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w, i1, w, h, alphabetPics, bmp, prompt, me.GetTheme(false, false), me.GetTheme(true, false), alphabet);
 
         BufferA = bmp.copy(bmp.getConfig(), true);
         BufferB = bmp.copy(bmp.getConfig(), true);
@@ -361,11 +486,10 @@ public class LegacyBSOD extends AppCompatActivity {
         binding.bsodWindow.setImageBitmap(BufferA);
     }
 
-    private Bitmap DrawText(int offset_x, int offset_y, int w, int h, Map<Character, Bitmap> alphabetPics, Bitmap original, String text, int bg, int fg) {
-        try {
+    private Bitmap DrawText(int offset_x, int offset_y, int w, int h, Map<Character, Bitmap> alphabetPics, Bitmap original, String text, int bg, int fg, String alphabet) {
             int x = offset_x;
             int y = offset_y;
-            alphabetPics = ColorizeAlphabet(alphabetPics, bg, fg);
+            alphabetPics = ColorizeAlphabet(alphabetPics, bg, fg, alphabet);
             Bitmap newBitmap = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 newBitmap = Bitmap.createBitmap(original.getWidth(), original.getHeight(), Bitmap.Config.ARGB_8888, false);
@@ -382,7 +506,7 @@ public class LegacyBSOD extends AppCompatActivity {
                     try {
                         canvas.drawBitmap(alphabetPics.get(c), x, y, null);
                     } catch (Exception ignored) {
-                        canvas.drawBitmap(alphabetPics.get('?'), x, y, null);
+                        canvas.drawBitmap(alphabetPics.get(' '), x, y, null);
                     }
                     x += w;
                 }
@@ -390,13 +514,10 @@ public class LegacyBSOD extends AppCompatActivity {
                 y += h;
             }
             return newBitmap;
-        } catch (Exception e){
-            return null;
-        }
     }
 
-    private Map<Character, Bitmap> ColorizeAlphabet(Map<Character, Bitmap> source, int bg, int fg) {
-        String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
+    private Map<Character, Bitmap> ColorizeAlphabet(Map<Character, Bitmap> source, int bg, int fg, String alphabet) {
+        //String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
         Map<Character, Bitmap> output = new Hashtable<>();
         for (char letter: alphabet.toCharArray()) {
             Bitmap currentLetter = source.get(letter);
