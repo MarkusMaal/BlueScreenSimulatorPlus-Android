@@ -254,6 +254,7 @@ public class LegacyBSOD extends AppCompatActivity {
 
                 }
             };
+            a.start();
         }
         //binding.bsodWindow.setScaleX(((float)me.GetInt("scale")) / 100);
         //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
@@ -273,7 +274,11 @@ public class LegacyBSOD extends AppCompatActivity {
         Type type = new TypeToken<Map<String, String>>() {
         }.getType();
         Map <String, String> txts;
+        Map <String, String[]> culpritfiles;
         txts = gson.fromJson(me.GetTexts(), type);
+        type = new TypeToken<Map<String, String[]>>() {
+        }.getType();
+        culpritfiles = gson.fromJson(me.GetFiles(), type);
         rasters.setPremultiplied(false);
         rasters.setHasAlpha(false);
         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
@@ -287,15 +292,7 @@ public class LegacyBSOD extends AppCompatActivity {
         int x = 0;
         h = rasters.getHeight();
         int i = 0;
-        String shiftOne = "TWXYZalmnoprsbcwxy1360:,.+*!-";
-        String shiftTwo = "BEGIKMOQSVegijtv~479(/' ";
         for (char c: alphabet.toCharArray()) {
-            /*if (shiftOne.indexOf(c) != -1) {
-                x += 1;
-            }
-            if (shiftTwo.indexOf(c) != -1) {
-                x += 2;
-            }*/
             if (x > rasters.getWidth() - w) {
                 x = rasters.getWidth() - w - 2;
             }
@@ -304,29 +301,54 @@ public class LegacyBSOD extends AppCompatActivity {
             x += w;
             i++;
         }
-        /*List<String> test_Message = new ArrayList<String>();
-        for  (char letter: alphabet.toCharArray()) {
-            switch (letter) {
-                case 'f':
-                case ':':
-                    test_Message.add("\n");
-                    break;
-            }
-            test_Message.add("?" + letter);
-        }
-        errorMessage = String.join("", test_Message).split("\n");*/
         String[] errorMessage;
-        String myText = "";
+        StringBuilder myText = new StringBuilder(String.format(txts.get("Error code formatting"), me.GetString("code").split(" ")[1].substring(1, 11), me.GenAddress(4, 8, false).replace(", ", ",")) + "\n");
+        myText.append(me.GetString("code").split(" ")[0]).append("\n\n");
         if (me.GetString("os").equals("Windows 2000")) {
-            myText = String.format(txts.get("Error code formatting"), me.GetString("code").split(" ")[1].substring(1, 11), me.GenAddress(4, 8, false).replace(", ", ",")) + "\n";
-            myText += me.GetString("code").split(" ")[0] + "\n\n";
-            myText += txts.get("Troubleshooting introduction") + "\n\n";
-            myText += txts.get("Troubleshooting text") + "\n\n";
-            myText += txts.get("Additional troubleshooting information") + "\n\n";
-        } else if (me.GetString("os").equals("Windows NT")) {
+            myText.append(txts.get("Troubleshooting introduction")).append("\n\n");
+            myText.append(txts.get("Troubleshooting text")).append("\n\n");
+            myText.append(txts.get("Additional troubleshooting information")).append("\n\n");
+        } else if (me.GetString("os").equals("Windows NT 3.x/4.0")) {
+            String processorText = "GenuineIntel";
+            if (me.GetBool("amd")) {
+                processorText = "AuthenticAMD";
+            }
+            myText.append(String.format(txts.get("CPUID formatting"), processorText)).append("\n\n");
+            myText.append(String.format("%-38.38s %-38.38s", txts.get("Stack trace heading"), txts.get("Stack trace heading"))).append("\n");
+            for (int n = 0; n < culpritfiles.size(); n += 2) {
+                String filename1 = (String) culpritfiles.keySet().toArray()[n];
+                if (culpritfiles.get(filename1).length > 2) {
+                    continue;
+                }
+                String filename2 = null;
+                try {
+                    filename2 = (String) culpritfiles.keySet().toArray()[n + 1];
+                } catch (Exception ignored) {
 
+                }
+                String[] codes1 = culpritfiles.get(filename1);
+                if (filename2 != null) {
+                    String[] codes2 = culpritfiles.get(filename2);
+                    myText.append(String.format("%-38.38s %-38.41s", String.format(txts.get("Stack trace table formatting"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), filename1), String.format(txts.get("Stack trace table formatting"), me.GenHex(8, codes2[0]), me.GenHex(8, codes2[1]), filename2)));
+                } else {
+                    myText.append(String.format("%-38.38s", String.format(txts.get("Stack trace table formatting"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), filename1)));
+                }
+                myText.append("\n");
+            }
+            myText.append("\n\n");
+            myText.append(txts.get("Memory address dump heading")).append("\n");
+            for (int n = 0; n < culpritfiles.size(); n++) {
+                String filename1 = (String) culpritfiles.keySet().toArray()[n];
+                if (culpritfiles.get(filename1).length < 6) {
+                    continue;
+                }
+                String[] codes1 = culpritfiles.get(filename1);
+                myText.append(String.format(txts.get("Memory address dump table"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), me.GenHex(8, codes1[2]), me.GenHex(8, codes1[3]), me.GenHex(8, codes1[4]), me.GenHex(8, codes1[5]), me.GenHex(8, codes1[6]), filename1)).append("\n");
+            }
+            myText.append("\n");
+            myText.append(txts.get("Troubleshooting text"));
         }
-        errorMessage = (myText).split("\n");
+        errorMessage = myText.toString().split("\n");
         int y_offset = 0;
         Paint tPaint = new Paint();
         tPaint.setFilterBitmap(false);
@@ -338,12 +360,11 @@ public class LegacyBSOD extends AppCompatActivity {
         int k = 0;
         for (String line: errorMessage) {
             bmp = DrawText(0, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false), alphabet);
-            //if (bmp == null) {
-            //    AlertDialog.Builder builder = new AlertDialog.Builder(getWindow().getContext());
-            //    builder.setMessage(R.string.unsupportedDevice).setPositiveButton(R.string.ok, dialogClickListener).setTitle(R.string.unsupportedTitle).show();
-            //    return;
-           // }
-            DrawText(0, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false), alphabet);
+            if (bmp == null) {
+               AlertDialog.Builder builder = new AlertDialog.Builder(getWindow().getContext());
+                builder.setMessage(R.string.unsupportedDevice).setPositiveButton(R.string.ok, dialogClickListener).setTitle(R.string.unsupportedTitle).show();
+                return;
+            }
             k += 1;
         }
 
@@ -355,8 +376,8 @@ public class LegacyBSOD extends AppCompatActivity {
         canvas = new Canvas(BufferB);
         Paint cPaint = new Paint();
         cPaint.setFilterBitmap(false);
-        cPaint.setColor(me.GetTheme(true, true));
-        canvas.drawRect(caret_x, caret_y, caret_x + w, caret_y + ((float)h/8f), cPaint);
+        cPaint.setColor(me.GetTheme(false, false));
+        canvas.drawRect(0, 2 * h - (h/4f), w, 2 * h - (h / 4f) + ((float)h/4f), cPaint);
         binding.bsodWindow.setImageBitmap(BufferA);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)

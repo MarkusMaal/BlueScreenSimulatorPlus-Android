@@ -57,18 +57,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Gson gson = new Gson();
         if (sharedPreferences.getString("bluescreens", null) == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            bluescreens.add(new BlueScreen("Windows 1.x/2.x", true));
-            bluescreens.add(new BlueScreen("Windows 3.1x", true));
-            bluescreens.add(new BlueScreen("Windows 9x/Me", true));
-            bluescreens.add(new BlueScreen("Windows CE", true));
-            bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true));
-            bluescreens.add(new BlueScreen("Windows 2000", true));
-            bluescreens.add(new BlueScreen("Windows XP", true));
-            bluescreens.add(new BlueScreen("Windows Vista", true));
-            bluescreens.add(new BlueScreen("Windows 7", true));
-            bluescreens.add(new BlueScreen("Windows 8/8.1", true));
-            bluescreens.add(new BlueScreen("Windows 10", true));
-            bluescreens.add(new BlueScreen("Windows 11", true));
+            bluescreens.add(new BlueScreen("Windows 1.x/2.x", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows 3.1x", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows 9x/Me", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows CE", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows 2000", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows XP", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows Vista", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows 7", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows 8/8.1", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows 10", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows 11", true, getActivity()));
             String json = gson.toJson(bluescreens);
             editor.putString("bluescreens", json);
             editor.apply();
@@ -140,6 +140,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     break;
                 case "Windows 3.1x":
                 case "Windows 9x/Me":
+                case "Windows NT 3.x/4.0":
                 case "Windows 2000":
                 case "Windows CE":
                 case "Windows XP":
@@ -263,18 +264,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                         Gson gson = new Gson();
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        bluescreens.add(new BlueScreen("Windows 1.x/2.x", true));
-                        bluescreens.add(new BlueScreen("Windows 3.1x", true));
-                        bluescreens.add(new BlueScreen("Windows 9x/Me", true));
-                        bluescreens.add(new BlueScreen("Windows CE", true));
-                        bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true));
-                        bluescreens.add(new BlueScreen("Windows 2000", true));
-                        bluescreens.add(new BlueScreen("Windows XP", true));
-                        bluescreens.add(new BlueScreen("Windows Vista", true));
-                        bluescreens.add(new BlueScreen("Windows 7", true));
-                        bluescreens.add(new BlueScreen("Windows 8/8.1", true));
-                        bluescreens.add(new BlueScreen("Windows 10", true));
-                        bluescreens.add(new BlueScreen("Windows 11", true));
+                        bluescreens.add(new BlueScreen("Windows 1.x/2.x", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows 3.1x", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows 9x/Me", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows CE", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows 2000", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows XP", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows Vista", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows 7", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows 8/8.1", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows 10", true, getActivity()));
+                        bluescreens.add(new BlueScreen("Windows 11", true, getActivity()));
                         String json = gson.toJson(bluescreens);
                         editor.putString("bluescreens", json);
                         editor.putInt("selectedItem", 0);

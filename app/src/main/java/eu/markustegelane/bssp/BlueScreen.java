@@ -1,5 +1,6 @@
 package eu.markustegelane.bssp;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
@@ -8,7 +9,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -28,6 +31,7 @@ public class BlueScreen implements Serializable {
     private String os;
 
     transient Typeface font;
+    transient Activity activity;
 
     String titles;
     String texts;
@@ -40,7 +44,7 @@ public class BlueScreen implements Serializable {
 
     transient private final Random r;
 
-    public BlueScreen(String base_os, boolean autosetup) {
+    public BlueScreen(String base_os, boolean autosetup, Activity activity) {
         Gson gson = new Gson();
         this.r = new Random();
         this.background = Color.argb(255, 0, 0, 0);
@@ -62,6 +66,7 @@ public class BlueScreen implements Serializable {
         this.progression = gson.toJson(new Hashtable<Integer, Integer>());
 
         this.font = Typeface.create("Lucida Console", Typeface.NORMAL);
+        this.activity = activity;
         if (autosetup) { SetOSSpecificDefaults(); }
     }
 
@@ -403,10 +408,29 @@ public class BlueScreen implements Serializable {
     }
 
     //GenFile generates a new file for use in Windows NT blue screen
-    public String GenFile(Boolean lower)
+    public String GenFile(Boolean lower, Activity activity)
     {
-        // add code here later
-        return "null.sys";
+        String[] files = activity.getResources().getStringArray(R.array.CulpritFiles);
+        List<String> filenames = new ArrayList<>();
+        for (String line: files) {
+            filenames.add(line.split(":")[0]);
+        }
+        int temp = r.nextInt(filenames.size() - 1);
+        boolean hasKey = true;
+        while (hasKey) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<Map<String, String[]>>(){}.getType();
+            Map<String, String[]> codefiles = gson.fromJson(this.GetFiles(), type);
+            hasKey = codefiles.containsKey(filenames.get(temp));
+            if (hasKey) {
+                temp = this.r.nextInt(filenames.size() - 1);
+            }
+        }
+        if (!lower) {
+            return filenames.get(temp);
+        } else {
+            return filenames.get(temp).toLowerCase();
+        }
     }
 
     public void SetDefaultProgression()
@@ -518,19 +542,19 @@ public class BlueScreen implements Serializable {
                 PushText("Memory address dump heading", "Address  dword dump   Build [1381]                            - Name");
 
                 SetInt("scale", 75);
-                PushText("Memory address dump table", "%s %s %s %s %s %s           - %s");
+                PushText("Memory address dump table", "%s %s %s %s %s %s %s - %s");
                 PushText("Troubleshooting text", "Restart and set the recovery options in the system control panel\nor the /CRASHDEBUG system start option.");
                 SetInt("blink_speed", 100);
                 SetString("friendlyname", "Windows NT 4.0/3.x (Text mode, Standard)");
                 for (int n = 0; n < 40; n++)
                 {
                     String[] inspirn = { "RRRRRRRR", "RRRRRRRR" };
-                    PushFile(GenFile(true), inspirn);
+                    PushFile(GenFile(true, this.activity), inspirn);
                 }
                 for (int n = 0; n < 4; n++)
                 {
-                    String[] inspirn = { "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
-                    PushFile(GenFile(true), inspirn);
+                    String[] inspirn = { "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" , "RRRRRRRR" };
+                    PushFile(GenFile(true, this.activity), inspirn);
                 }
                 SetBool("font_support", false);
                 SetBool("blinkblink", true);
@@ -549,7 +573,7 @@ public class BlueScreen implements Serializable {
                 SetString("friendlyname", "Windows 2000 Professional/Server Family (640x480, Standard)");
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
                 String[] inspirw2k = { "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
-                SetString("culprit", GenFile(true));
+                SetString("culprit", GenFile(true, this.activity));
                 PushFile(GetString("culprit"), inspirw2k);
                 SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
                 SetBool("show_description", true);
@@ -569,7 +593,7 @@ public class BlueScreen implements Serializable {
                 SetFont("Lucida Console", Typeface.NORMAL);
                 SetString("friendlyname", "Windows XP (640x480, Standard)");
                 String[] inspirb = { "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
-                SetString("culprit", GenFile(true));
+                SetString("culprit", GenFile(true, this.activity));
                 PushFile(GetString("culprit"), inspirb);
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
 
@@ -600,7 +624,7 @@ public class BlueScreen implements Serializable {
                 SetBool("autoclose", true);
                 SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
                 String[] inspir = { "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
-                SetString("culprit", GenFile(true));
+                SetString("culprit", GenFile(true, this.activity));
                 PushFile(GetString("culprit"), inspir);
                 SetBool("show_description", true);
                 SetBool("font_support", true);
@@ -627,7 +651,7 @@ public class BlueScreen implements Serializable {
                 SetBool("autoclose", true);
                 SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
                 String[] inspirc = { "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
-                SetString("culprit", GenFile(true));
+                SetString("culprit", GenFile(true, this.activity));
                 PushFile(GetString("culprit"), inspirc);
                 SetBool("show_description", true);
                 SetBool("font_support", true);
