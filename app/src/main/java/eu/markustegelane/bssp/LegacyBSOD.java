@@ -194,7 +194,7 @@ public class LegacyBSOD extends AppCompatActivity {
                 new CountDownTimer(1000 * (long)me.GetInt("timer") + 1000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         int progress;
-                        progress = me.GetInt("timer") - (int) ((me.GetInt("timer") * 1000 - millisUntilFinished) / 1000);
+                        progress = me.GetInt("timer") - (int) ((me.GetInt("timer") * 1000 + 1000 - millisUntilFinished) / 1000);
                         DrawCanvas(progress, me, 0);
                     }
 
