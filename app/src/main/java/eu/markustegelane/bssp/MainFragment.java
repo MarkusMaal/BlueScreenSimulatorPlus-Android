@@ -140,6 +140,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     break;
                 case "Windows 3.1x":
                 case "Windows 9x/Me":
+                case "Windows CE":
                 case "Windows XP":
                 case "Windows Vista":
                 case "Windows 7":

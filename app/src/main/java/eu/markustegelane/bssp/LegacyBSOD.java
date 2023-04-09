@@ -140,7 +140,8 @@ public class LegacyBSOD extends AppCompatActivity {
         setContentView(binding.getRoot());
         if (me.GetString("os").equals("Windows XP") ||
                 me.GetString("os").equals("Windows Vista") ||
-                me.GetString("os").equals("Windows 7")) {
+                me.GetString("os").equals("Windows 7") ||
+                me.GetString("os").equals("Windows CE")) {
             int len = 16;
             if (me.GetString("os").equals("Windows XP")) {
                 len = 8;
@@ -157,37 +158,51 @@ public class LegacyBSOD extends AppCompatActivity {
             Type type = new TypeToken<Map<String, String>>() {
             }.getType();
             texts = gson.fromJson(me.GetTexts(), type);
-            DrawCanvas(0, me, 0);
+            if (!me.GetString("os").equals("Windows CE")) {
+                DrawCanvas(0, me, 0);
+                new CountDownTimer(interval * 100L, interval) {
+                    public void onTick(long millisUntilFinished) {
+                        int progress;
+                        progress = (int) ((interval * 100 - millisUntilFinished) / interval);
+                        DrawCanvas(progress, me, 0);
+                    }
 
-            new CountDownTimer(interval * 100L, interval) {
-                public void onTick(long millisUntilFinished) {
-                    int progress;
-                    progress = (int) ((interval * 100 - millisUntilFinished) / interval);
-                    DrawCanvas(progress, me, 0);
-                }
-
-                public void onFinish() {
-                    if (me.GetBool("autoclose")) {
-                        finish();
-                    } else {
-                        switch (me.GetString("os")) {
-                            case "Windows 7":
-                                if (!me.GetBool("showfile")) {
+                    public void onFinish() {
+                        if (me.GetBool("autoclose")) {
+                            finish();
+                        } else {
+                            switch (me.GetString("os")) {
+                                case "Windows 7":
+                                    if (!me.GetBool("showfile")) {
+                                        DrawCanvas(100, me, -8);
+                                    } else {
+                                        DrawCanvas(100, me, -64);
+                                    }
+                                    break;
+                                case "Windows Vista":
                                     DrawCanvas(100, me, -8);
-                                } else {
-                                    DrawCanvas(100, me, -64);
-                                }
-                                break;
-                            case "Windows Vista":
-                                DrawCanvas(100, me, -8);
-                            case "Windows XP":
-                                DrawCanvas(100, me, 0);
-                            default:
-                                break;
+                                case "Windows XP":
+                                    DrawCanvas(100, me, 0);
+                                default:
+                                    break;
+                            }
                         }
                     }
-                }
-            }.start();
+                }.start();
+            } else {
+                DrawCanvas(me.GetInt("timer"), me, 0);
+                new CountDownTimer(1000 * (long)me.GetInt("timer") + 1000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        int progress;
+                        progress = me.GetInt("timer") - (int) ((me.GetInt("timer") * 1000 - millisUntilFinished) / 1000);
+                        DrawCanvas(progress, me, 0);
+                    }
+
+                    public void onFinish() {
+                        finish();
+                    }
+                }.start();
+            }
         } else if (me.GetString("os").equals("Windows 9x/Me") ||
                    me.GetString("os").equals("Windows 3.1x")) {
             Draw9xCanvas(me);
@@ -411,20 +426,31 @@ public class LegacyBSOD extends AppCompatActivity {
 
     private void DrawCanvas(int progress, BlueScreen me, int shift) {
         int w = 640, h = 480;
+        String yourText = "\n";
+        if (!me.GetString("os").equals("Windows CE")) {
+            yourText += texts.get("A problem has been detected...");
+            yourText += "\n\n" + me.GetString("code").split(" ")[0];
+            yourText += "\n\n" + texts.get("Troubleshooting introduction");
+            yourText += "\n\n" + texts.get("Troubleshooting") + "\n\n";
+            yourText += texts.get("Technical information") + "\n\n";
+        } else {
+            w = 750; h = 400;
+        }
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(w, h, conf);
         Canvas canvas = new Canvas (bmp);
-        String yourText = "\n";
-        yourText += texts.get("A problem has been detected...");
-        yourText += "\n\n" + me.GetString("code").split(" ")[0];
-        yourText += "\n\n" + texts.get("Troubleshooting introduction");
-        yourText += "\n\n" + texts.get("Troubleshooting") + "\n\n";
-        yourText += texts.get("Technical information") + "\n\n";
         switch (me.GetString("os")) {
             case "Windows XP":
                 yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
                 yourText += "\n\n\n";
                 yourText += texts.get("Physical memory dump") + "\n" + texts.get("Technical support");
+                break;
+            case "Windows CE":
+                yourText += texts.get("A problem has occurred...") + "\n";
+                yourText += texts.get("CTRL+ALT+DEL message") + "\n\n";
+                yourText += texts.get("Technical information") + "\n\n";
+                yourText += String.format(texts.get("Technical information formatting"), "0x" + new StringBuilder(new StringBuilder(me.GetString("code").split(" ")[1]).reverse().toString().substring(1, 7)).reverse().toString().toLowerCase(), me.GetString("code").split(" ")[0].toLowerCase().replace("_",   " ")) + "\n\n\n";
+                yourText += String.format(texts.get("Restart message"), progress);
                 break;
             default:
                 yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
@@ -442,7 +468,7 @@ public class LegacyBSOD extends AppCompatActivity {
         int i = 0;
         Paint tPaint = new Paint();
         tPaint.setColor(me.GetTheme(true, false));
-        canvas.drawRect(0, 0, 640, 480, tPaint);
+        canvas.drawRect(0, 0, w, h, tPaint);
         for (String line: yourText.split("\n")) {
             tPaint.setTextSize(16);
             Typeface typeface = ResourcesCompat.getFont(this, R.font.inconsolata);
