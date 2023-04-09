@@ -1,21 +1,12 @@
 package eu.markustegelane.bssp;
 
-import static android.content.Context.SENSOR_SERVICE;
-import static androidx.fragment.app.FragmentManager.TAG;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,14 +21,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+
+import com.android.colorpicker.ColorPickerDialog;
+import com.android.colorpicker.ColorPickerSwatch;
 
 import eu.markustegelane.bssp.databinding.FragmentFirstBinding;
 public class MainFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -319,6 +312,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 NotImplemented();
             }
         });
+
+        binding.devPickerTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ColorPickerDialog picker = new ColorPickerDialog(MainFragment.this, 255, 255, 255);
+            }
+        });
+
         /*inding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -220,6 +220,13 @@
                             android:layout_marginEnd="20sp"
                             android:layout_weight="0"
                             android:text="@string/settingsButton" />
+
+                        <Button
+                            android:id="@+id/devPickerTest"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:text="Color picker test (DEV)" />
                     </com.google.android.flexbox.FlexboxLayout>
 
                 </LinearLayout>

@@ -485,7 +485,7 @@ public class BlueScreen implements Serializable {
                 PushTitle("Main", "Windows");
                 PushTitle("System is busy", "System is busy. ");
                 PushTitle("Warning", "WARNING!");
-                PushText("System error", "An error has occurred. To continue:\n\nPress Enter to return to Windows, or\n\nPress CTRL + ALT + DEL to restart your computer. If you do this,\nyou will lose any unsaved information in all open applications.\n\nError: {0}");
+                PushText("System error", "An error has occurred. To continue:\n\nPress Enter to return to Windows, or\n\nPress CTRL + ALT + DEL to restart your computer. If you do this,\nyou will lose any unsaved information in all open applications.\n\nError: %s : %s : %s");
                 PushText("Application error", "A fatal exception %s has occurred at %s:%s. The current\napplication will be terminated.\n\n* Press any key to terminate current application\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in all applications.");
                 PushText("Driver error", "A fatal exception %s has occurred at %s:%s in VXD VMM(01) +\n%s. The current application will be terminated.\n\n* Press any key to terminate current application\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in all applications.");
                 PushText("System is busy", "The system is busy waiting for the Close Program dialog box to be\ndisplayed. You can wait and see if it appears, or you can restart\nyour computer.\n\n* Press any key to return to Windows and wait.\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in programs that are running.");
