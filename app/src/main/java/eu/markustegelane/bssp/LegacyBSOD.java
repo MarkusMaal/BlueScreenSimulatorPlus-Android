@@ -241,7 +241,7 @@ public class LegacyBSOD extends AppCompatActivity {
         int x_offset = 50;
         String firstcode = me.GenAddress(1, 2, false).replace("0x", "");
         String[] codes = me.GenAddress(4, 8, false).replace("0x", "").split(", ");
-        String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
+        String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\'\\ ";
         Bitmap bmp = Bitmap.createBitmap(640, 320, conf);
         bmp.setPremultiplied(false);
         bmp.setHasAlpha(false);
@@ -290,6 +290,9 @@ public class LegacyBSOD extends AppCompatActivity {
         errorMessage = String.join("", test_Message).split("\n");*/
         if (me.GetString("Screen mode").equals("")) {
             me.SetString("Screen mode", "Application error");
+        }
+        if (me.GetString("os").equals("Windows 3.1x")) {
+            me.SetString("Screen mode", "No unresponsive programs");
         }
         String screenText = txts.get(me.GetString("Screen mode"));
         String[] errorMessage;

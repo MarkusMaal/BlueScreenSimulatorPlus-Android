@@ -2,7 +2,6 @@ package eu.markustegelane.bssp;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.icu.text.ListFormatter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -469,7 +468,7 @@ public class BlueScreen implements Serializable {
                 SetTheme(RGB(170, 170, 170), RGB(0, 0, 170), true);
                 SetInt("blink_speed", 100);
                 PushTitle("Main", "Windows");
-                PushText("No unresponsive programs", "Altough you can use CTRL+ALT+DEL to quit an application that has\nstopped responding to the system, there is no application in this\nstate.\nTo quit an application, use the application's quit or exit command,\nor choose the Close command from the Control menu.\n* Press any key to return to Windows\n* Press CTRL + ALT + DEL again to restart your computer.You will\nlose any unsaved information in all applications.");
+                PushText("No unresponsive programs", "Altough you can use CTRL+ALT+DEL to quit an application that has\nstopped responding to the system, there is no application in this\nstate.\n\nTo quit an application, use the application's quit or exit command,\nor choose the Close command from the Control menu.\n\n*  Press any key to return to Windows\n*  Press CTRL + ALT + DEL again to restart your computer. You will\n   lose any unsaved information in all applications.");
                 PushText("Prompt", "Press any key to continue");
                 SetString("friendlyname", "Windows 3.1 (Text mode, Standard)");
                 SetBool("font_support", false);
