@@ -131,7 +131,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 case "Windows 8/8.1":
                 case "Windows 10":
                 case "Windows 11":
-                    Intent i = new Intent(view1.getContext(), Win11BSOD.class);
+                    Intent i = new Intent(view1.getContext(), ModernBSOD.class);
                     Bundle b = new Bundle();
                     BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
                     b.putSerializable("bluescreen", me);
@@ -143,7 +143,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 case "Windows XP":
                 case "Windows Vista":
                 case "Windows 7":
-                    i = new Intent(view1.getContext(), Win7BSOD.class);
+                    i = new Intent(view1.getContext(), LegacyBSOD.class);
                     b = new Bundle();
                     me = bluescreens.get((int)winspin.getSelectedItemId());
                     b.putSerializable("bluescreen", me);

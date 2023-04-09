@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#008"
     android:theme="@style/ThemeOverlay.BlueScreenSimulatorPlus.FullscreenContainer"
-    tools:context=".Win7BSOD">
+    tools:context=".LegacyBSOD">
 
     <ImageView
         android:id="@+id/bsodWindow"

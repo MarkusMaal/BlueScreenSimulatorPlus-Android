@@ -13,7 +13,7 @@
     android:foregroundGravity="center_vertical|center|center_horizontal"
     android:theme="@style/ThemeOverlay.BlueScreenSimulatorPlus.FullscreenContainer"
     app:layout_anchorGravity="center|center_horizontal|center_vertical"
-    tools:context=".Win11BSOD">
+    tools:context=".ModernBSOD">
 
     <TextView
         android:id="@+id/waterMark"

@@ -12,7 +12,7 @@
         android:theme="@style/Theme.BlueScreenSimulatorPlus"
         tools:targetApi="31">
         <activity
-            android:name=".Win7BSOD"
+            android:name=".LegacyBSOD"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:screenOrientation="landscape"
@@ -25,7 +25,7 @@
             android:exported="false"
             android:theme="@style/Theme.BlueScreenSimulatorPlus.NoActionBar" />
         <activity
-            android:name=".Win11BSOD"
+            android:name=".ModernBSOD"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:screenOrientation="landscape"
