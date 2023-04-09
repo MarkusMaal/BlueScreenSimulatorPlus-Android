@@ -557,4 +557,9 @@
     <string name="showACPI">Show ACPI error</string>
     <string name="unsupportedDevice">The version of Android this device is using, doesn\'t support certain drawing functions, which are required by this blue screen.</string>
     <string name="unsupportedTitle">Unsupported device</string>
+    <string name="theme">Theme</string>
+    <string name="themeBg">Background color</string>
+    <string name="themeFg">Text color</string>
+    <string name="themeHbg">Highlight background</string>
+    <string name="themeHfg">Highlight text</string>
 </resources>

@@ -3,8 +3,6 @@ package eu.markustegelane.bssp;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,16 +17,11 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -39,7 +32,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -325,16 +317,16 @@ public class Win7BSOD extends AppCompatActivity {
         caret_y = i1 + (h - h/4);
         int k = 0;
         for (String line: errorMessage) {
-            DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
+            bmp = DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
             if (bmp == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getWindow().getContext());
                 builder.setMessage(R.string.unsupportedDevice).setPositiveButton(R.string.ok, dialogClickListener).setTitle(R.string.unsupportedTitle).show();
                 return;
             }
-            bmp = DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
+            DrawText(x_offset, y_offset + h + h + k*h, w, h, alphabetPics, bmp, line, me.GetTheme(false, false), me.GetTheme(true, false));
             k += 1;
         }
-        bmp = DrawText(bmp.getWidth() / 2 - (windowsText.length() * w) / 2, y_offset, w, h, alphabetPics, bmp, windowsText, me.GetTheme(true, true),me.GetTheme(false, true));
+        bmp = DrawText(bmp.getWidth() / 2 - (windowsText.length() * w) / 2, y_offset, w, h, alphabetPics, bmp, windowsText, me.GetTheme(false, true),me.GetTheme(true, true));
 
         bmp = DrawText(bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w, i1, w, h, alphabetPics, bmp, prompt, me.GetTheme(false, false), me.GetTheme(true, false));
 
@@ -387,6 +379,7 @@ public class Win7BSOD extends AppCompatActivity {
 
     private Map<Character, Bitmap> ColorizeAlphabet(Map<Character, Bitmap> source, int bg, int fg) {
         String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
+        Map<Character, Bitmap> output = new Hashtable<>();
         for (char letter: alphabet.toCharArray()) {
             Bitmap currentLetter = source.get(letter);
             currentLetter.setPremultiplied(false);
@@ -396,20 +389,21 @@ public class Win7BSOD extends AppCompatActivity {
             int[] pixels = new int[width * height];
             //get pixels
             currentLetter.getPixels(pixels, 0, width, 0, 0, width, height);
-
+            List<Integer> pixelList = new ArrayList<>();
             for(int x = 0; x < pixels.length; ++x) {
-                pixels[x] = (Color.red(pixels[x]) < 129) ? Color.rgb(17, 17, 17) : pixels[x];
-                pixels[x] = (pixels[x] != Color.rgb(17, 17, 17)) ? fg : pixels[x];
-                pixels[x] = (pixels[x] == Color.rgb(17, 17, 17)) ? bg : pixels[x];
+                int y = x / currentLetter.getWidth();
+                int xx = x % currentLetter.getWidth();
+                if (Color.red(currentLetter.getPixel(xx, y)) > 140) {
+                    pixels[x] = bg;
+                } else {pixels[x] = fg;}
             }
             // create result bitmap output
             Bitmap result = Bitmap.createBitmap(width, height, currentLetter.getConfig());
             //set pixels
             result.setPixels(pixels, 0, width, 0, 0, width, height);
-
-            source.replace(letter, result);
+            output.put(letter, result);
         }
-        return source;
+        return output;
     }
 
     private void DrawCanvas(int progress, BlueScreen me, int shift) {

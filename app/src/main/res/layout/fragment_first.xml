@@ -179,6 +179,55 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
+
+
+
+                    <TextView
+                        android:id="@+id/colorOptionsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="0"
+                        android:text="@string/theme" />
+
+                    <com.google.android.flexbox.FlexboxLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:alignContent="flex_start"
+                        app:alignItems="flex_start"
+                        app:flexWrap="wrap">
+
+                        <Button
+                            android:id="@+id/textForeground"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/themeFg" />
+
+                        <Button
+                            android:id="@+id/textBackground"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/themeBg" />
+                        <Button
+                            android:id="@+id/hlForeground"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/themeHfg" />
+                        <Button
+                            android:id="@+id/hlBackground"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/themeHbg" />
+                    </com.google.android.flexbox.FlexboxLayout>
+
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="match_parent"
@@ -220,13 +269,6 @@
                             android:layout_marginEnd="20sp"
                             android:layout_weight="0"
                             android:text="@string/settingsButton" />
-
-                        <Button
-                            android:id="@+id/devPickerTest"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0"
-                            android:text="Color picker test (DEV)" />
                     </com.google.android.flexbox.FlexboxLayout>
 
                 </LinearLayout>

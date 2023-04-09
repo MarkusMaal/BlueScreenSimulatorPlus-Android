@@ -3,10 +3,6 @@ package eu.markustegelane.bssp;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,14 +20,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.Map;
 
-import eu.markustegelane.bssp.BlueScreen;
 import eu.markustegelane.bssp.databinding.ActivityWin11BsodBinding;
 
 /**
@@ -172,6 +169,12 @@ public class Win11BSOD extends AppCompatActivity {
         moreInfo.setText(texts.get("Additional information"));
         progress.setText(texts.get("Progress"));
         emoticon.setText(me.GetString("emoticon"));
+        moreInfo.setTextColor(me.GetTheme(false, false));
+        techInfo.setTextColor(me.GetTheme(false, false));
+        emoticon.setTextColor(me.GetTheme(false, false));
+        progress.setTextColor(me.GetTheme(false, false));
+        descripy.setTextColor(me.GetTheme(false, false));
+
         if (server) {
             emoticon.setVisibility(View.GONE);
         }

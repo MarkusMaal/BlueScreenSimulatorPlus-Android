@@ -34,4 +34,9 @@
     <string name="showACPI">Kuva ACPI viga</string>
     <string name="unsupportedDevice">Selle seadme Android versioon, ei toeta kindlaid joonistamisfunktsioone, mis on vajalikud selle sinise ekraani kuvamiseks.</string>
     <string name="unsupportedTitle">Seda seadet ei toetata</string>
+    <string name="theme">Teema</string>
+    <string name="themeBg">Taustavärv</string>
+    <string name="themeFg">Tekstivärv</string>
+    <string name="themeHbg">Esiletõstu taust</string>
+    <string name="themeHfg">Esiletõstu tekst</string>
 </resources>

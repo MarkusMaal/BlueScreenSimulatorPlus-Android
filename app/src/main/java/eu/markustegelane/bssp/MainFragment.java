@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -21,16 +22,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-
-import com.android.colorpicker.ColorPickerDialog;
-import com.android.colorpicker.ColorPickerSwatch;
 
 import eu.markustegelane.bssp.databinding.FragmentFirstBinding;
 public class MainFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -40,6 +41,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
     public List<BlueScreen> bluescreens = new ArrayList<>();
 
     private Boolean locked = false;
+
+    private int ColorDialogColor = Color.WHITE;
 
     BlueScreen os;
 
@@ -81,6 +84,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         super.onViewCreated(view, savedInstanceState);
         // Get reference to the spinner
         Bundle pb = getActivity().getIntent().getExtras();
+
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         int selection = 0;
@@ -132,6 +136,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     i.putExtras(b);
                     startActivity(i);
                     break;
+                case "Windows 3.1x":
                 case "Windows 9x/Me":
                 case "Windows XP":
                 case "Windows Vista":
@@ -313,11 +318,36 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
-        binding.devPickerTest.setOnClickListener(new View.OnClickListener() {
+        binding.textForeground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ColorPickerDialog picker = new ColorPickerDialog(MainFragment.this, 255, 255, 255);
+                ColorChooser(os.GetTheme(false, false), "Choose foreground color", false, false);
             }
+
+        });
+
+        binding.textBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ColorChooser(os.GetTheme(true, false), "Choose background color", true, false);
+            }
+
+        });
+
+        binding.hlForeground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ColorChooser(os.GetTheme(false, true), "Choose highlight foreground color", false, true);
+            }
+
+        });
+
+        binding.hlBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ColorChooser(os.GetTheme(true, true), "Choose highlight background color", true, true);
+            }
+
         });
 
         /*inding.buttonFirst.setOnClickListener(new View.OnClickListener() {
@@ -331,6 +361,43 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     void NotImplemented() {
         Toast.makeText(getContext(), R.string.notImplemented, Toast.LENGTH_SHORT).show();
+    }
+
+    void ColorChooser(int color, String title, Boolean bg, Boolean hl) {
+        ColorPickerDialogBuilder
+                .with(getContext())
+                .setTitle(title)
+                .initialColor(color)
+                .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
+                .density(10)
+                .setOnColorSelectedListener(new OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int selectedColor) {
+
+                    }
+                })
+                .setPositiveButton(R.string.ok, new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface d, int lastSelectedColor, Integer[] allColors) {
+                        if (bg) {
+                            os.SetTheme(lastSelectedColor, os.GetTheme(false, hl), hl);
+                        } else {
+                            os.SetTheme(os.GetTheme(true, hl), lastSelectedColor, hl);
+                        }
+                        saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getContext(), "Cancelled!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .showAlphaSlider(false)
+                .showColorEdit(true)
+                .setColorEditTextColor(Color.BLACK)
+                .build()
+                .show();
     }
 
     @Override
