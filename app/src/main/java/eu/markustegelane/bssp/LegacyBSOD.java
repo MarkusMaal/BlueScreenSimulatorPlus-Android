@@ -12,6 +12,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import eu.markustegelane.bssp.databinding.ActivityWin7BsodBinding;
 
@@ -75,7 +77,11 @@ public class LegacyBSOD extends AppCompatActivity {
     private Bitmap BufferA;
     private Bitmap BufferB;
 
+    List<Bitmap> characters = new ArrayList<>();
+
     Map<String, String> texts;
+
+    MediaPlayer mp;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -138,7 +144,34 @@ public class LegacyBSOD extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding.bsodWindow.setDrawingCacheEnabled(false);
         setContentView(binding.getRoot());
-        if (me.GetString("os").equals("Windows XP") ||
+        if (me.GetString("os").equals("Windows 1.x/2.x")) {
+            Draw12Canvas(me, 0, true);
+            Random r = new Random();
+            mp = MediaPlayer.create(LegacyBSOD.this, R.raw.beep);
+            if (me.GetBool("playsound")) {
+                mp.setLooping(true);
+                mp.start();
+            }
+            new CountDownTimer(Long.MAX_VALUE, interval) {
+
+                @Override
+                public void onTick(long l) {
+                    try {
+                        Draw12Canvas(me,r.nextInt(2) * 12, false);
+                    } catch (Exception ignored) {
+                        cancel();
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+                    if (mp.isPlaying()) {
+                        mp.stop();
+                    }
+                }
+            }.start();
+        }
+        else if (me.GetString("os").equals("Windows XP") ||
                 me.GetString("os").equals("Windows Vista") ||
                 me.GetString("os").equals("Windows 7") ||
                 me.GetString("os").equals("Windows CE")) {
@@ -260,6 +293,99 @@ public class LegacyBSOD extends AppCompatActivity {
         //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
     }
 
+    private void Draw12Canvas(BlueScreen me, Integer shift, boolean newImage) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        };
+
+        Bitmap rasters = BitmapFactory.decodeResource(getResources(), R.drawable.doscii);
+        rasters.setPremultiplied(false);
+        rasters.setHasAlpha(false);
+        Bitmap.Config conf = Bitmap.Config.ARGB_4444;
+        w = 8;
+        int x = 0;
+        h = rasters.getHeight();
+        Bitmap bmp = Bitmap.createBitmap(66 * w, 12 * h, conf);
+        Canvas canvas = new Canvas(bmp);
+        if (!newImage) {
+            if (shift == 0) {
+                return;
+            }
+            Paint tPaint = new Paint();
+            tPaint.setFilterBitmap(false);
+            tPaint.setColor(me.GetTheme(true, false));
+            canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
+            canvas.drawBitmap(BufferA, 0, -shift, null);
+        }
+        int i = 0;
+        if (newImage) {
+            for (i = 0; i < rasters.getWidth() / w; i += 1) {
+                if (x > rasters.getWidth() - w) {
+                    x = rasters.getWidth() - w - 2;
+                }
+                if ((i == 3) || (i == 19) || (i == 50)) {
+                    x -= 1;
+                } else if ((i == 95)) {
+                    x += 1;
+                }
+                Bitmap currentLetter = Bitmap.createBitmap(rasters, x, 0, w, h, new Matrix(), false);
+                int bg = me.GetTheme(true, false);
+                int fg = me.GetTheme(false, false);
+                int width = currentLetter.getWidth();
+                int height = currentLetter.getHeight();
+                int[] pixels = new int[width * height];
+                currentLetter.getPixels(pixels, 0, width, 0, 0, width, height);
+                List<Integer> pixelList = new ArrayList<>();
+                for (int x2 = 0; x2 < pixels.length; ++x2) {
+                    int y = x2 / currentLetter.getWidth();
+                    int xx = x2 % currentLetter.getWidth();
+                    if (Color.red(currentLetter.getPixel(xx, y)) > 140) {
+                        pixels[x2] = fg;
+                    } else {
+                        pixels[x2] = bg;
+                    }
+                }
+                // create result bitmap output
+                Bitmap result = Bitmap.createBitmap(width, height, currentLetter.getConfig());
+                //set pixels
+                result.setPixels(pixels, 0, width, 0, 0, width, height);
+                characters.add(result);
+                x += w;
+            }
+            Paint tPaint = new Paint();
+            tPaint.setFilterBitmap(false);
+            tPaint.setColor(me.GetTheme(true, false));
+            canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
+        }
+        Random r = new Random();
+        for (int y = 0; y < bmp.getHeight() / h; y++) {
+            ArrayList<Integer> rowChars = new ArrayList<>();
+            int ay = y;
+            if (!newImage) {
+                ay = (bmp.getHeight() - h) / h;
+            }
+            int min = (bmp.getWidth() / w) - 8;
+            for (int z = 0; z < r.nextInt(bmp.getWidth() / w + min) + min; z++) {
+                rowChars.add(r.nextInt(characters.size() - 1));
+            }
+            x = 0;
+            DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
+            canvas.setDrawFilter(filter);
+            for (Integer c : rowChars) {
+                canvas.drawBitmap(characters.get(c), x, ay * h, null);
+                x += w;
+            }
+            if (!newImage) {
+                break;
+            }
+        }
+        BufferA = bmp.copy(bmp.getConfig(), true);
+        binding.bsodWindow.setImageBitmap(bmp);
+    }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void DrawNTCanvas(BlueScreen me) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -657,8 +783,17 @@ public class LegacyBSOD extends AppCompatActivity {
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
+
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mp.isPlaying()) {
+            mp.stop();
+            mp.reset();
+        }
+        finish();
+    }
     private void show() {
         // Show the system bar
         if (Build.VERSION.SDK_INT >= 30) {

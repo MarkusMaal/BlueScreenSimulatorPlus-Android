@@ -44,8 +44,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     private Boolean locked = false;
 
-    private int ColorDialogColor = Color.WHITE;
-
     BlueScreen os;
 
     @Override
@@ -138,6 +136,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     i.putExtras(b);
                     startActivity(i);
                     break;
+                case "Windows 1.x/2.x":
                 case "Windows 3.1x":
                 case "Windows 9x/Me":
                 case "Windows NT 3.x/4.0":
