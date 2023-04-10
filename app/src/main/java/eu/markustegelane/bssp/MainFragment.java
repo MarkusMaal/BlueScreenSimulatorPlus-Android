@@ -334,7 +334,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.textForeground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ColorChooser(os.GetTheme(false, false), "Choose foreground color", false, false);
+                ColorChooser(os.GetTheme(false, false), String.format(getString(R.string.selectColor), getString(R.string.foregroundCol)), false, false);
             }
 
         });
@@ -342,7 +342,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.textBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ColorChooser(os.GetTheme(true, false), "Choose background color", true, false);
+                ColorChooser(os.GetTheme(true, false), String.format(getString(R.string.selectColor), getString(R.string.backgroundCol)), true, false);
             }
 
         });
@@ -350,7 +350,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.hlForeground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ColorChooser(os.GetTheme(false, true), "Choose highlight foreground color", false, true);
+                ColorChooser(os.GetTheme(false, true), String.format(getString(R.string.selectColor), String.format("%s %s", getString(R.string.highlight_), getString(R.string.foregroundCol))), false, true);
             }
 
         });
@@ -358,7 +358,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.hlBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ColorChooser(os.GetTheme(true, true), "Choose highlight background color", true, true);
+                ColorChooser(os.GetTheme(true, true), String.format(getString(R.string.selectColor), String.format("%s %s", getString(R.string.highlight_), getString(R.string.backgroundCol))), true, true);
             }
 
         });
@@ -407,7 +407,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getContext(), "Cancelled!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), String.format("%s!", getString(R.string.cancelled)), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .showAlphaSlider(false)

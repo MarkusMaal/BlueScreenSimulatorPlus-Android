@@ -16,7 +16,6 @@
     <string name="errorCode">Veakood</string>
     <string name="settings">%s seaded</string>
     <string name="colorpick">Muud värvi</string>
-    <string name="settingsButton">Seaded</string>
     <string name="notImplemented">Pole implementeeritud!</string>
     <string name="developer">Arendaja valikud</string>
     <string name="codeEdit">Parameetriredaktor</string>
@@ -52,5 +51,10 @@
     <string name="xmargin">Horisontaalne veeris</string>
     <string name="qrsize">QR koodi suurus</string>
     <string name="scaling">Suurendus (%)</string>
-    <string name="bs">Vilkumise kiirus</string>
+    <string name="bs">Vilkumise kiirus (ms)</string>
+    <string name="cancelled">Loobusite</string>
+    <string name="selectColor">Valige %svärv</string>
+    <string name="highlight_">esiletõstu</string>
+    <string name="backgroundCol">tausta</string>
+    <string name="foregroundCol">teksti</string>
 </resources>

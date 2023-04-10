@@ -538,7 +538,7 @@
     <string name="errorCode">Error code</string>
     <string name="settings">Settings for %s</string>
     <string name="colorpick">Change color</string>
-    <string name="settingsButton">Settings</string>
+    <string name="settingsButton" translatable="false">String editor (DEV)</string>
     <string name="ok" translatable="false">OK</string>
     <string name="notImplemented">Not implemented yet!</string>
     <string name="developer">Developer options</string>
@@ -581,5 +581,10 @@
     <string name="xmargin">Horizontal margin</string>
     <string name="qrsize">QR size</string>
     <string name="scaling">Scale (%)</string>
-    <string name="bs">Blink speed</string>
+    <string name="bs">Blink speed (ms)</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="selectColor">Select %s color</string>
+    <string name="highlight_">highlight</string>
+    <string name="backgroundCol">background</string>
+    <string name="foregroundCol">text</string>
 </resources>

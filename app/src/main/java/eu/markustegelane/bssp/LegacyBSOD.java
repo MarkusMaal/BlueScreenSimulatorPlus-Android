@@ -63,7 +63,7 @@ public class LegacyBSOD extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
-    public static int interval = 100;
+    public static int interval = 500;
     private final Handler mHideHandler = new Handler(Looper.myLooper());
     private View mContentView;
     private String memcodes;
@@ -293,7 +293,9 @@ public class LegacyBSOD extends AppCompatActivity {
 
                 }
             };
-            a.start();
+            if (me.GetBool("blinkblink")) {
+                a.start();
+            }
         }
         //binding.bsodWindow.setScaleX(((float)me.GetInt("scale")) / 100);
         //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
