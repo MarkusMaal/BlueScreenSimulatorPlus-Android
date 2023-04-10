@@ -565,18 +565,21 @@
     <string name="title_activity_parameter_editor">Parameter editor</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header" translatable="false">Messages</string>
-    <string name="sync_header" translatable="false">Sync</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title" translatable="false">Your signature</string>
-    <string name="reply_title" translatable="false">Default reply action</string>
 
     <!-- Sync Preferences -->
-    <string name="sync_title" translatable="false">Sync email periodically</string>
-    <string name="attachment_title" translatable="false">Download incoming attachments</string>
-    <string name="attachment_summary_on" translatable="false">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off" translatable="false">Only download attachments when manually requested</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="strings">Miscellaneous</string>
+    <string name="titles">Titles</string>
+    <string name="texts">Texts</string>
+    <string name="integers">Numbers</string>
+    <string name="emoticon">Emoticon</string>
+    <string name="template">Template name</string>
+    <string name="ecode">Error code</string>
+    <string name="ymargin">Vertical margin</string>
+    <string name="xmargin">Horizontal margin</string>
+    <string name="qrsize">QR size</string>
+    <string name="scaling">Scale (%)</string>
+    <string name="bs">Blink speed</string>
 </resources>

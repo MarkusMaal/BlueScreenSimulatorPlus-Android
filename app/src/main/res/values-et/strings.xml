@@ -40,4 +40,17 @@
     <string name="themeHbg">Esiletõstu taust</string>
     <string name="themeHfg">Esiletõstu tekst</string>
     <string name="title_activity_parameter_editor">Parameetriredaktor</string>
+    <string name="title_activity_settings">Seaded</string>
+    <string name="strings">Varia</string>
+    <string name="titles">Pealkirjad</string>
+    <string name="texts">Tekstid</string>
+    <string name="integers">Numbrid</string>
+    <string name="emoticon">Emootikon</string>
+    <string name="template">Malli nimetus</string>
+    <string name="ecode">Veakood</string>
+    <string name="ymargin">Vertikaalne veeris</string>
+    <string name="xmargin">Horisontaalne veeris</string>
+    <string name="qrsize">QR koodi suurus</string>
+    <string name="scaling">Suurendus (%)</string>
+    <string name="bs">Vilkumise kiirus</string>
 </resources>

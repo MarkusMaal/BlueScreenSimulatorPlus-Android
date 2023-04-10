@@ -80,7 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             if (titles.size() > 0) {
                 pc = new PreferenceCategory(ps.getContext());
-                pc.setTitle("Titles");
+                pc.setTitle(R.string.titles);
                 ps.addPreference(pc);
                 for (String s: titles.keySet()) {
                     EditTextPreference p = new EditTextPreference(ps.getContext());
@@ -104,51 +104,53 @@ public class SettingsActivity extends AppCompatActivity {
                     pc.addPreference(p);
                 }
             }
-            pc = new PreferenceCategory(ps.getContext());
-            pc.setTitle("Texts");
-            ps.addPreference(pc);
-            for (String s: texts.keySet()) {
-                EditTextPreference p = new EditTextPreference(ps.getContext());
-                p.setTitle(s);
-                p.setKey(s);
-                p.setEnabled(true);
-                String summary = texts.get(s);
-                if (summary.length() > 50) {
-                    summary = summary.substring(0, 50) + "...";
-                }
-                p.setSummary(summary);
-                p.setDefaultValue(texts.get(s));
-                p.setOnPreferenceChangeListener((preference, newValue) -> {
-                    String summary2 = newValue.toString();
-                    if (summary2.length() > 50) {
-                        summary2 = summary2.substring(0, 50) + "...";
+            if (texts.size() > 0) {
+                pc = new PreferenceCategory(ps.getContext());
+                pc.setTitle(R.string.texts);
+                ps.addPreference(pc);
+                for (String s : texts.keySet()) {
+                    EditTextPreference p = new EditTextPreference(ps.getContext());
+                    p.setTitle(s);
+                    p.setKey(s);
+                    p.setEnabled(true);
+                    String summary = texts.get(s);
+                    if (summary.length() > 50) {
+                        summary = summary.substring(0, 50) + "...";
                     }
-                    preference.setSummary(summary2);
-                    preference.setDefaultValue(newValue.toString());
-                    me.SetText(preference.getKey(), newValue.toString());
-                    saveSettings(bsods, me, os_id);
-                    return true;
-                });
-                p.setOnPreferenceClickListener(preference -> {
-                    Map<String, String> inTexts = gson.fromJson(me.GetTexts(), type);
-                    preference.setDefaultValue(inTexts.get(preference.getKey()));
-                    return false;
-                });
-                pc.addPreference(p);
+                    p.setSummary(summary);
+                    p.setDefaultValue(texts.get(s));
+                    p.setOnPreferenceChangeListener((preference, newValue) -> {
+                        String summary2 = newValue.toString();
+                        if (summary2.length() > 50) {
+                            summary2 = summary2.substring(0, 50) + "...";
+                        }
+                        preference.setSummary(summary2);
+                        preference.setDefaultValue(newValue.toString());
+                        me.SetText(preference.getKey(), newValue.toString());
+                        saveSettings(bsods, me, os_id);
+                        return true;
+                    });
+                    p.setOnPreferenceClickListener(preference -> {
+                        Map<String, String> inTexts = gson.fromJson(me.GetTexts(), type);
+                        preference.setDefaultValue(inTexts.get(preference.getKey()));
+                        return false;
+                    });
+                    pc.addPreference(p);
+                }
             }
             if (numbers.size() > 0) {
                 pc = new PreferenceCategory(ps.getContext());
-                pc.setTitle("Numbers");
+                pc.setTitle(R.string.integers);
                 ps.addPreference(pc);
                 for (String s : numbers.keySet()) {
                     EditTextPreference p = new EditTextPreference(ps.getContext());
                     boolean ignoreSetting = false;
                     switch (s) {
-                        case "blink_speed": p.setTitle("Blink speed"); break;
-                        case "scale": p.setTitle("Scaling"); break;
-                        case "qr_size": p.setTitle("QR code size"); break;
-                        case "margin-x": p.setTitle("Horizontal margin"); break;
-                        case "margin-y": p.setTitle("Vertical margin"); break;
+                        case "blink_speed": p.setTitle(R.string.bs); break;
+                        case "scale": p.setTitle(R.string.scaling); break;
+                        case "qr_size": p.setTitle(R.string.qrsize); break;
+                        case "margin-x": p.setTitle(R.string.xmargin); break;
+                        case "margin-y": p.setTitle(R.string.ymargin); break;
                         case "progressmillis": ignoreSetting = true; break;
                         default: p.setTitle(s); break;
                     }
@@ -176,7 +178,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             if (strings.size() > 0) {
                 pc = new PreferenceCategory(ps.getContext());
-                pc.setTitle("Miscellaneous");
+                pc.setTitle(R.string.strings);
                 ps.addPreference(pc);
                 for (String s : strings.keySet()) {
                     EditTextPreference p = new EditTextPreference(ps.getContext());
@@ -188,9 +190,9 @@ public class SettingsActivity extends AppCompatActivity {
                         case "qr_file":
                             ignoreSetting = true;
                             break;
-                        case "emoticon": p.setTitle("Emoticon"); break;
-                        case "friendlyname": p.setTitle("Template name"); break;
-                        case "code": p.setTitle("Error code"); break;
+                        case "emoticon": p.setTitle(R.string.emoticon); break;
+                        case "friendlyname": p.setTitle(R.string.template); break;
+                        case "code": p.setTitle(R.string.ecode); break;
                         case "culprit":
                             ListPreference lp = new ListPreference(ps.getContext());
                             ArrayList<String> filenames = new ArrayList<>();
@@ -205,7 +207,7 @@ public class SettingsActivity extends AppCompatActivity {
                             }
                             lp.setEntryValues(filenames.toArray(new String[0]));
                             lp.setEntries(filenames.toArray(new String[0]));
-                            lp.setTitle("Culprit file");
+                            lp.setTitle(R.string.culprit);
                             lp.setKey(s);
                             lp.setOnPreferenceChangeListener((preference, newValue) -> {
                                 preference.setSummary(newValue.toString());
