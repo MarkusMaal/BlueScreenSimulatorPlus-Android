@@ -319,7 +319,15 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.advancedOptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NotImplemented();
+                Intent s = new Intent(getContext(), SettingsActivity.class);
+                Bundle b = new Bundle();
+                BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
+                b.putSerializable("bluescreen", me);
+                b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
+                b.putSerializable("bluescreens", (Serializable) bluescreens);
+                s.putExtras(b);
+                startActivity(s);
+                getActivity().finish();
             }
         });
 
@@ -501,8 +509,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 elabel.setVisibility(View.VISIBLE);
                 break;
             case "Windows CE":
-                codesel.setVisibility(View.VISIBLE);
-                elabel.setVisibility(View.VISIBLE);
+                details.setVisibility(View.GONE);
                 break;
             case "Windows 9x/Me":
                 parEdit.setVisibility(View.VISIBLE);

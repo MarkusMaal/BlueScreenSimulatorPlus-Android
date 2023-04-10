@@ -39,4 +39,5 @@
     <string name="themeFg">Tekstivärv</string>
     <string name="themeHbg">Esiletõstu taust</string>
     <string name="themeHfg">Esiletõstu tekst</string>
+    <string name="title_activity_parameter_editor">Parameetriredaktor</string>
 </resources>
