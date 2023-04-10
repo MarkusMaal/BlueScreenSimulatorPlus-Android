@@ -145,7 +145,17 @@ public class LegacyBSOD extends AppCompatActivity {
         binding.bsodWindow.setDrawingCacheEnabled(false);
         setContentView(binding.getRoot());
         if (me.GetString("os").equals("Windows 1.x/2.x")) {
-            Draw12Canvas(me, 0, true);
+            switch(me.GetString("qr_file")) {
+                case "local:0":
+                    Draw12Canvas(me, 0, true, "Win1");
+                    break;
+                case "local:1":
+                    Draw12Canvas(me, 0, true, "Win2");
+                    break;
+                case "local:null":
+                    Draw12Canvas(me, 0, true, "default");
+                    break;
+            }
             Random r = new Random();
             mp = MediaPlayer.create(LegacyBSOD.this, R.raw.beep);
             if (me.GetBool("playsound")) {
@@ -156,11 +166,7 @@ public class LegacyBSOD extends AppCompatActivity {
 
                 @Override
                 public void onTick(long l) {
-                    try {
-                        Draw12Canvas(me,r.nextInt(2) * 12, false);
-                    } catch (Exception ignored) {
-                        cancel();
-                    }
+                    Draw12Canvas(me,r.nextInt(2) * 12, false, "default");
                 }
 
                 @Override
@@ -293,7 +299,7 @@ public class LegacyBSOD extends AppCompatActivity {
         //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
     }
 
-    private void Draw12Canvas(BlueScreen me, Integer shift, boolean newImage) {
+    private void Draw12Canvas(BlueScreen me, Integer shift, boolean newImage, String type) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 
             @Override
@@ -309,7 +315,7 @@ public class LegacyBSOD extends AppCompatActivity {
         w = 8;
         int x = 0;
         h = rasters.getHeight();
-        Bitmap bmp = Bitmap.createBitmap(66 * w, 12 * h, conf);
+        Bitmap bmp = Bitmap.createBitmap(624, 228, conf);
         Canvas canvas = new Canvas(bmp);
         if (!newImage) {
             if (shift == 0) {
@@ -323,6 +329,13 @@ public class LegacyBSOD extends AppCompatActivity {
         }
         int i = 0;
         if (newImage) {
+            int[] pixels;
+            int bg;
+            int fg;
+            int width;
+            int height;
+            Bitmap result;
+
             for (i = 0; i < rasters.getWidth() / w; i += 1) {
                 if (x > rasters.getWidth() - w) {
                     x = rasters.getWidth() - w - 2;
@@ -333,13 +346,12 @@ public class LegacyBSOD extends AppCompatActivity {
                     x += 1;
                 }
                 Bitmap currentLetter = Bitmap.createBitmap(rasters, x, 0, w, h, new Matrix(), false);
-                int bg = me.GetTheme(true, false);
-                int fg = me.GetTheme(false, false);
-                int width = currentLetter.getWidth();
-                int height = currentLetter.getHeight();
-                int[] pixels = new int[width * height];
+                bg = me.GetTheme(true, false);
+                fg = me.GetTheme(false, false);
+                width = currentLetter.getWidth();
+                height = currentLetter.getHeight();
+                pixels = new int[width * height];
                 currentLetter.getPixels(pixels, 0, width, 0, 0, width, height);
-                List<Integer> pixelList = new ArrayList<>();
                 for (int x2 = 0; x2 < pixels.length; ++x2) {
                     int y = x2 / currentLetter.getWidth();
                     int xx = x2 % currentLetter.getWidth();
@@ -350,7 +362,7 @@ public class LegacyBSOD extends AppCompatActivity {
                     }
                 }
                 // create result bitmap output
-                Bitmap result = Bitmap.createBitmap(width, height, currentLetter.getConfig());
+                result = Bitmap.createBitmap(width, height, currentLetter.getConfig());
                 //set pixels
                 result.setPixels(pixels, 0, width, 0, 0, width, height);
                 characters.add(result);
@@ -360,6 +372,58 @@ public class LegacyBSOD extends AppCompatActivity {
             tPaint.setFilterBitmap(false);
             tPaint.setColor(me.GetTheme(true, false));
             canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
+            switch (type) {
+                case "Win1":
+                    bmp = BitmapFactory.decodeResource(getResources(), R.drawable.win1_splash);
+                    bg = me.GetTheme(true, false);
+                    fg = me.GetTheme(false, false);
+                    width = bmp.getWidth();
+                    height = bmp.getHeight();
+                    pixels = new int[width * height];
+                    bmp.getPixels(pixels, 0, width, 0, 0, width, height);
+                    for (int x2 = 0; x2 < pixels.length; ++x2) {
+                        int y = x2 / bmp.getWidth();
+                        int xx = x2 % bmp.getWidth();
+                        if (Color.red(bmp.getPixel(xx, y)) > 140) {
+                            pixels[x2] = fg;
+                        } else {
+                            pixels[x2] = bg;
+                        }
+                    }
+                    // create result bitmap output
+                    result = Bitmap.createBitmap(width, height, bmp.getConfig());
+                    //set pixels
+                    result.setPixels(pixels, 0, width, 0, 0, width, height);
+                    BufferA = result.copy(result.getConfig(), true);
+                    binding.bsodWindow.setImageBitmap(result);
+                    return;
+                case "Win2":
+                    bmp = BitmapFactory.decodeResource(getResources(), R.drawable.win2_splash);
+                    bg = me.GetTheme(true, false);
+                    fg = me.GetTheme(false, false);
+                    width = bmp.getWidth();
+                    height = bmp.getHeight();
+                    pixels = new int[width * height];
+                    bmp.getPixels(pixels, 0, width, 0, 0, width, height);
+                    for (int x2 = 0; x2 < pixels.length; ++x2) {
+                        int y = x2 / bmp.getWidth();
+                        int xx = x2 % bmp.getWidth();
+                        if (Color.red(bmp.getPixel(xx, y)) > 140) {
+                            pixels[x2] = fg;
+                        } else {
+                            pixels[x2] = bg;
+                        }
+                    }
+                    // create result bitmap output
+                    result = Bitmap.createBitmap(width, height, bmp.getConfig());
+                    //set pixels
+                    result.setPixels(pixels, 0, width, 0, 0, width, height);
+                    BufferA = result.copy(result.getConfig(), true);
+                    binding.bsodWindow.setImageBitmap(result);
+                    return;
+                default:
+                    break;
+            }
         }
         Random r = new Random();
         for (int y = 0; y < bmp.getHeight() / h; y++) {
