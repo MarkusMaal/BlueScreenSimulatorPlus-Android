@@ -852,7 +852,7 @@ public class LegacyBSOD extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mp.isPlaying()) {
+        if ((mp != null) && (mp.isPlaying())) {
             mp.stop();
             mp.reset();
         }
