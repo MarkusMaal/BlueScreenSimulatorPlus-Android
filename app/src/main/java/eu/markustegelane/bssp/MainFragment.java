@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -451,16 +452,20 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         }
         Button ntEdit = binding.ntCodeEditButton;
         Button parEdit = binding.codeEditButton;
+        Button hbg = binding.hlBackground;
+        Button hfg = binding.hlForeground;
+        Spinner codesel = binding.ecodeSpinner;
         Spinner nineXSpinner = binding.nineXSpinner;
         Switch ac = binding.autoCloseCheck;
         Switch green = binding.insiderCheck;
         Switch details = binding.showDetailsCheck;
         Switch pars = binding.showParCodes;
         Switch server = binding.serverScreen;
+        TextView elabel = binding.eCodeLabel;
 
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
-        server.setVisibility(View.GONE); nineXSpinner.setVisibility(View.GONE);
-        ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE);
+        server.setVisibility(View.GONE); nineXSpinner.setVisibility(View.GONE); hbg.setVisibility(View.GONE); hfg.setVisibility(View.GONE);
+        ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE); codesel.setVisibility(View.GONE); elabel.setVisibility(View.GONE);
         switch (os.GetString("os")) {
             case "Windows 11":
             case "Windows 10":
@@ -470,12 +475,16 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 pars.setVisibility(View.VISIBLE);
                 parEdit.setVisibility(View.VISIBLE);
                 server.setVisibility(View.VISIBLE);
+                codesel.setVisibility(View.VISIBLE);
+                elabel.setVisibility(View.VISIBLE);
                 break;
             case "Windows 8/8.1":
                 ac.setVisibility(View.VISIBLE);
                 details.setVisibility(View.VISIBLE);
                 pars.setVisibility(View.VISIBLE);
                 parEdit.setVisibility(View.VISIBLE);
+                codesel.setVisibility(View.VISIBLE);
+                elabel.setVisibility(View.VISIBLE);
                 break;
             case "Windows 7":
             case "Windows Vista":
@@ -488,13 +497,31 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 if (os.GetString("os").equals("Windows 7") || os.GetString("os").equals("Windows Vista")) {
                     ac.setVisibility(View.VISIBLE);
                 }
+                codesel.setVisibility(View.VISIBLE);
+                elabel.setVisibility(View.VISIBLE);
+                break;
+            case "Windows CE":
+                codesel.setVisibility(View.VISIBLE);
+                elabel.setVisibility(View.VISIBLE);
                 break;
             case "Windows 9x/Me":
                 parEdit.setVisibility(View.VISIBLE);
                 nineXSpinner.setVisibility(View.VISIBLE);
+                hbg.setVisibility(View.VISIBLE);
+                hfg.setVisibility(View.VISIBLE);
+                elabel.setVisibility(View.VISIBLE);
+                break;
+            case "Windows 3.1x":
+                hbg.setVisibility(View.VISIBLE);
+                hfg.setVisibility(View.VISIBLE);
+                details.setVisibility(View.GONE);
+                break;
+            case "Windows 1.x/2.x":
+                details.setVisibility(View.GONE);
                 break;
             default:
                 details.setVisibility(View.VISIBLE);
+                elabel.setVisibility(View.VISIBLE);
                 break;
         }
         Spinner eCodeSpin = binding.ecodeSpinner;
