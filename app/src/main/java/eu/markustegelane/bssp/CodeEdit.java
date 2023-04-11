@@ -113,22 +113,30 @@ public class CodeEdit extends AppCompatActivity {
         });
         binding.codeEditOkButton.setOnClickListener(view -> {
             saveSettings(bluescreens, me, bs_id);
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
-            overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
-            finish();
+            onBackPressed();
         });
         int blockSize = 0;
         switch (me.GetString("os")) {
             case "Windows XP":
             case "Windows NT 3.x/4.0":
             case "Windows 2000":
+            case "Windows 9x/Me":
                 blockSize = 8;
                 break;
-            case "Windows 9x/Me":
-                blockSize = 12;
-                break;
         }
+        HideElements(blockSize);
+        UpdateValues();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
+        finish();
+    }
+    @SuppressLint("DiscouragedApi")
+    public void HideElements(int blockSize) {
         for (int i = 16 - blockSize + 1; i <= 16; i++) {
             int idF = getResources().getIdentifier(String.format("f1l%s", i), "id", this.getPackageName());
             int idZ = getResources().getIdentifier(String.format("z1l%s", i), "id", this.getPackageName());
@@ -143,7 +151,20 @@ public class CodeEdit extends AppCompatActivity {
             rb.setVisibility(View.GONE);
             lb.setVisibility(View.GONE);
         }
-        UpdateValues();
+        for (int i = 1; i < 16 - blockSize + 1; i++) {
+            int idF = getResources().getIdentifier(String.format("f1l%s", i), "id", this.getPackageName());
+            int idZ = getResources().getIdentifier(String.format("z1l%s", i), "id", this.getPackageName());
+            int idR = getResources().getIdentifier(String.format("r1l%s", i), "id", this.getPackageName());
+            int idL = getResources().getIdentifier(String.format("c1l%s", i), "id", this.getPackageName());
+            View fb = findViewById(idF);
+            View zb = findViewById(idZ);
+            View rb = findViewById(idR);
+            View lb = findViewById(idL);
+            fb.setVisibility(View.VISIBLE);
+            zb.setVisibility(View.VISIBLE);
+            rb.setVisibility(View.VISIBLE);
+            lb.setVisibility(View.VISIBLE);
+        }
     }
 
     public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
@@ -161,6 +182,20 @@ public class CodeEdit extends AppCompatActivity {
         words.add(1, me.GetString("ecode2"));
         words.add(2, me.GetString("ecode3"));
         words.add(3, me.GetString("ecode4"));
+        if (me.GetString("os").equals("Windows 9x/Me")) {
+            switch (selected) {
+                case 0:
+                    HideElements(14);
+                    break;
+                case 1:
+                    HideElements(12);
+                    break;
+                case 2:
+                case 3:
+                    HideElements(8);
+                    break;
+            }
+        }
         for (int i = 1; i <= 16; i++) {
             int id = getResources().getIdentifier(String.format("c1l%s", i), "id", this.getPackageName());
             TextView tv = findViewById(id);
