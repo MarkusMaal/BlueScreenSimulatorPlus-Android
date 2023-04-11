@@ -19,14 +19,16 @@
     <string-array name="OperatingSystems">
         <item>Windows 11</item>
         <item>Windows 10</item>
-        <item>Windows 8</item>
+        <item>Windows 8.x</item>
         <item>Windows 7</item>
         <item>Windows Vista</item>
         <item>Windows XP</item>
+        <item>Windows CE</item>
         <item>Windows 2000</item>
-        <item>Windows 9x/ME</item>
         <item>Windows NT 3.x/4.x</item>
+        <item>Windows 9x/Me</item>
         <item>Windows 3.1x</item>
+        <item>Windows 1.x/2.x</item>
     </string-array>
     <string name="os">Operating system</string>
     <string name="execute">Simulate</string>
@@ -602,4 +604,10 @@
     <string name="loadPreset">Load file</string>
     <string name="savePreset">Save file</string>
     <string name="resetAll">Reset all settings</string>
+    <string name="ostemplate">Operating system template</string>
+    <string name="allowCustOS">Manually specify OS</string>
+    <string name="hybridWarn">This feature allows you to create \"hybrid\" blue screens, but may cause severe crashing issues, depending on which OS is selected. Are you sure you want to continue?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="danger">Dangerous option</string>
 </resources>

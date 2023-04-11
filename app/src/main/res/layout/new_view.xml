@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
+            android:text="@string/ostemplate" />
+
+        <Spinner
+            android:id="@+id/osSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:entries="@array/OperatingSystems"
+            android:padding="20sp"
+            android:spinnerMode="dialog" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
+            android:text="@string/template" />
+
+        <EditText
+            android:id="@+id/editTextTemplate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:padding="20sp"
+            android:text="Windows 11 (Native, ClearType)" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
+            android:text="@string/os"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/osSpinner2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:clickable="false"
+            android:entries="@array/OperatingSystems"
+            android:padding="20sp"
+            android:spinnerMode="dialog"
+            android:visibility="gone" />
+
+        <Switch
+            android:id="@+id/allowCust"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            android:padding="20sp"
+            android:text="@string/allowCustOS" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

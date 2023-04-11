@@ -69,4 +69,10 @@
     <string name="loadPreset">Ava fail</string>
     <string name="savePreset">Salvesta fail</string>
     <string name="resetAll">Taasta vaikesätted</string>
+    <string name="ostemplate">Operatsioonsüsteemi mall</string>
+    <string name="allowCustOS">Vali OS käsitsi</string>
+    <string name="hybridWarn">See funktsioon võimaldab teil luua \"hübriidseid\" siniseid ekraane, kuid võib põhjustada tõsiseid krahhimisprobleeme, olenevalt sellest, millise OS-i valite. Kas olete kindel, et soovite jätkata?</string>
+    <string name="yes">Jah</string>
+    <string name="no">Ei</string>
+    <string name="danger">Ohtlik suvand</string>
 </resources>

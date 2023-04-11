@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -398,7 +399,76 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.addPreset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NotImplemented();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                TypedValue tv = new TypedValue();
+                View new_view = LayoutInflater.from(getContext()).inflate(R.layout.new_view, null);
+                final Spinner templateSelector = ((Spinner) new_view.findViewById(R.id.osSpinner));
+                final Spinner osSelector = ((Spinner) new_view.findViewById(R.id.osSpinner2));
+                final EditText friendlyText = ((EditText) new_view.findViewById(R.id.editTextTemplate));
+                final TextView tv4 = ((TextView)new_view.findViewById(R.id.textView4));
+                final Switch allowCust = ((Switch)new_view.findViewById(R.id.allowCust));
+                templateSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (!allowCust.isChecked()) {
+                            osSelector.setSelection(i);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+                allowCust.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if (!b) {
+                            osSelector.setVisibility(View.GONE);
+                            tv4.setVisibility(View.GONE);
+                            osSelector.setSelection((int)templateSelector.getSelectedItemId());
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            TypedValue tv = new TypedValue();
+                            getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
+                            builder.setMessage(getString(R.string.hybridWarn)).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            osSelector.setVisibility(View.VISIBLE);
+                                            tv4.setVisibility(View.VISIBLE);
+                                        }
+                                    })
+                                    .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            compoundButton.setChecked(false);
+                                        }
+                                    }).setIcon(tv.resourceId).setTitle(getString(R.string.danger)).show();
+                        }
+                    }
+                });
+                getActivity().getTheme().resolveAttribute(android.R.attr.dialogIcon, tv, true);
+                builder.setView(new_view);
+                builder.setCancelable(false)
+                        .setPositiveButton(getString(R.string.ok),
+                                (dialogInterface, i) -> {
+                                    BlueScreen newScreen = new BlueScreen(templateSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString(), true, getActivity());
+                                    newScreen.SetString("friendlyname", friendlyText.getText().toString());
+                                    newScreen.SetString("os", osSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString());
+                                    bluescreens.add(newScreen);
+                                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                                    Intent in = new Intent(getContext(), MainActivity.class);
+                                    startActivity(in);
+                                    getActivity().overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
+                                    getActivity().finish();
+                                })
+                        .setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {
+
+                        });
+
+                AlertDialog ad = builder.create();
+                ad.show();
             }
         });
 
