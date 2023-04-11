@@ -57,4 +57,9 @@
     <string name="highlight_">esiletõstu</string>
     <string name="backgroundCol">tausta</string>
     <string name="foregroundCol">teksti</string>
+    <string name="title_activity_code_edit">Parameetriredaktor</string>
+    <string name="cancel">Loobu</string>
+    <string name="word">Sõna %s</string>
+    <string name="random">Juhuslik kood</string>
+    <string name="nullcode">Nullkood</string>
 </resources>

@@ -587,4 +587,12 @@
     <string name="highlight_">highlight</string>
     <string name="backgroundCol">background</string>
     <string name="foregroundCol">text</string>
+    <string name="title_activity_code_edit">Parameter editor</string>
+    <string name="R" translatable="false">R</string>
+    <string name="nullValue" translatable="false">0</string>
+    <string name="F" translatable="false">F</string>
+    <string name="cancel">Cancel</string>
+    <string name="word">Word %s</string>
+    <string name="random">Random code</string>
+    <string name="nullcode">Null code</string>
 </resources>

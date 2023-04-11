@@ -305,7 +305,15 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.codeEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NotImplemented();
+                Intent i = new Intent(getContext(), CodeEdit.class);
+                Bundle b = new Bundle();
+                BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
+                b.putSerializable("bluescreen", me);
+                b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
+                b.putSerializable("bluescreens", (Serializable) bluescreens);
+                i.putExtras(b);
+                startActivity(i);
+                getActivity().finish();
             }
         });
 

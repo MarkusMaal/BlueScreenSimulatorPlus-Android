@@ -12,6 +12,11 @@
         android:theme="@style/Theme.BlueScreenSimulatorPlus"
         tools:targetApi="31">
         <activity
+            android:name=".CodeEdit"
+            android:exported="false"
+            android:label="@string/title_activity_code_edit"
+            android:theme="@style/Theme.BlueScreenSimulatorPlus.NoActionBar" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
