@@ -480,7 +480,25 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.resetHacks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NotImplemented();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                TypedValue tv = new TypedValue();
+                getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
+                builder.setMessage("Warning: This will reset EVERYTHING for the selected configuration. Are you sure you want to continue?").setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                String backupName = os.GetString("friendlyname");
+                                bluescreens.set((int)winspin.getSelectedItemId(), new BlueScreen(os.GetString("os"), true, getActivity()));
+                                os = bluescreens.get((int)winspin.getSelectedItemId());
+                                os.SetString("friendlyname", backupName);
+                                saveSettings(bluescreens, os, winspin.getSelectedItemId());
+                                Intent in = new Intent(getContext(), MainActivity.class);
+                                startActivity(in);
+                                getActivity().overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
+                                getActivity().finish();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle("Reset all settings").show();
             }
         });
 
