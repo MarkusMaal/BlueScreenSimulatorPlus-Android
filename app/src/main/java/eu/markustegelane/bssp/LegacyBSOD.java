@@ -631,7 +631,7 @@ public class LegacyBSOD extends AppCompatActivity {
                 windowsText = titles.get("System is busy");
                 break;
             default:
-                windowsText = "";
+                windowsText = "Windows";
                 break;
         }
         /*List<String> test_Message = new ArrayList<String>();
@@ -678,7 +678,7 @@ public class LegacyBSOD extends AppCompatActivity {
         canvas.drawRect(backBox_x, backBox_y, backBox_w, backBox_h, bPaint);
         String prompt = txts.get("Prompt");
         if (prompt == null) {
-            prompt = "Windows";
+            prompt = "";
         }
         int i1 = y_offset + h + h + (errorMessage.length + 1) * h;
         caret_x = (bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w) + (prompt.length() * w) + w / 2;
