@@ -5,14 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -74,25 +70,23 @@ public class CodeEdit extends AppCompatActivity {
                 UpdateValues();
             });
             fb.setOnClickListener(view -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 int lumerand = Integer.parseInt(tagF.replace("f1l", ""));
-                int id2 = getResources().getIdentifier(String.format("c1l%s", lumerand), "id", getPackageName());
-                TextView tv = findViewById(id2);
-                String current = tv.getText().toString();
-                builder.setTitle(String.format("Set value for word %s at %s", selected + 1, lumerand));
-                EditText input = new EditText(view.getContext());
-                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
-                input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(1)});
-                input.setText(current);
-                builder.setView(input);
-                builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i1) -> {
-                    String cval = words.get(selected);
-                    words.set(selected, cval.substring(0, lumerand - 1) + input.getText().toString() + cval.substring(lumerand));
-                    me.SetCodes(words.get(0), words.get(1), words.get(2), words.get(3));
-                    UpdateValues();
-                });
-                builder.setNegativeButton(getString(R.string.cancel), (dialogInterface, i1) -> dialogInterface.cancel());
-                builder.show();
+                String cval = words.get(selected);
+                char[] nums = "0123456789ABCDEF".toCharArray();
+                char nextVal = '0';
+                for (int k = 0; k < nums.length; k++) {
+                    if (cval.charAt(lumerand - 1) == nums[k]) {
+                        if (k + 1 > nums.length - 1) {
+                            nextVal = '0';
+                        } else {
+                            nextVal = nums[k + 1];
+                        }
+                        break;
+                    }
+                }
+                words.set(selected, cval.substring(0, lumerand - 1) + nextVal + cval.substring(lumerand));
+                me.SetCodes(words.get(0), words.get(1), words.get(2), words.get(3));
+                UpdateValues();
             });
         }
         RadioButton radio1 = (RadioButton)findViewById(R.id.wordRadio1);
