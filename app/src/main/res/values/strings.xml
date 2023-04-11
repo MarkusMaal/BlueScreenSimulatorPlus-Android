@@ -595,4 +595,11 @@
     <string name="word">Word %s</string>
     <string name="random">Random code</string>
     <string name="nullcode">Null code</string>
+    <string name="global">Preset settings</string>
+    <string name="delPreset">Delete preset</string>
+    <string name="addPreset">Add preset</string>
+    <string name="resetHacks">Reset texts and colors</string>
+    <string name="loadPreset">Load file</string>
+    <string name="savePreset">Save file</string>
+    <string name="resetAll">Reset all settings</string>
 </resources>

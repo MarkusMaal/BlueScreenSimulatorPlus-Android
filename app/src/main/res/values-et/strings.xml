@@ -62,4 +62,11 @@
     <string name="word">Sõna %s</string>
     <string name="random">Juhuslik kood</string>
     <string name="nullcode">Nullkood</string>
+    <string name="global">Eelseadistuse valikud</string>
+    <string name="delPreset">Kustuta eelseadistus</string>
+    <string name="addPreset">Lisa eelseadistus</string>
+    <string name="resetHacks">Lähtesta tekstid ja värvid</string>
+    <string name="loadPreset">Ava fail</string>
+    <string name="savePreset">Salvesta fail</string>
+    <string name="resetAll">Taasta vaikesätted</string>
 </resources>

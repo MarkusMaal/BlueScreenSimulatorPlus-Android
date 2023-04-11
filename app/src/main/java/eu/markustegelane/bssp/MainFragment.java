@@ -293,15 +293,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         };
 
-        binding.resetSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage("Warning: This will reset EVERYTHING and all of your custom preferences will be erased. Are you sure you want to continue?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).setTitle("Reset all settings").show();
-            }
-        });
-
         binding.codeEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -369,6 +360,50 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 ColorChooser(os.GetTheme(true, true), String.format(getString(R.string.selectColor), String.format("%s %s", getString(R.string.highlight_), getString(R.string.backgroundCol))), true, true);
             }
 
+        });
+
+        binding.delPreset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotImplemented();
+            }
+        });
+
+        binding.addPreset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotImplemented();
+            }
+        });
+
+        binding.resetHacks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotImplemented();
+            }
+        });
+
+        binding.loadConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotImplemented();
+            }
+        });
+
+        binding.saveConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotImplemented();
+            }
+        });
+
+        binding.resetAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage("Warning: This will reset EVERYTHING and all of your custom preferences will be erased. Are you sure you want to continue?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).setTitle("Reset all settings").show();
+            }
         });
 
         /*inding.buttonFirst.setOnClickListener(new View.OnClickListener() {
