@@ -118,6 +118,31 @@ public class CodeEdit extends AppCompatActivity {
             overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
             finish();
         });
+        int blockSize = 0;
+        switch (me.GetString("os")) {
+            case "Windows XP":
+            case "Windows NT 3.x/4.0":
+            case "Windows 2000":
+                blockSize = 8;
+                break;
+            case "Windows 9x/Me":
+                blockSize = 12;
+                break;
+        }
+        for (int i = 16 - blockSize + 1; i <= 16; i++) {
+            int idF = getResources().getIdentifier(String.format("f1l%s", i), "id", this.getPackageName());
+            int idZ = getResources().getIdentifier(String.format("z1l%s", i), "id", this.getPackageName());
+            int idR = getResources().getIdentifier(String.format("r1l%s", i), "id", this.getPackageName());
+            int idL = getResources().getIdentifier(String.format("c1l%s", i), "id", this.getPackageName());
+            View fb = findViewById(idF);
+            View zb = findViewById(idZ);
+            View rb = findViewById(idR);
+            View lb = findViewById(idL);
+            fb.setVisibility(View.GONE);
+            zb.setVisibility(View.GONE);
+            rb.setVisibility(View.GONE);
+            lb.setVisibility(View.GONE);
+        }
         UpdateValues();
     }
 
