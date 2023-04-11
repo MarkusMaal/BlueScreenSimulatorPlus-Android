@@ -29,6 +29,7 @@
         <item>Windows 9x/Me</item>
         <item>Windows 3.1x</item>
         <item>Windows 1.x/2.x</item>
+        <item>BOOTMGR</item>
     </string-array>
     <string name="os">Operating system</string>
     <string name="execute">Simulate</string>
@@ -610,4 +611,14 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="danger">Dangerous option</string>
+    <string name="currentReset">Warning: This will reset EVERYTHING for the selected configuration. Are you sure you want to continue?</string>
+    <string name="resetAllConfig">Reset all settings</string>
+    <string name="delConfig">Delete configuration</string>
+    <string name="delConfigWarning">Warning: This will remove this OS configuration from the list. Are you sure you want to continue?</string>
+    <string name="resetAllWarning">Warning: This will reset EVERYTHING and all of your custom preferences will be erased. Are you sure you want to continue?</string>
+    <string name="what">Wait, how?</string>
+    <string name="noChange">No changes have been made</string>
+    <string name="resetFinished">Settings have been reset</string>
+    <string name="presetDelFinished">Preset deleted</string>
+    <string name="cannotDel">Cannot delete last remaining preset</string>
 </resources>

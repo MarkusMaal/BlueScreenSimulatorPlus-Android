@@ -75,4 +75,14 @@
     <string name="yes">Jah</string>
     <string name="no">Ei</string>
     <string name="danger">Ohtlik suvand</string>
+    <string name="currentReset">Hoiatus: See taastab KÕIK algseadistused valitud konfiguratsioonile. Kas olete kindel, et soovite jätakata?</string>
+    <string name="resetAllConfig">Taasta vaikeseadistused</string>
+    <string name="delConfig">Konfiguratsiooni kustutamine</string>
+    <string name="delConfigWarning">Hoiatus: See kustutab valitud OS-i konfiguratsiooni loetelust. Kas olete kindel, et soovite jätkata?</string>
+    <string name="resetAllWarning">Hoiatus: See taastab KÕIK vaikesätted ning kõik lisatud eelistused eemaldatakse. Kas olete kindel, et soovite jätkata?</string>
+    <string name="what">Oota, kuidas?</string>
+    <string name="noChange">Muudatusi ei teostatud</string>
+    <string name="resetFinished">Vaikesätted taastati</string>
+    <string name="presetDelFinished">Eelseadistus kustutati</string>
+    <string name="cannotDel">Viimast eelseadistust ei saa kustutada</string>
 </resources>

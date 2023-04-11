@@ -33,6 +33,7 @@ public class CodeEdit extends AppCompatActivity {
     List<String> words = new ArrayList<>();
 
     @SuppressLint("DiscouragedApi")
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

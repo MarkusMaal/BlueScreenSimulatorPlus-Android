@@ -265,14 +265,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     if (bluescreens.size() > 1) {
                         bluescreens.remove(bluescreens.get((int) winspin.getSelectedItemId()));
                         saveSettings(bluescreens, bluescreens.get(0), 0);
-                        Toast.makeText(getContext(), "Preset deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.presetDelFinished), Toast.LENGTH_SHORT).show();
                         Intent mi = getActivity().getIntent();
                         getActivity().finish();
                         startActivity(mi);
                         getActivity().finish();
                         break;
                     }
-                    Toast.makeText(getContext(), "Cannot delete last remaining preset", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.cannotDel), Toast.LENGTH_SHORT).show();
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     break;
@@ -305,7 +305,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         editor.putString("bluescreens", json);
                         editor.putInt("selectedItem", 0);
                         editor.apply();
-                        Toast.makeText(getContext(), "Settings have been reset. Restarting activity...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.resetFinished), Toast.LENGTH_SHORT).show();
                         Intent i = getActivity().getIntent();
                         getActivity().finish();
                         startActivity(i);
@@ -313,7 +313,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
-                        Toast.makeText(getContext(), "No changes to settings have been made", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.noChange), Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -394,13 +394,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 TypedValue tv = new TypedValue();
                 getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
-                builder.setMessage("Warning: This will remove this OS configuration from the list. Are you sure you want to continue?").setPositiveButton("Yes", delPresetListener)
-                        .setNegativeButton("No", delPresetListener).setTitle("Delete configuration").setIcon(tv.resourceId).show();
+                builder.setMessage(getString(R.string.delConfigWarning)).setPositiveButton(getString(R.string.yes), delPresetListener)
+                        .setNegativeButton(getString(R.string.no), delPresetListener).setTitle(getString(R.string.delConfig)).setIcon(tv.resourceId).show();
             }
         });
 
         binding.addPreset.setOnClickListener(new View.OnClickListener() {
             @Override
+            @SuppressLint("UseSwitchCompatOrMaterialCode")
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 TypedValue tv = new TypedValue();
@@ -484,7 +485,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 TypedValue tv = new TypedValue();
                 getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
-                builder.setMessage("Warning: This will reset EVERYTHING for the selected configuration. Are you sure you want to continue?").setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                builder.setMessage(getString(R.string.currentReset)).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String backupName = os.GetString("friendlyname");
@@ -498,7 +499,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                                 getActivity().finish();
                             }
                         })
-                        .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle("Reset all settings").show();
+                        .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle(getString(R.string.resetAllConfig)).show();
             }
         });
 
@@ -522,18 +523,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 TypedValue tv = new TypedValue();
                 getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
-                builder.setMessage("Warning: This will reset EVERYTHING and all of your custom preferences will be erased. Are you sure you want to continue?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).setIcon(tv.resourceId).setTitle("Reset all settings").show();
+                builder.setMessage(getString(R.string.resetAllWarning)).setPositiveButton(getString(R.string.yes), dialogClickListener)
+                        .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle(getString(R.string.resetAll)).show();
             }
         });
-
-        /*inding.buttonFirst.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-            }
-        });*/
     }
 
     void NotImplemented() {
@@ -568,7 +561,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(getContext(), String.format("%s!", getString(R.string.cancelled)), Toast.LENGTH_SHORT).show();
@@ -673,6 +666,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 elabel.setVisibility(View.VISIBLE);
                 break;
             case "Windows CE":
+            case "Windows 1.x/2.x":
                 details.setVisibility(View.GONE);
                 break;
             case "Windows 9x/Me":
@@ -685,9 +679,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             case "Windows 3.1x":
                 hbg.setVisibility(View.VISIBLE);
                 hfg.setVisibility(View.VISIBLE);
-                details.setVisibility(View.GONE);
-                break;
-            case "Windows 1.x/2.x":
                 details.setVisibility(View.GONE);
                 break;
             default:
@@ -721,6 +712,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        Toast.makeText(adapterView.getContext(), "Wait, how?", Toast.LENGTH_SHORT).show();
+        Toast.makeText(adapterView.getContext(), getString(R.string.what), Toast.LENGTH_SHORT).show();
     }
 }
