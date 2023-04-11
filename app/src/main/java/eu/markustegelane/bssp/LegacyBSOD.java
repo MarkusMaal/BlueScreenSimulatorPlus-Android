@@ -700,33 +700,27 @@ public class LegacyBSOD extends AppCompatActivity {
     }
 
     private Bitmap DrawText(int offset_x, int offset_y, int w, int h, Map<Character, Bitmap> alphabetPics, Bitmap original, String text, int bg, int fg, String alphabet) {
-            int x = offset_x;
-            int y = offset_y;
-            alphabetPics = ColorizeAlphabet(alphabetPics, bg, fg, alphabet);
-            Bitmap newBitmap = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                newBitmap = Bitmap.createBitmap(original.getWidth(), original.getHeight(), Bitmap.Config.ARGB_8888, false);
-            }
-            if (newBitmap == null) {
-                return null;
-            }
-            Canvas canvas = new Canvas(newBitmap);
-            DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
-            canvas.setDrawFilter(filter);
-            canvas.drawBitmap(original, 0, 0, null);
-            for (String line : text.split("\n")) {
-                for (Character c : line.toCharArray()) {
-                    try {
-                        canvas.drawBitmap(alphabetPics.get(c), x, y, null);
-                    } catch (Exception ignored) {
-                        canvas.drawBitmap(alphabetPics.get(' '), x, y, null);
-                    }
-                    x += w;
+        int x = offset_x;
+        int y = offset_y;
+        alphabetPics = ColorizeAlphabet(alphabetPics, bg, fg, alphabet);
+        Bitmap newBitmap = Bitmap.createBitmap(original.getWidth(), original.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(newBitmap);
+        DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
+        canvas.setDrawFilter(filter);
+        canvas.drawBitmap(original, 0, 0, null);
+        for (String line : text.split("\n")) {
+            for (Character c : line.toCharArray()) {
+                try {
+                    canvas.drawBitmap(alphabetPics.get(c), x, y, null);
+                } catch (Exception ignored) {
+                    canvas.drawBitmap(alphabetPics.get(' '), x, y, null);
                 }
-                x = offset_x;
-                y += h;
+                x += w;
             }
-            return newBitmap;
+            x = offset_x;
+            y += h;
+        }
+        return newBitmap;
     }
 
     private Map<Character, Bitmap> ColorizeAlphabet(Map<Character, Bitmap> source, int bg, int fg, String alphabet) {
