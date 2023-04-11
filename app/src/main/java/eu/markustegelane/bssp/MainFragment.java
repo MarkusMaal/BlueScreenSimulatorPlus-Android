@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -254,6 +255,26 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
+        DialogInterface.OnClickListener delPresetListener = (dialogInterface, i) -> {
+            switch (i) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    if (bluescreens.size() > 1) {
+                        bluescreens.remove(bluescreens.get((int) winspin.getSelectedItemId()));
+                        saveSettings(bluescreens, bluescreens.get(0), 0);
+                        Toast.makeText(getContext(), "Preset deleted", Toast.LENGTH_SHORT).show();
+                        Intent mi = getActivity().getIntent();
+                        getActivity().finish();
+                        startActivity(mi);
+                        getActivity().finish();
+                        break;
+                    }
+                    Toast.makeText(getContext(), "Cannot delete last remaining preset", Toast.LENGTH_SHORT).show();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        };
+
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -284,6 +305,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         Intent i = getActivity().getIntent();
                         getActivity().finish();
                         startActivity(i);
+                        getActivity().finish();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -365,7 +387,11 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.delPreset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NotImplemented();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                TypedValue tv = new TypedValue();
+                getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
+                builder.setMessage("Warning: This will remove this OS configuration from the list. Are you sure you want to continue?").setPositiveButton("Yes", delPresetListener)
+                        .setNegativeButton("No", delPresetListener).setTitle("Delete configuration").setIcon(tv.resourceId).show();
             }
         });
 
@@ -401,8 +427,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                TypedValue tv = new TypedValue();
+                getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
                 builder.setMessage("Warning: This will reset EVERYTHING and all of your custom preferences will be erased. Are you sure you want to continue?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).setTitle("Reset all settings").show();
+                        .setNegativeButton("No", dialogClickListener).setIcon(tv.resourceId).setTitle("Reset all settings").show();
             }
         });
 
