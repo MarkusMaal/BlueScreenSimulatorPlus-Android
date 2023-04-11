@@ -96,6 +96,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         } else if (sharedPreferences.getInt("selectedItem", -1) != -1) {
             selection = sharedPreferences.getInt("selectedItem", -1);
         }
+        if (selection > bluescreens.size() - 1) {
+            selection = bluescreens.size() - 1;
+        }
         Spinner winspin = binding.winSpinner;
 
 
@@ -453,9 +456,11 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 builder.setCancelable(false)
                         .setPositiveButton(getString(R.string.ok),
                                 (dialogInterface, i) -> {
-                                    BlueScreen newScreen = new BlueScreen(templateSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString(), true, getActivity());
+                                    BlueScreen newScreen = new BlueScreen(templateSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString(), false, getActivity());
+                                    newScreen.os = osSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString();
+                                    newScreen.SetOSSpecificDefaults();
+                                    newScreen.os = osSelector.getAdapter().getItem((int)osSelector.getSelectedItemId()).toString();
                                     newScreen.SetString("friendlyname", friendlyText.getText().toString());
-                                    newScreen.SetString("os", osSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString());
                                     bluescreens.add(newScreen);
                                     saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                                     Intent in = new Intent(getContext(), MainActivity.class);

@@ -28,7 +28,7 @@ public class BlueScreen implements Serializable {
 
     private String[] ecodes = new String[]{"RRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRR", "RRRRRRRRRRRRRRRR"};
 
-    private String os;
+    public String os;
 
     transient Typeface font;
     transient Activity activity;
@@ -51,7 +51,7 @@ public class BlueScreen implements Serializable {
         this.foreground = Color.argb(255, 255, 255, 255);
         this.highlight_bg = Color.argb(255, 255, 255, 255);
         this.highlight_fg = Color.argb(255, 0, 0, 0);
-        this.os = base_os;
+        if (autosetup) { this.os = base_os; }
         this.titles = gson.toJson(new Hashtable<String, String>());
         this.texts = gson.toJson(new Hashtable<String, String>());
 

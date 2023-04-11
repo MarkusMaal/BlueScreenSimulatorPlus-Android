@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -629,6 +630,9 @@ public class LegacyBSOD extends AppCompatActivity {
             case "System is busy":
                 windowsText = titles.get("System is busy");
                 break;
+            default:
+                windowsText = "";
+                break;
         }
         /*List<String> test_Message = new ArrayList<String>();
         for  (char letter: alphabet.toCharArray()) {
@@ -649,10 +653,15 @@ public class LegacyBSOD extends AppCompatActivity {
         }
         String screenText = txts.get(me.GetString("Screen mode"));
         String[] errorMessage;
-        if (screenText.contains("%s")) {
-            errorMessage = String.format(screenText, firstcode, codes[1].substring(0, 4), codes[2], codes[3]).split("\n");
-        } else {
-            errorMessage = screenText.split("\n");
+        try {
+            if (screenText.contains("%s")) {
+                errorMessage = String.format(screenText, firstcode, codes[1].substring(0, 4), codes[2], codes[3]).split("\n");
+            } else {
+                errorMessage = screenText.split("\n");
+            }
+        } catch (Exception e) {
+            Toast.makeText(getWindow().getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            errorMessage = new String[0];
         }
         int y_offset = bmp.getHeight() / 2 - (h * (4 + errorMessage.length)) / 2;
         Paint tPaint = new Paint();
@@ -668,8 +677,11 @@ public class LegacyBSOD extends AppCompatActivity {
         bPaint.setColor(me.GetTheme(true, true));
         canvas.drawRect(backBox_x, backBox_y, backBox_w, backBox_h, bPaint);
         String prompt = txts.get("Prompt");
+        if (prompt == null) {
+            prompt = "";
+        }
         int i1 = y_offset + h + h + (errorMessage.length + 1) * h;
-        caret_x = (bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w) + (txts.get("Prompt").length() * w) + w / 2;
+        caret_x = (bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w) + (prompt.length() * w) + w / 2;
         caret_y = i1 + (h - h/4);
         int k = 0;
         for (String line: errorMessage) {
@@ -767,25 +779,31 @@ public class LegacyBSOD extends AppCompatActivity {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(w, h, conf);
         Canvas canvas = new Canvas (bmp);
-        switch (me.GetString("os")) {
-            case "Windows XP":
-                yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
-                yourText += "\n\n\n";
-                yourText += texts.get("Physical memory dump") + "\n" + texts.get("Technical support");
-                break;
-            case "Windows CE":
-                yourText += texts.get("A problem has occurred...") + "\n";
-                yourText += texts.get("CTRL+ALT+DEL message") + "\n\n";
-                yourText += texts.get("Technical information") + "\n\n";
-                yourText += String.format(texts.get("Technical information formatting"), "0x" + new StringBuilder(new StringBuilder(me.GetString("code").split(" ")[1]).reverse().toString().substring(1, 7)).reverse().toString().toLowerCase(), me.GetString("code").split(" ")[0].toLowerCase().replace("_",   " ")) + "\n\n\n";
-                yourText += String.format(texts.get("Restart message"), progress);
-                break;
-            default:
-                yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
-                yourText += "\n\n\n" + texts.get("Collecting data for crash dump") + "\n";
-                yourText += texts.get("Initializing crash dump") + "\n" + texts.get("Begin dump") + "\n";
-                yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", String.valueOf(progress)));
-                break;
+        try {
+            switch (me.GetString("os")) {
+                case "Windows XP":
+                    yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
+                    yourText += "\n\n\n";
+                    yourText += texts.get("Physical memory dump") + "\n" + texts.get("Technical support");
+                    break;
+                case "Windows CE":
+                    yourText += texts.get("A problem has occurred...") + "\n";
+                    yourText += texts.get("CTRL+ALT+DEL message") + "\n\n";
+                    yourText += texts.get("Technical information") + "\n\n";
+                    yourText += String.format(texts.get("Technical information formatting"), "0x" + new StringBuilder(new StringBuilder(me.GetString("code").split(" ")[1]).reverse().toString().substring(1, 7)).reverse().toString().toLowerCase(), me.GetString("code").split(" ")[0].toLowerCase().replace("_", " ")) + "\n\n\n";
+                    yourText += String.format(texts.get("Restart message"), progress);
+                    break;
+                default:
+                    yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
+                    yourText += "\n\n\n" + texts.get("Collecting data for crash dump") + "\n";
+                    yourText += texts.get("Initializing crash dump") + "\n" + texts.get("Begin dump") + "\n";
+                    yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", String.valueOf(progress)));
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getWindow().getContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
         if (!me.GetString("os").equals("Windows XP")) {
             if (progress == 100) {

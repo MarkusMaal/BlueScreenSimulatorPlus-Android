@@ -57,7 +57,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
-            android:clickable="false"
             android:entries="@array/OperatingSystems"
             android:padding="20sp"
             android:spinnerMode="dialog"
