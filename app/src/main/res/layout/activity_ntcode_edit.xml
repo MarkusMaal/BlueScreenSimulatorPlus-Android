@@ -380,6 +380,13 @@
                                 android:text="@string/nullcode" />
 
                             <Button
+                                android:id="@+id/addFileButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="@string/addFile" />
+
+                            <Button
                                 android:id="@+id/renameFileButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

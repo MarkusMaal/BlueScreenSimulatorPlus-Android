@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -204,6 +205,47 @@ public class NTCodeEdit extends AppCompatActivity {
                 me.DeleteFile(binding.errorFileSpinner.getAdapter().getItem((int)binding.errorFileSpinner.getSelectedItemId()).toString().split(" ")[0]);
                 selected = 0;
                 RefreshSpinner();
+            }
+        });
+
+        findViewById(R.id.addFileButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getWindow().getContext());
+                alert.setTitle(getString(R.string.addFile));
+                alert.setMessage(getString(R.string.enterName));
+                View file_view = LayoutInflater.from(getWindow().getContext()).inflate(R.layout.file_name_view, null);
+                alert.setView(file_view);
+                file_view.findViewById(R.id.fourSevenCheck).setVisibility(View.VISIBLE);
+                if (!me.GetString("os").equals("Windows NT 3.x/4.0")) {
+                    ((Switch)file_view.findViewById(R.id.fourSevenCheck)).setClickable(false);
+                    ((Switch)file_view.findViewById(R.id.fourSevenCheck)).setChecked(true);
+                }
+                alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        List<String> codes = new ArrayList<>();
+                        int codeCount = 2;
+                        if (!me.GetString("os").equals("Windows NT 3.x/4.0")) {
+                            codeCount = 4;
+                        } else if (((Switch)file_view.findViewById(R.id.fourSevenCheck)).isChecked()) {
+                            codeCount = 7;
+                        }
+                        for (int k = 0; k < codeCount; k++) {
+                            codes.add("RRRRRRRR");
+                        }
+                        me.PushFile(((EditText)file_view.findViewById(R.id.fileName)).getText().toString(), codes.toArray(new String[0]));
+                        saveSettings(bluescreens, me, bs_id);
+                        RefreshSpinner();
+                    }
+                });
+                alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                alert.show();
             }
         });
     }
