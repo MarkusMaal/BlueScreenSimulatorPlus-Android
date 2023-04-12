@@ -386,6 +386,13 @@
                                 android:layout_gravity="center_horizontal"
                                 android:text="@string/renameFile" />
 
+                            <Button
+                                android:id="@+id/deleteFileButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="@string/delFile" />
+
                         </LinearLayout>
 
                     </HorizontalScrollView>

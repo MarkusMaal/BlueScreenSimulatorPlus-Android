@@ -354,6 +354,14 @@ public class BlueScreen implements Serializable {
         this.codefiles = gson.toJson(codefiles);
     }
 
+    public void DeleteFile(String key) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String[]>>(){}.getType();
+        Map<String, String[]> codefiles = gson.fromJson(this.codefiles, type);
+        codefiles.remove(key);
+        this.codefiles = gson.toJson(codefiles);
+    }
+
     public String GetFiles()
     {
         return codefiles;

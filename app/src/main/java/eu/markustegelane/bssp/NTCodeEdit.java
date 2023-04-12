@@ -198,6 +198,14 @@ public class NTCodeEdit extends AppCompatActivity {
             alert.show();
 
         });
+        findViewById(R.id.deleteFileButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                me.DeleteFile(binding.errorFileSpinner.getAdapter().getItem((int)binding.errorFileSpinner.getSelectedItemId()).toString().split(" ")[0]);
+                selected = 0;
+                RefreshSpinner();
+            }
+        });
     }
 
 
