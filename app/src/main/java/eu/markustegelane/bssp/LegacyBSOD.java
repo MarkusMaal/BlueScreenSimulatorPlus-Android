@@ -12,6 +12,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import eu.markustegelane.bssp.databinding.ActivityWin7BsodBinding;
 
@@ -61,7 +64,7 @@ public class LegacyBSOD extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
-    public static int interval = 100;
+    public static int interval = 500;
     private final Handler mHideHandler = new Handler(Looper.myLooper());
     private View mContentView;
     private String memcodes;
@@ -75,7 +78,11 @@ public class LegacyBSOD extends AppCompatActivity {
     private Bitmap BufferA;
     private Bitmap BufferB;
 
+    List<Bitmap> characters = new ArrayList<>();
+
     Map<String, String> texts;
+
+    MediaPlayer mp;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -138,7 +145,40 @@ public class LegacyBSOD extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding.bsodWindow.setDrawingCacheEnabled(false);
         setContentView(binding.getRoot());
-        if (me.GetString("os").equals("Windows XP") ||
+        if (me.GetString("os").equals("Windows 1.x/2.x")) {
+            switch(me.GetString("qr_file")) {
+                case "local:0":
+                    Draw12Canvas(me, 0, true, "Win1");
+                    break;
+                case "local:1":
+                    Draw12Canvas(me, 0, true, "Win2");
+                    break;
+                case "local:null":
+                    Draw12Canvas(me, 0, true, "default");
+                    break;
+            }
+            Random r = new Random();
+            mp = MediaPlayer.create(LegacyBSOD.this, R.raw.beep);
+            if (me.GetBool("playsound")) {
+                mp.setLooping(true);
+                mp.start();
+            }
+            new CountDownTimer(Long.MAX_VALUE, interval) {
+
+                @Override
+                public void onTick(long l) {
+                    Draw12Canvas(me,r.nextInt(2) * 12, false, "default");
+                }
+
+                @Override
+                public void onFinish() {
+                    if (mp.isPlaying()) {
+                        mp.stop();
+                    }
+                }
+            }.start();
+        }
+        else if (me.GetString("os").equals("Windows XP") ||
                 me.GetString("os").equals("Windows Vista") ||
                 me.GetString("os").equals("Windows 7") ||
                 me.GetString("os").equals("Windows CE")) {
@@ -194,7 +234,7 @@ public class LegacyBSOD extends AppCompatActivity {
                 new CountDownTimer(1000 * (long)me.GetInt("timer") + 1000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         int progress;
-                        progress = me.GetInt("timer") - (int) ((me.GetInt("timer") * 1000 - millisUntilFinished) / 1000);
+                        progress = me.GetInt("timer") - (int) ((me.GetInt("timer") * 1000 + 1000 - millisUntilFinished) / 1000);
                         DrawCanvas(progress, me, 0);
                     }
 
@@ -254,12 +294,165 @@ public class LegacyBSOD extends AppCompatActivity {
 
                 }
             };
-            a.start();
+            if (me.GetBool("blinkblink")) {
+                a.start();
+            }
         }
         //binding.bsodWindow.setScaleX(((float)me.GetInt("scale")) / 100);
         //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
     }
 
+    private void Draw12Canvas(BlueScreen me, Integer shift, boolean newImage, String type) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        };
+
+        Bitmap rasters = BitmapFactory.decodeResource(getResources(), R.drawable.doscii);
+        rasters.setPremultiplied(false);
+        rasters.setHasAlpha(false);
+        Bitmap.Config conf = Bitmap.Config.ARGB_4444;
+        w = 8;
+        int x = 0;
+        h = rasters.getHeight();
+        Bitmap bmp = Bitmap.createBitmap(624, 228, conf);
+        Canvas canvas = new Canvas(bmp);
+        if (!newImage) {
+            if (shift == 0) {
+                return;
+            }
+            Paint tPaint = new Paint();
+            tPaint.setFilterBitmap(false);
+            tPaint.setColor(me.GetTheme(true, false));
+            canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
+            canvas.drawBitmap(BufferA, 0, -shift, null);
+        }
+        int i = 0;
+        if (newImage) {
+            int[] pixels;
+            int bg;
+            int fg;
+            int width;
+            int height;
+            Bitmap result;
+
+            for (i = 0; i < rasters.getWidth() / w; i += 1) {
+                if (x > rasters.getWidth() - w) {
+                    x = rasters.getWidth() - w - 2;
+                }
+                if ((i == 3) || (i == 19) || (i == 50)) {
+                    x -= 1;
+                } else if ((i == 95)) {
+                    x += 1;
+                }
+                Bitmap currentLetter = Bitmap.createBitmap(rasters, x, 0, w, h, new Matrix(), false);
+                bg = me.GetTheme(true, false);
+                fg = me.GetTheme(false, false);
+                width = currentLetter.getWidth();
+                height = currentLetter.getHeight();
+                pixels = new int[width * height];
+                currentLetter.getPixels(pixels, 0, width, 0, 0, width, height);
+                for (int x2 = 0; x2 < pixels.length; ++x2) {
+                    int y = x2 / currentLetter.getWidth();
+                    int xx = x2 % currentLetter.getWidth();
+                    if (Color.red(currentLetter.getPixel(xx, y)) > 140) {
+                        pixels[x2] = fg;
+                    } else {
+                        pixels[x2] = bg;
+                    }
+                }
+                // create result bitmap output
+                result = Bitmap.createBitmap(width, height, currentLetter.getConfig());
+                //set pixels
+                result.setPixels(pixels, 0, width, 0, 0, width, height);
+                characters.add(result);
+                x += w;
+            }
+            Paint tPaint = new Paint();
+            tPaint.setFilterBitmap(false);
+            tPaint.setColor(me.GetTheme(true, false));
+            canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
+            switch (type) {
+                case "Win1":
+                    bmp = BitmapFactory.decodeResource(getResources(), R.drawable.win1_splash);
+                    bg = me.GetTheme(true, false);
+                    fg = me.GetTheme(false, false);
+                    width = bmp.getWidth();
+                    height = bmp.getHeight();
+                    pixels = new int[width * height];
+                    bmp.getPixels(pixels, 0, width, 0, 0, width, height);
+                    for (int x2 = 0; x2 < pixels.length; ++x2) {
+                        int y = x2 / bmp.getWidth();
+                        int xx = x2 % bmp.getWidth();
+                        if (Color.red(bmp.getPixel(xx, y)) > 140) {
+                            pixels[x2] = fg;
+                        } else {
+                            pixels[x2] = bg;
+                        }
+                    }
+                    // create result bitmap output
+                    result = Bitmap.createBitmap(width, height, bmp.getConfig());
+                    //set pixels
+                    result.setPixels(pixels, 0, width, 0, 0, width, height);
+                    BufferA = result.copy(result.getConfig(), true);
+                    binding.bsodWindow.setImageBitmap(result);
+                    return;
+                case "Win2":
+                    bmp = BitmapFactory.decodeResource(getResources(), R.drawable.win2_splash);
+                    bg = me.GetTheme(true, false);
+                    fg = me.GetTheme(false, false);
+                    width = bmp.getWidth();
+                    height = bmp.getHeight();
+                    pixels = new int[width * height];
+                    bmp.getPixels(pixels, 0, width, 0, 0, width, height);
+                    for (int x2 = 0; x2 < pixels.length; ++x2) {
+                        int y = x2 / bmp.getWidth();
+                        int xx = x2 % bmp.getWidth();
+                        if (Color.red(bmp.getPixel(xx, y)) > 140) {
+                            pixels[x2] = fg;
+                        } else {
+                            pixels[x2] = bg;
+                        }
+                    }
+                    // create result bitmap output
+                    result = Bitmap.createBitmap(width, height, bmp.getConfig());
+                    //set pixels
+                    result.setPixels(pixels, 0, width, 0, 0, width, height);
+                    BufferA = result.copy(result.getConfig(), true);
+                    binding.bsodWindow.setImageBitmap(result);
+                    return;
+                default:
+                    break;
+            }
+        }
+        Random r = new Random();
+        for (int y = 0; y < bmp.getHeight() / h; y++) {
+            ArrayList<Integer> rowChars = new ArrayList<>();
+            int ay = y;
+            if (!newImage) {
+                ay = (bmp.getHeight() - h) / h;
+            }
+            int min = (bmp.getWidth() / w) - 8;
+            for (int z = 0; z < r.nextInt(bmp.getWidth() / w + min) + min; z++) {
+                rowChars.add(r.nextInt(characters.size() - 1));
+            }
+            x = 0;
+            DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
+            canvas.setDrawFilter(filter);
+            for (Integer c : rowChars) {
+                canvas.drawBitmap(characters.get(c), x, ay * h, null);
+                x += w;
+            }
+            if (!newImage) {
+                break;
+            }
+        }
+        BufferA = bmp.copy(bmp.getConfig(), true);
+        binding.bsodWindow.setImageBitmap(bmp);
+    }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void DrawNTCanvas(BlueScreen me) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -323,6 +516,9 @@ public class LegacyBSOD extends AppCompatActivity {
                 String filename2 = null;
                 try {
                     filename2 = (String) culpritfiles.keySet().toArray()[n + 1];
+                    if (culpritfiles.get(filename2).length > 2) {
+                        continue;
+                    }
                 } catch (Exception ignored) {
 
                 }
@@ -437,6 +633,9 @@ public class LegacyBSOD extends AppCompatActivity {
             case "System is busy":
                 windowsText = titles.get("System is busy");
                 break;
+            default:
+                windowsText = "Windows";
+                break;
         }
         /*List<String> test_Message = new ArrayList<String>();
         for  (char letter: alphabet.toCharArray()) {
@@ -457,10 +656,15 @@ public class LegacyBSOD extends AppCompatActivity {
         }
         String screenText = txts.get(me.GetString("Screen mode"));
         String[] errorMessage;
-        if (screenText.contains("%s")) {
-            errorMessage = String.format(screenText, firstcode, codes[1].substring(0, 4), codes[2], codes[3]).split("\n");
-        } else {
-            errorMessage = screenText.split("\n");
+        try {
+            if (screenText.contains("%s")) {
+                errorMessage = String.format(screenText, firstcode, codes[1].substring(0, 4), codes[2], codes[3]).split("\n");
+            } else {
+                errorMessage = screenText.split("\n");
+            }
+        } catch (Exception e) {
+            Toast.makeText(getWindow().getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            errorMessage = new String[0];
         }
         int y_offset = bmp.getHeight() / 2 - (h * (4 + errorMessage.length)) / 2;
         Paint tPaint = new Paint();
@@ -476,8 +680,11 @@ public class LegacyBSOD extends AppCompatActivity {
         bPaint.setColor(me.GetTheme(true, true));
         canvas.drawRect(backBox_x, backBox_y, backBox_w, backBox_h, bPaint);
         String prompt = txts.get("Prompt");
+        if (prompt == null) {
+            prompt = "";
+        }
         int i1 = y_offset + h + h + (errorMessage.length + 1) * h;
-        caret_x = (bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w) + (txts.get("Prompt").length() * w) + w / 2;
+        caret_x = (bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w) + (prompt.length() * w) + w / 2;
         caret_y = i1 + (h - h/4);
         int k = 0;
         for (String line: errorMessage) {
@@ -508,33 +715,27 @@ public class LegacyBSOD extends AppCompatActivity {
     }
 
     private Bitmap DrawText(int offset_x, int offset_y, int w, int h, Map<Character, Bitmap> alphabetPics, Bitmap original, String text, int bg, int fg, String alphabet) {
-            int x = offset_x;
-            int y = offset_y;
-            alphabetPics = ColorizeAlphabet(alphabetPics, bg, fg, alphabet);
-            Bitmap newBitmap = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                newBitmap = Bitmap.createBitmap(original.getWidth(), original.getHeight(), Bitmap.Config.ARGB_8888, false);
-            }
-            if (newBitmap == null) {
-                return null;
-            }
-            Canvas canvas = new Canvas(newBitmap);
-            DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
-            canvas.setDrawFilter(filter);
-            canvas.drawBitmap(original, 0, 0, null);
-            for (String line : text.split("\n")) {
-                for (Character c : line.toCharArray()) {
-                    try {
-                        canvas.drawBitmap(alphabetPics.get(c), x, y, null);
-                    } catch (Exception ignored) {
-                        canvas.drawBitmap(alphabetPics.get(' '), x, y, null);
-                    }
-                    x += w;
+        int x = offset_x;
+        int y = offset_y;
+        alphabetPics = ColorizeAlphabet(alphabetPics, bg, fg, alphabet);
+        Bitmap newBitmap = Bitmap.createBitmap(original.getWidth(), original.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(newBitmap);
+        DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
+        canvas.setDrawFilter(filter);
+        canvas.drawBitmap(original, 0, 0, null);
+        for (String line : text.split("\n")) {
+            for (Character c : line.toCharArray()) {
+                try {
+                    canvas.drawBitmap(alphabetPics.get(c), x, y, null);
+                } catch (Exception ignored) {
+                    canvas.drawBitmap(alphabetPics.get(' '), x, y, null);
                 }
-                x = offset_x;
-                y += h;
+                x += w;
             }
-            return newBitmap;
+            x = offset_x;
+            y += h;
+        }
+        return newBitmap;
     }
 
     private Map<Character, Bitmap> ColorizeAlphabet(Map<Character, Bitmap> source, int bg, int fg, String alphabet) {
@@ -581,25 +782,31 @@ public class LegacyBSOD extends AppCompatActivity {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(w, h, conf);
         Canvas canvas = new Canvas (bmp);
-        switch (me.GetString("os")) {
-            case "Windows XP":
-                yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
-                yourText += "\n\n\n";
-                yourText += texts.get("Physical memory dump") + "\n" + texts.get("Technical support");
-                break;
-            case "Windows CE":
-                yourText += texts.get("A problem has occurred...") + "\n";
-                yourText += texts.get("CTRL+ALT+DEL message") + "\n\n";
-                yourText += texts.get("Technical information") + "\n\n";
-                yourText += String.format(texts.get("Technical information formatting"), "0x" + new StringBuilder(new StringBuilder(me.GetString("code").split(" ")[1]).reverse().toString().substring(1, 7)).reverse().toString().toLowerCase(), me.GetString("code").split(" ")[0].toLowerCase().replace("_",   " ")) + "\n\n\n";
-                yourText += String.format(texts.get("Restart message"), progress);
-                break;
-            default:
-                yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
-                yourText += "\n\n\n" + texts.get("Collecting data for crash dump") + "\n";
-                yourText += texts.get("Initializing crash dump") + "\n" + texts.get("Begin dump") + "\n";
-                yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", String.valueOf(progress)));
-                break;
+        try {
+            switch (me.GetString("os")) {
+                case "Windows XP":
+                    yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
+                    yourText += "\n\n\n";
+                    yourText += texts.get("Physical memory dump") + "\n" + texts.get("Technical support");
+                    break;
+                case "Windows CE":
+                    yourText += texts.get("A problem has occurred...") + "\n";
+                    yourText += texts.get("CTRL+ALT+DEL message") + "\n\n";
+                    yourText += texts.get("Technical information") + "\n\n";
+                    yourText += String.format(texts.get("Technical information formatting"), "0x" + new StringBuilder(new StringBuilder(me.GetString("code").split(" ")[1]).reverse().toString().substring(1, 7)).reverse().toString().toLowerCase(), me.GetString("code").split(" ")[0].toLowerCase().replace("_", " ")) + "\n\n\n";
+                    yourText += String.format(texts.get("Restart message"), progress);
+                    break;
+                default:
+                    yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
+                    yourText += "\n\n\n" + texts.get("Collecting data for crash dump") + "\n";
+                    yourText += texts.get("Initializing crash dump") + "\n" + texts.get("Begin dump") + "\n";
+                    yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", String.valueOf(progress)));
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getWindow().getContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
         if (!me.GetString("os").equals("Windows XP")) {
             if (progress == 100) {
@@ -657,8 +864,17 @@ public class LegacyBSOD extends AppCompatActivity {
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
+
     }
 
+    @Override
+    public void onBackPressed() {
+        if ((mp != null) && (mp.isPlaying())) {
+            mp.stop();
+            mp.reset();
+        }
+        finish();
+    }
     private void show() {
         // Show the system bar
         if (Build.VERSION.SDK_INT >= 30) {

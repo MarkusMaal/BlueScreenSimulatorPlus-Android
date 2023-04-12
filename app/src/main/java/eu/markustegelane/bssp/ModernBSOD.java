@@ -185,10 +185,14 @@ public class ModernBSOD extends AppCompatActivity {
         } else {
             descripy.setText(texts.get("Information text without dump"));
         }
+        String ecode = texts.get("Error code");
+        if (ecode == null) {
+            ecode = "";
+        }
         if (showDetails) {
-            techInfo.setText(String.format(texts.get("Error code"), errorCode.split(" ")[0]));
+            techInfo.setText(String.format(ecode, errorCode.split(" ")[0]));
         } else {
-            techInfo.setText(String.format(texts.get("Error code"), errorCode.split(" ")[1].replace("(", "").replace(")", "")));
+            techInfo.setText(String.format(ecode, errorCode.split(" ")[1].replace("(", "").replace(")", "")));
         }
         fl.setBackgroundColor(me.GetTheme(true, false));
         if (blackscreen) {

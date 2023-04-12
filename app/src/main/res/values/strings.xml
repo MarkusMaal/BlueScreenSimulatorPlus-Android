@@ -19,14 +19,17 @@
     <string-array name="OperatingSystems">
         <item>Windows 11</item>
         <item>Windows 10</item>
-        <item>Windows 8</item>
+        <item>Windows 8.x</item>
         <item>Windows 7</item>
         <item>Windows Vista</item>
         <item>Windows XP</item>
+        <item>Windows CE</item>
         <item>Windows 2000</item>
-        <item>Windows 9x/ME</item>
         <item>Windows NT 3.x/4.x</item>
+        <item>Windows 9x/Me</item>
         <item>Windows 3.1x</item>
+        <item>Windows 1.x/2.x</item>
+        <item>BOOTMGR</item>
     </string-array>
     <string name="os">Operating system</string>
     <string name="execute">Simulate</string>
@@ -538,7 +541,7 @@
     <string name="errorCode">Error code</string>
     <string name="settings">Settings for %s</string>
     <string name="colorpick">Change color</string>
-    <string name="settingsButton">Settings</string>
+    <string name="settingsButton" translatable="false">String editor (DEV)</string>
     <string name="ok" translatable="false">OK</string>
     <string name="notImplemented">Not implemented yet!</string>
     <string name="developer">Developer options</string>
@@ -562,4 +565,66 @@
     <string name="themeFg">Text color</string>
     <string name="themeHbg">Highlight background</string>
     <string name="themeHfg">Highlight text</string>
+    <string name="title_activity_parameter_editor">Parameter editor</string>
+
+    <!-- Preference Titles -->
+
+    <!-- Messages Preferences -->
+
+    <!-- Sync Preferences -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="strings">Miscellaneous</string>
+    <string name="titles">Titles</string>
+    <string name="texts">Texts</string>
+    <string name="integers">Numbers</string>
+    <string name="emoticon">Emoticon</string>
+    <string name="template">Template name</string>
+    <string name="ecode">Error code</string>
+    <string name="ymargin">Vertical margin</string>
+    <string name="xmargin">Horizontal margin</string>
+    <string name="qrsize">QR size</string>
+    <string name="scaling">Scale (%)</string>
+    <string name="bs">Blink speed (ms)</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="selectColor">Select %s color</string>
+    <string name="highlight_">highlight</string>
+    <string name="backgroundCol">background</string>
+    <string name="foregroundCol">text</string>
+    <string name="title_activity_code_edit">Parameter editor</string>
+    <string name="R" translatable="false">R</string>
+    <string name="nullValue" translatable="false">0</string>
+    <string name="F" translatable="false">F</string>
+    <string name="cancel">Cancel</string>
+    <string name="word">Word %s</string>
+    <string name="random">Random code</string>
+    <string name="nullcode">Null code</string>
+    <string name="global">Preset settings</string>
+    <string name="delPreset">Delete preset</string>
+    <string name="addPreset">Add preset</string>
+    <string name="resetHacks">Reset texts and colors</string>
+    <string name="loadPreset">Load file</string>
+    <string name="savePreset">Save file</string>
+    <string name="resetAll">Reset all settings</string>
+    <string name="ostemplate">Operating system template</string>
+    <string name="allowCustOS">Manually specify OS</string>
+    <string name="hybridWarn">This feature allows you to create \"hybrid\" blue screens, but may cause severe crashing issues, depending on which OS is selected. Are you sure you want to continue?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="danger">Dangerous option</string>
+    <string name="currentReset">Warning: This will reset EVERYTHING for the selected configuration. Are you sure you want to continue?</string>
+    <string name="resetAllConfig">Reset all settings</string>
+    <string name="delConfig">Delete configuration</string>
+    <string name="delConfigWarning">Warning: This will remove this OS configuration from the list. Are you sure you want to continue?</string>
+    <string name="resetAllWarning">Warning: This will reset EVERYTHING and all of your custom preferences will be erased. Are you sure you want to continue?</string>
+    <string name="what">Wait, how?</string>
+    <string name="noChange">No changes have been made</string>
+    <string name="resetFinished">Settings have been reset</string>
+    <string name="presetDelFinished">Preset deleted</string>
+    <string name="cannotDel">Cannot delete last remaining preset</string>
+    <string name="title_activity_ntcode_edit">NT code editor</string>
+    <string name="delFile">Delete file</string>
+    <string name="addFile">Add file</string>
+    <string name="renameFile">Rename file</string>
+    <string name="enterName">Enter file name</string>
+    <string name="isCulprit">4/7 parameters</string>
 </resources>
