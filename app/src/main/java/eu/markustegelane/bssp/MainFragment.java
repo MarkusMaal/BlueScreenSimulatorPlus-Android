@@ -337,7 +337,15 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.ntCodeEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NotImplemented();
+                Intent nt = new Intent(getContext(), NTCodeEdit.class);
+                Bundle b =  new Bundle();
+                BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
+                b.putSerializable("bluescreen", me);
+                b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
+                b.putSerializable("bluescreens", (Serializable) bluescreens);
+                nt.putExtras(b);
+                startActivity(nt);
+                getActivity().finish();
             }
         });
 

@@ -1,8 +1,10 @@
 package eu.markustegelane.bssp;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -46,29 +48,47 @@ public class CodeEdit extends AppCompatActivity {
         me = (BlueScreen) bundle.getSerializable("bluescreen");
         bs_id = bundle.getInt("bluescreen_id");
         bluescreens = (List<BlueScreen>)bundle.getSerializable("bluescreens");
+        AddListeners(getResources(), this.getPackageName(), this);
+        int blockSize = 0;
+        switch (me.GetString("os")) {
+            case "Windows XP":
+            case "Windows NT 3.x/4.0":
+            case "Windows 2000":
+            case "Windows 9x/Me":
+                blockSize = 8;
+                break;
+        }
+        HideElements(blockSize);
+        UpdateValues(this, "");
+    }
+
+    @SuppressLint("DiscouragedApi")
+    public void AddListeners(Resources r, String p, Activity a) {
         for (int i = 1; i <= 16; i++) {
-            int idF = getResources().getIdentifier(String.format("f1l%s", i), "id", this.getPackageName());
-            int idZ = getResources().getIdentifier(String.format("z1l%s", i), "id", this.getPackageName());
-            int idR = getResources().getIdentifier(String.format("r1l%s", i), "id", this.getPackageName());
+            int idF = r.getIdentifier(String.format("f1l%s", i), "id", p);
+            int idZ = r.getIdentifier(String.format("z1l%s", i), "id", p);
+            int idR = r.getIdentifier(String.format("r1l%s", i), "id", p);
             String tagF = "f1l" + i;
             String tagZ = "z1l" + i;
             String tagR = "r1l" + i;
-            View fb = findViewById(idF);
-            View zb = findViewById(idZ);
-            View rb = findViewById(idR);
+            View fb = a.findViewById(idF);
+            View zb = a.findViewById(idZ);
+            View rb = a.findViewById(idR);
             zb.setOnClickListener(view -> {
                 int lumerand = Integer.parseInt(tagZ.replace("z1l", ""));
                 String cval = words.get(selected);
                 words.set(selected, cval.substring(0, lumerand - 1) + "0" + cval.substring(lumerand));
-                me.SetCodes(words.get(0), words.get(1), words.get(2), words.get(3));
-                UpdateValues();
+                if (a == CodeEdit.this) { ((CodeEdit)a).SetCodes(words.toArray(new String[0])); }
+                else { ((NTCodeEdit)a).SetCodes(words.toArray(new String[0])); }
+                UpdateValues(a, "");
             });
             rb.setOnClickListener(view -> {
                 int lumerand = Integer.parseInt(tagR.replace("r1l", ""));
                 String cval = words.get(selected);
                 words.set(selected, cval.substring(0, lumerand - 1) + "R" + cval.substring(lumerand));
-                me.SetCodes(words.get(0), words.get(1), words.get(2), words.get(3));
-                UpdateValues();
+                if (a == CodeEdit.this) { ((CodeEdit)a).SetCodes(words.toArray(new String[0])); }
+                else { ((NTCodeEdit)a).SetCodes(words.toArray(new String[0])); }
+                UpdateValues(a, "");
             });
             fb.setOnClickListener(view -> {
                 int lumerand = Integer.parseInt(tagF.replace("f1l", ""));
@@ -86,47 +106,67 @@ public class CodeEdit extends AppCompatActivity {
                     }
                 }
                 words.set(selected, cval.substring(0, lumerand - 1) + nextVal + cval.substring(lumerand));
-                me.SetCodes(words.get(0), words.get(1), words.get(2), words.get(3));
-                UpdateValues();
+                if (a == CodeEdit.this) { ((CodeEdit)a).SetCodes(words.toArray(new String[0])); }
+                else { ((NTCodeEdit)a).SetCodes(words.toArray(new String[0])); }
+                UpdateValues(a, "");
             });
         }
-        RadioButton radio1 = (RadioButton)findViewById(R.id.wordRadio1);
-        RadioButton radio2 = (RadioButton)findViewById(R.id.wordRadio2);
-        RadioButton radio3 = (RadioButton)findViewById(R.id.wordRadio3);
-        RadioButton radio4 = (RadioButton)findViewById(R.id.wordRadio4);
-        radio1.setText(String.format(getString(R.string.word), "1"));
-        radio2.setText(String.format(getString(R.string.word), "2"));
-        radio3.setText(String.format(getString(R.string.word), "3"));
-        radio4.setText(String.format(getString(R.string.word), "4"));
-        radio1.setOnCheckedChangeListener((compoundButton, b) -> { if (b) { selected = 0; UpdateValues(); } });
-        radio2.setOnCheckedChangeListener((compoundButton, b) -> { if (b) { selected = 1; UpdateValues(); } });
-        radio3.setOnCheckedChangeListener((compoundButton, b) -> { if (b) { selected = 2; UpdateValues(); } });
-        radio4.setOnCheckedChangeListener((compoundButton, b) -> { if (b) { selected = 3; UpdateValues(); } });
-        binding.nullCodeButton.setOnClickListener(view -> {
-            words.set(selected, "0000000000000000");
-            me.SetCodes(words.get(0), words.get(1), words.get(2), words.get(3));
-            UpdateValues();
-        });
-        binding.randomCodeButton.setOnClickListener(view -> {
-            words.set(selected, "RRRRRRRRRRRRRRRR");
-            me.SetCodes(words.get(0), words.get(1), words.get(2), words.get(3));
-            UpdateValues();
-        });
-        binding.codeEditOkButton.setOnClickListener(view -> {
-            saveSettings(bluescreens, me, bs_id);
-            onBackPressed();
-        });
-        int blockSize = 0;
-        switch (me.GetString("os")) {
-            case "Windows XP":
-            case "Windows NT 3.x/4.0":
-            case "Windows 2000":
-            case "Windows 9x/Me":
-                blockSize = 8;
-                break;
+        RadioButton radio1 = (RadioButton)a.findViewById(R.id.wordRadio1);
+        RadioButton radio2 = (RadioButton)a.findViewById(R.id.wordRadio2);
+        RadioButton radio3 = (RadioButton)a.findViewById(R.id.wordRadio3);
+        RadioButton radio4 = (RadioButton)a.findViewById(R.id.wordRadio4);
+
+        if (radio1 != null) {
+            radio1.setText(String.format(getString(R.string.word), "1"));
+            radio2.setText(String.format(getString(R.string.word), "2"));
+            radio3.setText(String.format(getString(R.string.word), "3"));
+            radio4.setText(String.format(getString(R.string.word), "4"));
+            radio1.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b) {
+                    selected = 0;
+                    UpdateValues(a, "");
+                }
+            });
+            radio2.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b) {
+                    selected = 1;
+                    UpdateValues(a, "");
+                }
+            });
+            radio3.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b) {
+                    selected = 2;
+                    UpdateValues(a, "");
+                }
+            });
+            radio4.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b) {
+                    selected = 3;
+                    UpdateValues(a, "");
+                }
+            });
         }
-        HideElements(blockSize);
-        UpdateValues();
+        a.findViewById(R.id.nullCodeButton).setOnClickListener(view -> {
+            words.set(selected, "0000000000000000");
+            if (a == CodeEdit.this) { ((CodeEdit)a).SetCodes(words.toArray(new String[0])); }
+            else { ((NTCodeEdit)a).SetCodes(words.toArray(new String[0])); }
+            UpdateValues(a, words.get(selected));
+        });
+        a.findViewById(R.id.randomCodeButton).setOnClickListener(view -> {
+            words.set(selected, "RRRRRRRRRRRRRRRR");
+            if (a == CodeEdit.this) { ((CodeEdit)a).SetCodes(words.toArray(new String[0])); }
+            else { ((NTCodeEdit)a).SetCodes(words.toArray(new String[0])); }
+            UpdateValues(a, words.get(selected));
+        });
+        a.findViewById(R.id.codeEditOkButton).setOnClickListener(view -> {
+            saveSettings(bluescreens, me, bs_id);
+            a.onBackPressed();
+        });
+    }
+
+
+    public void SetCodes(String[] words) {
+        me.SetCodes(words[0], words[1], words[2], words[3]);
     }
 
     @Override
@@ -177,7 +217,16 @@ public class CodeEdit extends AppCompatActivity {
         editor.putString("bluescreens", json);
         editor.apply();
     }
-    public void UpdateValues() {
+    public void UpdateValues(Activity a, String word) {
+        boolean here = a == CodeEdit.this;
+        if (!here) {
+            for (int i = 1; i <= 16; i++) {
+                int id = getResources().getIdentifier(String.format("c1l%s", i), "id", this.getPackageName());
+                TextView tv = findViewById(id);
+                tv.setText(word.substring(i - 1, i));
+            }
+            return;
+        }
         words.clear();
         words.add(0, me.GetString("ecode1"));
         words.add(1, me.GetString("ecode2"));

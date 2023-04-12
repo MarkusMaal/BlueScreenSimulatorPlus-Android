@@ -621,4 +621,5 @@
     <string name="resetFinished">Settings have been reset</string>
     <string name="presetDelFinished">Preset deleted</string>
     <string name="cannotDel">Cannot delete last remaining preset</string>
+    <string name="title_activity_ntcode_edit">NTCodeEdit</string>
 </resources>
