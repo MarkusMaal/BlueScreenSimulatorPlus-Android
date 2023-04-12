@@ -1,15 +1,19 @@
 package eu.markustegelane.bssp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 
@@ -50,12 +54,12 @@ public class NTCodeEdit extends AppCompatActivity {
         SetWords(7);
 
         Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, String[]>>(){}.getType();
-        Map<String, String[]> codeFiles = gson.fromJson(me.GetFiles(), type);
         RefreshSpinner();
         binding.errorFileSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Type type = new TypeToken<Map<String, String[]>>(){}.getType();
+                Map<String, String[]> codeFiles = gson.fromJson(me.GetFiles(), type);
                 String[] cfiles = codeFiles.get(((String)adapterView.getAdapter().getItem(adapterView.getSelectedItemPosition())).split(" ")[0]);
                 words = cfiles;
                 SetWords(words.length);
@@ -169,6 +173,30 @@ public class NTCodeEdit extends AppCompatActivity {
         findViewById(R.id.codeEditOkButton).setOnClickListener(view -> {
             saveSettings(bluescreens, me, bs_id);
             onBackPressed();
+        });
+        findViewById(R.id.renameFileButton).setOnClickListener(view -> {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle(getString(R.string.renameFile));
+            alert.setMessage(getString(R.string.enterName));
+            View file_view = LayoutInflater.from(this).inflate(R.layout.file_name_view, null);
+            alert.setView(file_view);
+            file_view.findViewById(R.id.fourSevenCheck).setVisibility(View.GONE);
+            alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    me.RenameFile(binding.errorFileSpinner.getAdapter().getItem((int)binding.errorFileSpinner.getSelectedItemId()).toString().split(" ")[0], ((EditText)file_view.findViewById(R.id.fileName)).getText().toString());
+                    saveSettings(bluescreens, me, bs_id);
+                    RefreshSpinner();
+                }
+            });
+            alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            alert.show();
+
         });
     }
 

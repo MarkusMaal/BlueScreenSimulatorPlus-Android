@@ -621,5 +621,10 @@
     <string name="resetFinished">Settings have been reset</string>
     <string name="presetDelFinished">Preset deleted</string>
     <string name="cannotDel">Cannot delete last remaining preset</string>
-    <string name="title_activity_ntcode_edit">NTCodeEdit</string>
+    <string name="title_activity_ntcode_edit">NT code editor</string>
+    <string name="delFile">Delete file</string>
+    <string name="addFile">Add file</string>
+    <string name="renameFile">Rename file</string>
+    <string name="enterName">Enter file name</string>
+    <string name="isCulprit">4/7 parameters</string>
 </resources>

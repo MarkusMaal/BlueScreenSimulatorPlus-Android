@@ -370,17 +370,17 @@ public class BlueScreen implements Serializable {
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String[]>>(){}.getType();
         Map<String, String[]> codefiles = gson.fromJson(this.codefiles, type);
-        for (Map.Entry<String, String[]> kvp : ((Map<String, String[]>)gson.fromJson(this.GetFiles(), type)).entrySet())
+        Map<String, String[]> newfiles = new Hashtable<>();
+        for (Map.Entry<String, String[]> kvp : codefiles.entrySet())
         {
             if (Objects.equals(kvp.getKey(), key))
             {
-                codes = kvp.getValue();
-                codefiles.remove(key);
-                this.PushFile(renamed, codes);
-                break;
+                newfiles.put(renamed, kvp.getValue());
+            } else {
+                newfiles.put(kvp.getKey(), kvp.getValue());
             }
         }
-        this.codefiles = gson.toJson(codefiles);
+        this.codefiles = gson.toJson(newfiles);
     }
 
     public void SetFile(String key, int subcode, String code)

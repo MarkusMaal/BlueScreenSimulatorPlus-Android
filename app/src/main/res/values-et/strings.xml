@@ -85,4 +85,10 @@
     <string name="resetFinished">Vaikesätted taastati</string>
     <string name="presetDelFinished">Eelseadistus kustutati</string>
     <string name="cannotDel">Viimast eelseadistust ei saa kustutada</string>
+    <string name="title_activity_ntcode_edit">NT koodiredaktor</string>
+    <string name="delFile">Kustuta fail</string>
+    <string name="addFile">Lisa fail</string>
+    <string name="renameFile">Muuda faili nime</string>
+    <string name="enterName">Sisesta faili nimi</string>
+    <string name="isCulprit">4/7 parameetrit</string>
 </resources>
