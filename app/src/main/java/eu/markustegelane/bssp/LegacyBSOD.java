@@ -516,6 +516,9 @@ public class LegacyBSOD extends AppCompatActivity {
                 String filename2 = null;
                 try {
                     filename2 = (String) culpritfiles.keySet().toArray()[n + 1];
+                    if (culpritfiles.get(filename2).length > 2) {
+                        continue;
+                    }
                 } catch (Exception ignored) {
 
                 }
