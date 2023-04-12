@@ -85,20 +85,20 @@ public class SettingsActivity extends AppCompatActivity {
                 for (String s: titles.keySet()) {
                     EditTextPreference p = new EditTextPreference(ps.getContext());
                     p.setTitle(s);
-                    p.setKey(s);
+                    p.setKey(s + "/" + me.GenHex(32, "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"));
                     p.setEnabled(true);
                     p.setSummary(titles.get(s));
                     p.setDefaultValue(titles.get(s));
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
                         preference.setSummary(newValue.toString());
 
-                        me.SetTitle(preference.getKey(), newValue.toString());
+                        me.SetTitle(preference.getKey().split("/")[0], newValue.toString());
                         saveSettings(bsods, me, os_id);
                         return true;
                     });
                     p.setOnPreferenceClickListener(preference -> {
                         Map<String, String> inTitles = gson.fromJson(me.GetTitles(), type);
-                        preference.setDefaultValue(inTitles.get(preference.getKey()));
+                        preference.setDefaultValue(inTitles.get(preference.getKey().split("/")[0]));
                         return false;
                     });
                     pc.addPreference(p);
@@ -111,7 +111,7 @@ public class SettingsActivity extends AppCompatActivity {
                 for (String s : texts.keySet()) {
                     EditTextPreference p = new EditTextPreference(ps.getContext());
                     p.setTitle(s);
-                    p.setKey(s);
+                    p.setKey(s + "/" + me.GenHex(32, "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"));
                     p.setEnabled(true);
                     String summary = texts.get(s);
                     if (summary.length() > 50) {
@@ -126,13 +126,13 @@ public class SettingsActivity extends AppCompatActivity {
                         }
                         preference.setSummary(summary2);
                         preference.setDefaultValue(newValue.toString());
-                        me.SetText(preference.getKey(), newValue.toString());
+                        me.SetText(preference.getKey().split("/")[0], newValue.toString());
                         saveSettings(bsods, me, os_id);
                         return true;
                     });
                     p.setOnPreferenceClickListener(preference -> {
                         Map<String, String> inTexts = gson.fromJson(me.GetTexts(), type);
-                        preference.setDefaultValue(inTexts.get(preference.getKey()));
+                        preference.setDefaultValue(inTexts.get(preference.getKey().split("/")[0]));
                         return false;
                     });
                     pc.addPreference(p);
@@ -157,19 +157,19 @@ public class SettingsActivity extends AppCompatActivity {
                     if (ignoreSetting) {
                         continue;
                     }
-                    p.setKey(s);
+                    p.setKey(s + "/" + me.GenHex(32, "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"));
                     p.setEnabled(true);
                     p.setSummary(numbers.get(s).toString());
                     p.setDefaultValue(numbers.get(s).toString());
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
                         preference.setSummary(newValue.toString());
                         preference.setDefaultValue(newValue.toString());
-                        me.SetInt(preference.getKey(), Integer.parseInt(newValue.toString()));
+                        me.SetInt(preference.getKey().split("/")[0], Integer.parseInt(newValue.toString()));
                         saveSettings(bsods, me, os_id);
                         return true;
                     });
                     p.setOnPreferenceClickListener(preference -> {
-                        preference.setDefaultValue(me.GetInt(preference.getKey()));
+                        preference.setDefaultValue(me.GetInt(preference.getKey().split("/")[0]));
                         return false;
                     });
                     pc.addPreference(p);
@@ -208,7 +208,7 @@ public class SettingsActivity extends AppCompatActivity {
                             lp.setEntryValues(filenames.toArray(new String[0]));
                             lp.setEntries(filenames.toArray(new String[0]));
                             lp.setTitle(R.string.culprit);
-                            lp.setKey(s);
+                            lp.setKey(s  + "/" +  me.GenHex(32, "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"));
                             lp.setOnPreferenceChangeListener((preference, newValue) -> {
                                 preference.setSummary(newValue.toString());
                                 preference.setDefaultValue(newValue.toString());
@@ -217,7 +217,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 return true;
                             });
                             lp.setOnPreferenceClickListener(preference -> {
-                                preference.setDefaultValue(me.GetString(preference.getKey()));
+                                preference.setDefaultValue(me.GetString(preference.getKey().split("/")[0]));
                                 return false;
                             });
                             lp.setDefaultValue(strings.get(s));
@@ -230,19 +230,19 @@ public class SettingsActivity extends AppCompatActivity {
                     if (ignoreSetting) {
                         continue;
                     }
-                    p.setKey(s);
+                    p.setKey(s + "/" + me.GenHex(32, "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"));
                     p.setEnabled(true);
                     p.setSummary(strings.get(s));
                     p.setDefaultValue(strings.get(s));
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
                         preference.setSummary(newValue.toString());
                         preference.setDefaultValue(newValue.toString());
-                        me.SetString(preference.getKey(), newValue.toString());
+                        me.SetString(preference.getKey().split("/")[0], newValue.toString());
                         saveSettings(bsods, me, os_id);
                         return true;
                     });
                     p.setOnPreferenceClickListener(preference -> {
-                        preference.setDefaultValue(me.GetString(preference.getKey()));
+                        preference.setDefaultValue(me.GetString(preference.getKey().split("/")[0]));
                         return false;
                     });
                     pc.addPreference(p);
