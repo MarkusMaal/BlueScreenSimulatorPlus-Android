@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -32,11 +34,16 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import eu.markustegelane.bssp.databinding.FragmentFirstBinding;
 public class MainFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -521,7 +528,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.saveConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NotImplemented();
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().toString()), "text/bs2cfg");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(Intent.createChooser(intent, "Save as..."), 22);
             }
         });
 
@@ -535,6 +545,167 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle(getString(R.string.resetAll)).show();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int req_code, int res_code, Intent data) {
+        if ((req_code == 22) && (res_code == Activity.RESULT_OK)) {
+            String content = GenerateSaveData("2.1");
+            Uri uri = data.getData();
+            try {
+                OutputStream os = getContext().getContentResolver().openOutputStream(uri);
+                os.write(content.getBytes());
+                os.flush();
+                os.close();
+                Toast.makeText(getContext(), getString(R.string.done), Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    public String GenerateSaveData(String format) {
+        StringBuilder fileData = new StringBuilder();
+        fileData.append("*** Blue screen simulator plus " + format + " ***");
+        Gson gson = new Gson();
+        Type strType = new TypeToken<Map<String, String>>() {
+        }.getType();
+        Type intType = new TypeToken<Map<String, Integer>>() {
+        }.getType();
+        Type boolType = new TypeToken<Map<String, Boolean>>() {
+        }.getType();
+        Type progType = new TypeToken<Map<Integer, Integer>>() {}.getType();
+        Type arrayType = new TypeToken<Map<String, String[]>>() {}.getType();
+        for (BlueScreen bs: bluescreens) {
+            Map <String, String> titles;
+            Map <String, String> txts;
+            Map <String, String> strings;
+            Map <String, Integer> ints;
+            Map <String, Boolean> bools;
+            Map <Integer, Integer> progress;
+            Map <String, String[]> files;
+            titles = gson.fromJson(bs.GetTitles(), strType);
+            txts = gson.fromJson(bs.GetTexts(), strType);
+            strings = gson.fromJson(bs.AllStrings(), strType);
+            ints = gson.fromJson(bs.AllInts(), intType);
+            bools = gson.fromJson(bs.AllBools(), boolType);
+            progress = gson.fromJson(bs.AllProgress(), progType);
+            files = gson.fromJson(bs.GetFiles(), arrayType);
+            if (format.equals("2.1")) {
+                fileData.append("\n\n\n#").append(bs.GetString("os")).append("\n\n");
+            } else if (format.equals("2.0")) {
+                fileData.append("\n\n\n#").append(bs.GetString("os").replace("Windows Vista", "Windows Vista/7").replace("Windows 7", "Windows Vista/7")).append("\n\n");
+            }
+            if (strings.size() > 0) {
+                fileData.append("\n\n[string]");
+                for (Map.Entry<String, String> entry : strings.entrySet()) {
+                    fileData.append("\n");
+                    fileData.append(entry.getKey()).append("=")
+                            .append(SanitizeString(entry.getValue())).append(";");
+                }
+            }
+            for (int i = 1; i <= 4; i++) {
+                fileData.append(String.format("\necode%s=", i)).append(bs.GetString(String.format("ecode%s", i))).append(";");
+            }
+            fileData.append("\nicon=2D Window;");
+            if ((progress.size() > 0) && (format.equals("2.1"))) {
+                fileData.append("\n\n[progress]");
+                for (Map.Entry<Integer, Integer> entry: progress.entrySet()) {
+                    fileData.append(String.format("\n%s=%s;", entry.getKey(), entry.getValue()));
+                }
+            }
+            if (files.size() > 0) {
+                fileData.append("\n\n[nt_codes]");
+                for (Map.Entry<String, String[]> entry: files.entrySet()) {
+                    fileData.append("\n")
+                            .append(entry.getKey())
+                            .append("=")
+                            .append(String.join(",", entry.getValue()))
+                            .append(";");
+                }
+            }
+            if (bools.size() > 0) {
+                fileData.append("\n\n[boolean]");
+                for (Map.Entry<String, Boolean> entry: bools.entrySet()) {
+                    String outpend = "True";
+                    if (!entry.getValue()) {
+                        outpend = "False";
+                    }
+                    fileData.append("\n")
+                            .append(entry.getKey())
+                            .append("=")
+                            .append(outpend)
+                            .append(";");
+                }
+            }
+            if (ints.size() > 0) {
+                fileData.append("\n\n[integer]");
+                for (Map.Entry<String, Integer> entry : ints.entrySet()) {
+                    fileData.append("\n")
+                            .append(entry.getKey())
+                            .append("=")
+                            .append(entry.getValue().toString())
+                            .append(";");
+                }
+            }
+            fileData.append("\n\n[theme]");
+            fileData.append("\nbg=")
+                    .append(RGB_String(bs.GetTheme(true, false)))
+                    .append(";");
+            fileData.append("\nfg=")
+                    .append(RGB_String(bs.GetTheme(false, false)))
+                    .append(";");
+            fileData.append("\nhbg=")
+                    .append(RGB_String(bs.GetTheme(true, true)))
+                    .append(";");
+            fileData.append("\nhfg=")
+                    .append(RGB_String(bs.GetTheme(false, true)))
+                    .append(";");
+            if (titles.size() > 0) {
+                fileData.append("\n\n[title]");
+                for (Map.Entry<String, String> entry: titles.entrySet()) {
+                    fileData.append("\n")
+                            .append(entry.getKey())
+                            .append("=")
+                            .append(SanitizeString(entry.getValue()))
+                            .append(";");
+                }
+            }
+            if (txts.size() > 0) {
+                fileData.append("\n\n[text]");
+                for (Map.Entry<String, String> entry: txts.entrySet()) {
+                    fileData.append("\n")
+                            .append(entry.getKey())
+                            .append("=")
+                            .append(SanitizeString(entry.getValue()))
+                            .append(";");
+                }
+            }
+                    /*if (bs.GetBool("font_support")) {
+                        fileData.append("\n\n[format]");
+                        fileData.append("\nfontfamily=")
+                                .append(((Typeface)bs.GetFont()).getStyle())
+                                .append(";");
+                        fileData.append("\nsize=")
+                                .append("8")
+                                .append(";");
+                        fileData.append("\nstyle=")
+                                .append(((Typeface)bs.GetFont()).getStyle())
+                                .append(";");
+                    }*/
+        }
+        return fileData.toString();
+    }
+
+    private String SanitizeString(String original) {
+        return original.replace(":", "::")
+                .replace("#", ":h:")
+                .replace("[", ":sb:")
+                .replace("]", ":eb:");
+    }
+
+    private String RGB_String(int rgb) {
+        String[] rgbArray = {String.valueOf(Color.red(rgb)), String.valueOf(Color.green(rgb)), String.valueOf(Color.blue(rgb))};
+        return String.join(",", rgbArray);
     }
 
     void NotImplemented() {
