@@ -692,6 +692,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         }
                     }
                 }
+                if (bs.GetInt("scale") == 1) {
+                    bs.SetInt("scale", 75);
+                }
                 bluescreens.add(bs);
             }
 
@@ -712,6 +715,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             winspin.setAdapter(catAdapter);
 
             winspin.setSelection(0);
+            saveSettings(bluescreens, os, 0);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             TypedValue tv = new TypedValue();
@@ -860,7 +864,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 .replace(":sc:", ";")
                 .replace(":sb:", "[")
                 .replace(":eb:", "]")
-                .replace(":/:/:", ":");
+                .replace(":/:/:", ":")
+                .replace("{0}%", "%s%%")
+                .replace("{0}", "%s")
+                .replace("{1}", "%s")
+                .replace("{2}", "%s")
+                .replace("{3}", "%s")
+                .replace("{4}", "%s")
+                .replace("{5}", "%s")
+                .replace("{6}", "%s")
+                .replace("{7}", "%s")
+                .replace("{8}", "%s")
+                .replace("{9}", "%s");
     }
 
     private String SanitizeString(String original) {

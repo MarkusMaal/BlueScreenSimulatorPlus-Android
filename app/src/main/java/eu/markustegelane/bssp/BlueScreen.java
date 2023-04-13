@@ -143,6 +143,23 @@ public class BlueScreen implements Serializable {
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String>>(){}.getType();
         Map<String, String> strings = gson.fromJson(this.strings, type);
+        if (name.startsWith("ecode")) {
+            switch (Integer.parseInt(name.replace("ecode", ""))) {
+                case 1:
+                    SetCodes(value, GetCodes()[1], GetCodes()[2], GetCodes()[3]);
+                    break;
+                case 2:
+                    SetCodes(GetCodes()[0], value, GetCodes()[2], GetCodes()[3]);
+                    break;
+                case 3:
+                    SetCodes(GetCodes()[0], GetCodes()[1], value, GetCodes()[3]);
+                    break;
+                case 4:
+                    SetCodes(GetCodes()[0], GetCodes()[1], GetCodes()[2], value);
+                    break;
+            }
+            return;
+        }
         if ("os".equals(name)) {
             this.os = value;
         } else {

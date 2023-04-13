@@ -532,14 +532,21 @@ public class LegacyBSOD extends AppCompatActivity {
                 myText.append("\n");
             }
             myText.append("\n\n");
-            myText.append(txts.get("Memory address dump heading")).append("\n");
-            for (int n = 0; n < culpritfiles.size(); n++) {
-                String filename1 = (String) culpritfiles.keySet().toArray()[n];
-                if (culpritfiles.get(filename1).length < 6) {
-                    continue;
+            if (txts.get("Memory address dump table") != null) {
+                myText.append(txts.get("Memory address dump heading")).append("\n");
+                for (int n = 0; n < culpritfiles.size(); n++) {
+                    String filename1 = (String) culpritfiles.keySet().toArray()[n];
+                    if (culpritfiles.get(filename1).length < 6) {
+                        continue;
+                    }
+                    String[] codes1 = culpritfiles.get(filename1);
+                    // 6 code variant for backwards compatibility
+                        if (culpritfiles.get(filename1).length != 6) {
+                            myText.append(String.format(txts.get("Memory address dump table"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), me.GenHex(8, codes1[2]), me.GenHex(8, codes1[3]), me.GenHex(8, codes1[4]), me.GenHex(8, codes1[5]), me.GenHex(8, codes1[6]), filename1)).append("\n");
+                        } else {
+                            myText.append(String.format(txts.get("Memory address dump table"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), me.GenHex(8, codes1[2]), me.GenHex(8, codes1[3]), me.GenHex(8, codes1[4]), me.GenHex(8, codes1[5]), filename1)).append("\n");
+                        }
                 }
-                String[] codes1 = culpritfiles.get(filename1);
-                myText.append(String.format(txts.get("Memory address dump table"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), me.GenHex(8, codes1[2]), me.GenHex(8, codes1[3]), me.GenHex(8, codes1[4]), me.GenHex(8, codes1[5]), me.GenHex(8, codes1[6]), filename1)).append("\n");
             }
             myText.append("\n");
             myText.append(txts.get("Troubleshooting text"));

@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -251,8 +250,9 @@ public class ModernBSOD extends AppCompatActivity {
                         progressText.setText(String.format(texts.get("Progress"), progress.toString()));
                     }
                 } catch (Exception e) {
-                    Toast.makeText(getWindow().getContext(), "Error occoured:\n" + e.toString(), Toast.LENGTH_SHORT).show();
-                    cancel();
+                    throw e;
+                    //Toast.makeText(getWindow().getContext(), "Error occoured:\n" + e.toString(), Toast.LENGTH_SHORT).show();
+                    //cancel();
                 }
             }
 
