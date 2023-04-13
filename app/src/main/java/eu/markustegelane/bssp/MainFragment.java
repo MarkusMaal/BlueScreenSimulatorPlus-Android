@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -36,7 +38,10 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -54,6 +59,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     private Boolean locked = false;
 
+    boolean hasFileAccess = true;
+
     BlueScreen os;
 
     @Override
@@ -61,6 +68,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         Gson gson = new Gson();
         if (sharedPreferences.getString("bluescreens", null) == null) {
@@ -421,11 +429,11 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 TypedValue tv = new TypedValue();
                 View new_view = LayoutInflater.from(getContext()).inflate(R.layout.new_view, null);
-                final Spinner templateSelector = ((Spinner) new_view.findViewById(R.id.osSpinner));
-                final Spinner osSelector = ((Spinner) new_view.findViewById(R.id.osSpinner2));
-                final EditText friendlyText = ((EditText) new_view.findViewById(R.id.editTextTemplate));
-                final TextView tv4 = ((TextView)new_view.findViewById(R.id.textView4));
-                final Switch allowCust = ((Switch)new_view.findViewById(R.id.allowCust));
+                final Spinner templateSelector = new_view.findViewById(R.id.osSpinner);
+                final Spinner osSelector = new_view.findViewById(R.id.osSpinner2);
+                final EditText friendlyText = new_view.findViewById(R.id.editTextTemplate);
+                final TextView tv4 = new_view.findViewById(R.id.textView4);
+                final Switch allowCust = new_view.findViewById(R.id.allowCust);
                 templateSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -521,7 +529,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.loadConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NotImplemented();
+                if (hasFileAccess) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().toString()), "*/*");
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    startActivityForResult(Intent.createChooser(intent, "Open .."), 21);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    TypedValue tv = new TypedValue();
+                    getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
+                    builder.setMessage("Couldn't access the file, because file permissions weren't granted. Re-launch or check app settings.").setPositiveButton(getString(R.string.ok), null)
+                            .setIcon(tv.resourceId).setTitle("Permission denied").show();
+                }
             }
         });
 
@@ -531,7 +550,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                 intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().toString()), "text/bs2cfg");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(Intent.createChooser(intent, "Save as..."), 22);
+                startActivityForResult(Intent.createChooser(intent, "Save as .."), 22);
             }
         });
 
@@ -547,22 +566,161 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onActivityResult(int req_code, int res_code, Intent data) {
-        if ((req_code == 22) && (res_code == Activity.RESULT_OK)) {
-            String content = GenerateSaveData("2.1");
-            Uri uri = data.getData();
-            try {
-                OutputStream os = getContext().getContentResolver().openOutputStream(uri);
-                os.write(content.getBytes());
-                os.flush();
-                os.close();
-                Toast.makeText(getContext(), getString(R.string.done), Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        if (res_code == Activity.RESULT_OK) {
+            String content;
+            Uri uri;
+            switch (req_code) {
+                case 22:
+                    content = GenerateSaveData("2.1");
+                    uri = data.getData();
+                    try {
+                        OutputStream os = getContext().getContentResolver().openOutputStream(uri);
+                        os.write(content.getBytes());
+                        os.flush();
+                        os.close();
+                        Toast.makeText(getContext(), getString(R.string.done), Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case 21:
+                    uri = data.getData();
+                    InputStream is = null;
+                    try {
+                        is = getActivity().getContentResolver().openInputStream(uri);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                    StringBuilder strBuilder = new StringBuilder();
+                    String line;
+                    while (true) {
+                        try {
+                            if ((line = reader.readLine()) == null) break;
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        strBuilder.append(line)
+                                .append("\n");
+                    }
+                    ParseSaveData(strBuilder.toString());
+                    break;
             }
         }
     }
+
+    public void ParseSaveData(String fileData) {
+        String version = fileData.split("\n")[0];
+        if (version.startsWith("*** Blue screen simulator plus 1.")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            TypedValue tv = new TypedValue();
+            getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
+            builder.setMessage("This version of Blue Screen Simulator for Android doesn't support version 1.x configuration files.").setPositiveButton(getString(R.string.ok), null)
+                    .setIcon(tv.resourceId).setTitle("Incompatible file").show();
+        } else if (version.startsWith("*** Blue screen simulator plus 2.")) {
+            String[] primary_section_tokens = fileData.split("#");
+            bluescreens.clear();
+            for (String section: primary_section_tokens) {
+                String[] subsection_tokens = section.split("\\[");
+                if (section.startsWith("*")) { continue; }
+                String os_name = subsection_tokens[0].replace("\n", "").replace("Windows Vista/7", "Windows 7");
+                if (os_name.equals("")) { continue; }
+                BlueScreen bs = new BlueScreen(os_name, false, getActivity());
+                bs.SetString("os", os_name);
+                bs.ClearAllTitleTexts();
+                bs.ClearFiles();
+                for (String subsection: subsection_tokens) {
+                    if (subsection.indexOf("]") > 0) {
+                        String type = subsection.substring(0, subsection.indexOf("]"));
+                        String subsection_withoutheading = subsection.substring(type.length() + 1);
+                        int bg = Color.rgb(0, 0, 0);
+                        int fg = Color.rgb(255, 255, 255);
+                        int hbg = Color.rgb(255, 255, 255);
+                        int hfg = Color.rgb(0,0,0);
+                        String[] entries = subsection_withoutheading.split(";");
+                        for (String entry: entries) {
+                            if (!entry.replace("\n", "").equals("")) {
+                                String key = entry.split("=")[0].replace("\n", "");
+                                String value = entry.substring(entry.indexOf("=")+1);
+                                switch (type) {
+                                    case "string":
+                                        bs.SetString(key, UnsanitizeString(value));
+                                        break;
+                                    case "integer":
+                                        bs.SetInt(key, Integer.parseInt(value));
+                                        break;
+                                    case "boolean":
+                                        bs.SetBool(key, UnsanitizeString(value).equals("True"));
+                                        break;
+                                    case "title":
+                                        bs.PushTitle(key, UnsanitizeString(value));
+                                        break;
+                                    case "progress":
+                                        bs.SetProgression(Integer.parseInt(key), Integer.parseInt(value));
+                                        break;
+                                    case "nt_codes":
+                                        bs.PushFile(key, value.split(","));
+                                        break;
+                                    case "text":
+                                        bs.PushText(key, UnsanitizeString(value));
+                                        break;
+                                    case "theme":
+                                        switch (key) {
+                                            case "bg":
+                                                bg = StringToColor(value);
+                                                bs.SetTheme(bg, fg, false);
+                                                break;
+                                            case "fg":
+                                                fg = StringToColor(value);
+                                                bs.SetTheme(bg, fg, false);
+                                                break;
+                                            case "hbg":
+                                                hbg = StringToColor(value);
+                                                bs.SetTheme(hbg, hfg, true);
+                                                break;
+                                            case "hfg":
+                                                hfg = StringToColor(value);
+                                                bs.SetTheme(hbg, hfg, true);
+                                                break;
+                                        }
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+                bluescreens.add(bs);
+            }
+
+            Spinner winspin = binding.winSpinner;
+
+
+            List<String> friendlyNames = new ArrayList<String>();
+            for (BlueScreen element : bluescreens) {
+                friendlyNames.add(element.GetString("friendlyname"));
+            }
+
+            // Create an ArrayAdapter using the string array and a default spinner layout
+            ArrayAdapter<String> catAdapter;
+            catAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, friendlyNames);
+
+
+            // Apply the adapter to the spinner
+            winspin.setAdapter(catAdapter);
+
+            winspin.setSelection(0);
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            TypedValue tv = new TypedValue();
+            getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
+            builder.setMessage("Couldn't recognize the file format. This could be for one of the following reasons:\n\n* The file is not a blue screen simulator plus configuration file\n* This file was designed for a newer version of blue screen simulator plus\n* The file is damaged").setPositiveButton(getString(R.string.ok), null)
+                    .setIcon(tv.resourceId).setTitle("Unrecognized file").show();
+        }
+    }
+
     public String GenerateSaveData(String format) {
         StringBuilder fileData = new StringBuilder();
         fileData.append("*** Blue screen simulator plus " + format + " ***");
@@ -696,6 +854,15 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         return fileData.toString();
     }
 
+    private String UnsanitizeString(String original) {
+        return original.replace("::", ":/:/:")
+                .replace(":h:", "#")
+                .replace(":sc:", ";")
+                .replace(":sb:", "[")
+                .replace(":eb:", "]")
+                .replace(":/:/:", ":");
+    }
+
     private String SanitizeString(String original) {
         return original.replace(":", "::")
                 .replace("#", ":h:")
@@ -706,6 +873,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
     private String RGB_String(int rgb) {
         String[] rgbArray = {String.valueOf(Color.red(rgb)), String.valueOf(Color.green(rgb)), String.valueOf(Color.blue(rgb))};
         return String.join(",", rgbArray);
+    }
+
+    private int StringToColor(String commastring) {
+        String[] rgbArray = commastring.split(",");
+        int r = Integer.parseInt(rgbArray[0]);
+        int g = Integer.parseInt(rgbArray[1]);
+        int b = Integer.parseInt(rgbArray[2]);
+        return Color.rgb(r, g, b);
     }
 
     void NotImplemented() {

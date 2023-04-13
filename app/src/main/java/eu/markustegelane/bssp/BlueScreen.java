@@ -369,7 +369,11 @@ public class BlueScreen implements Serializable {
 
     public void ClearFiles()
     {
-        codefiles = null;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String[]>>(){}.getType();
+        Map<String, String[]> codefiles = gson.fromJson(this.codefiles, type);
+        codefiles.clear();
+        this.codefiles = gson.toJson(codefiles);
     }
 
     public void RenameFile(String key, String renamed)
