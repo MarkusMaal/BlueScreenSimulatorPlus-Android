@@ -618,7 +618,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             TypedValue tv = new TypedValue();
             getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
-            builder.setMessage("This version of Blue Screen Simulator for Android doesn't support version 1.x configuration files.").setPositiveButton(getString(R.string.ok), null)
+            builder.setMessage("This version of Blue Screen Simulator Plus for Android doesn't support version 1.x configuration files.").setPositiveButton(getString(R.string.ok), null)
                     .setIcon(tv.resourceId).setTitle("Incompatible file").show();
         } else if (version.startsWith("*** Blue screen simulator plus 2.")) {
             String[] primary_section_tokens = fileData.split("#");
@@ -715,7 +715,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             winspin.setAdapter(catAdapter);
 
             winspin.setSelection(0);
-            saveSettings(bluescreens, os, 0);
+            saveSettings(bluescreens, bluescreens.get(0), 0);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             TypedValue tv = new TypedValue();
