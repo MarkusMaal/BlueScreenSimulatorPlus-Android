@@ -151,6 +151,12 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             startActivity(jd);
         });
 
+        binding.playSound.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("playsound", b);
+            }
+        });
+
         binding.executeButton.setOnClickListener(view1 -> {
             switch (bluescreens.get((int)winspin.getSelectedItemId()).GetString("os")) {
                 case "Windows 8/8.1":
@@ -1017,6 +1023,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
         server.setVisibility(View.GONE); nineXSpinner.setVisibility(View.GONE); hbg.setVisibility(View.GONE); hfg.setVisibility(View.GONE);
         ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE); codesel.setVisibility(View.GONE); elabel.setVisibility(View.GONE);
+        binding.playSound.setVisibility(View.GONE);
         switch (os.GetString("os")) {
             case "Windows 11":
             case "Windows 10":
@@ -1051,9 +1058,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 codesel.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
                 break;
-            case "Windows CE":
             case "Windows 1.x/2.x":
                 details.setVisibility(View.GONE);
+                binding.playSound.setVisibility(View.VISIBLE);
                 break;
             case "Windows 9x/Me":
                 parEdit.setVisibility(View.VISIBLE);
@@ -1065,6 +1072,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             case "Windows 3.1x":
                 hbg.setVisibility(View.VISIBLE);
                 hfg.setVisibility(View.VISIBLE);
+                details.setVisibility(View.GONE);
+                break;
+            case "Windows CE":
                 details.setVisibility(View.GONE);
                 break;
             default:

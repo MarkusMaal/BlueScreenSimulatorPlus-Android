@@ -132,6 +132,15 @@
                     android:minHeight="60sp"
                     android:text="@string/waterMark"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/playSound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:text="@string/playSound"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
             </com.google.android.flexbox.FlexboxLayout>
 
