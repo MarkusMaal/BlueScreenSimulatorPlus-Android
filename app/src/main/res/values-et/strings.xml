@@ -102,4 +102,9 @@
     <string name="aboutFonts">Kirjatüübid</string>
     <string name="aboutSource">Lähtekood</string>
     <string name="aboutSourceDescription">Selle rakenduse kood on avalikult kättesaadav ja kasutatav vastavalt GPLv3 litsentsi tingimustel</string>
+    <string-array name="Win12Splash">
+        <item>Windows 1.01 käivitusekraan</item>
+        <item>Windows 2.03 käivitusekraan</item>
+        <item>Käivitusekraan puudub</item>
+    </string-array>
 </resources>

@@ -154,6 +154,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.playSound.setOnCheckedChangeListener((compoundButton, b) -> {
             if ((!locked) && (os != null)) {
                 os.SetBool("playsound", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         });
 
@@ -286,6 +287,27 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if ((!locked) && (os != null)) {
                     os.SetString("code", adapterView.getItemAtPosition(i).toString());
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        binding.oneSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if ((!locked) && (os != null)) {
+                    if (adapterView.getItemAtPosition(i).toString().contains("Windows 1.01")) {
+                        os.SetString("qr_file", "local:0");
+                    } else if (adapterView.getItemAtPosition(i).toString().contains("Windows 2.03")) {
+                        os.SetString("qr_file", "local:1");
+                    } else {
+                        os.SetString("qr_file", "local:null");
+                    }
                     saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 }
             }
@@ -1023,7 +1045,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
         server.setVisibility(View.GONE); nineXSpinner.setVisibility(View.GONE); hbg.setVisibility(View.GONE); hfg.setVisibility(View.GONE);
         ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE); codesel.setVisibility(View.GONE); elabel.setVisibility(View.GONE);
-        binding.playSound.setVisibility(View.GONE);
+        binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE);
         switch (os.GetString("os")) {
             case "Windows 11":
             case "Windows 10":
@@ -1059,6 +1081,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 elabel.setVisibility(View.VISIBLE);
                 break;
             case "Windows 1.x/2.x":
+                binding.oneSpinner.setVisibility(View.VISIBLE);
                 details.setVisibility(View.GONE);
                 binding.playSound.setVisibility(View.VISIBLE);
                 break;
@@ -1090,10 +1113,17 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         pars.setChecked(os.GetBool("extracodes"));
         server.setChecked(os.GetBool("server"));
         waterMark.setChecked(os.GetBool("watermark"));
+        binding.playSound.setChecked(os.GetBool("playsound"));
         saveSelection(i);
         for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
             if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {
                 eCodeSpin.setSelection(j);
+                break;
+            }
+        }
+        for (int j = 0; j < binding.oneSpinner.getAdapter().getCount(); j++) {
+            if (binding.oneSpinner.getItemAtPosition(j).toString().equals(os.GetString("qr_file"))) {
+                binding.oneSpinner.setSelection(j);
                 break;
             }
         }
