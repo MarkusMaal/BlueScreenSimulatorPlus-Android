@@ -634,4 +634,8 @@
     <string name="devThingie">%s steps to developer</string>
     <string name="devUnlocked">You are now a developer!</string>
     <string name="devNoNeed">No need, you are already a developer</string>
+    <string name="devName">Developed by</string>
+    <string name="aboutFonts">Fonts</string>
+    <string name="aboutSource">Source code</string>
+    <string name="aboutSourceDescription">The code for this app is publically available under the GPL-v3 license</string>
 </resources>

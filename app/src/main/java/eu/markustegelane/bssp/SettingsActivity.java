@@ -2,12 +2,12 @@ package eu.markustegelane.bssp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.EditTextPreference;
@@ -24,6 +24,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -260,14 +262,41 @@ public class SettingsActivity extends AppCompatActivity {
             pc.setTitle(R.string.about);
             ps.addPreference(pc);
             Preference p = new Preference(ps.getContext());
-            p.setTitle(R.string.version);
-            p.setSummary("0.4 (canary)");
-            p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(@NonNull Preference preference) {
-                    setToast();
-                    return false;
+            p.setTitle(R.string.devName);
+            p.setSummary("Markus Maal");
+            Random r = new Random();
+            p.setOnPreferenceClickListener(preference -> {
+                if (r.nextBoolean()) {
+                    preference.setSummary(MakeAnagram(preference.getSummary().toString()));
                 }
+                return false;
+            });
+            ps.addPreference(p);
+            p = new Preference(ps.getContext());
+            p.setTitle(R.string.aboutFonts);
+            p.setSummary("Inconsolata\nUbuntu\nUbuntu Light");
+            p.setOnPreferenceClickListener(preference -> {
+                if (r.nextBoolean()) {
+                    preference.setSummary(Shuffle(preference.getSummary().toString()));
+                }
+                return false;
+            });
+            ps.addPreference(p);
+            p = new Preference(ps.getContext());
+            p.setTitle(R.string.aboutSource);
+            p.setSummary(R.string.aboutSourceDescription);
+            p.setOnPreferenceClickListener(preference -> {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/MarkusMaal/BlueScreenSimulatorPlus-Android"));
+                startActivity(browserIntent);
+                return false;
+            });
+            ps.addPreference(p);
+            p = new Preference(ps.getContext());
+            p.setTitle(R.string.version);
+            p.setSummary(BuildConfig.VERSION_NAME);
+            p.setOnPreferenceClickListener(preference -> {
+                setToast();
+                return false;
             });
             ps.addPreference(p);
         }
@@ -280,7 +309,7 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 devProgress = 999;
             }
-            if (devProgress < 8) {
+            if (devProgress < 5) {
                 devToast.cancel();
                 devToast = Toast.makeText(getContext(), String.format(getString(R.string.devThingie), String.valueOf(8 - devProgress)), Toast.LENGTH_SHORT);
                 devToast.show();
@@ -296,6 +325,47 @@ public class SettingsActivity extends AppCompatActivity {
                 devToast = Toast.makeText(getContext(), getString(R.string.devNoNeed), Toast.LENGTH_SHORT);
                 devToast.show();
             }
+        }
+
+        public String Shuffle(String original) {
+            List<String> originals = List.of(original.split("\n"));
+            StringBuilder newList = new StringBuilder();
+            Random r = new Random();
+            while (newList.length() < original.length()) {
+                String font = originals.get(r.nextInt(originals.size()));
+                int loopcount = 0;
+                while (newList.toString().contains(font)) {
+                    font = originals.get(r.nextInt(originals.size()));
+                    loopcount ++;
+                    if (loopcount > 100) {
+                        return original;
+                    }
+                }
+                if (!font.equals("")) {
+                    if (newList.chars().filter(ch -> ch == '\n').count() < original.split("\n").length - 1) {
+                        newList.append(font).append("\n");
+                    } else{
+                        newList.append(font);
+                    }
+                }
+            }
+            return newList.toString();
+        }
+
+        public String MakeAnagram(String original) {
+            List<Character> original_letters = original.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
+            StringBuilder newName = new StringBuilder();
+            Random r = new Random();
+            while (original_letters.size() > 0) {
+                Character letter = original_letters.get(r.nextInt(original_letters.size()));
+                if (r.nextBoolean()) {
+                    newName.append(letter.toString().toUpperCase());
+                } else {
+                    newName.append(letter.toString().toLowerCase());
+                }
+                original_letters.remove(letter);
+            }
+            return newName.toString();
         }
 
         public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {

@@ -98,4 +98,8 @@
     <string name="devThingie">%s sammu arendajani</string>
     <string name="devUnlocked">Olete nüüd arendaja!</string>
     <string name="devNoNeed">Pole vaja, olete juba arendaja</string>
+    <string name="devName">Arendaja</string>
+    <string name="aboutFonts">Kirjatüübid</string>
+    <string name="aboutSource">Lähtekood</string>
+    <string name="aboutSourceDescription">Selle rakenduse kood on avalikult kättesaadav ja kasutatav vastavalt GPLv3 litsentsi tingimustel</string>
 </resources>
