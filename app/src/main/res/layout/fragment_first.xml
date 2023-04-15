@@ -155,6 +155,36 @@
                     android:minHeight="60sp"
                     android:text="@string/playSound"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/blinkCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/blinkCursor"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/amdProcessorCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/amdProcessor"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/stackTraceCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/showStackTrace"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
             </com.google.android.flexbox.FlexboxLayout>
 

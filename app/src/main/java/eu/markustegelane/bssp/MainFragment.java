@@ -378,6 +378,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         };
 
+        binding.blinkCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+            os.SetBool("blinkblink", b);
+            saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+        });
+        binding.amdProcessorCheck.setOnCheckedChangeListener(((compoundButton, b) -> {
+            os.SetBool("amd", b);
+            saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+        }));
+        binding.stackTraceCheck.setOnCheckedChangeListener(((compoundButton, b) -> {
+            os.SetBool("stack_trace", b);
+            saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+        }));
         binding.codeEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1045,7 +1057,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
         server.setVisibility(View.GONE); nineXSpinner.setVisibility(View.GONE); hbg.setVisibility(View.GONE); hfg.setVisibility(View.GONE);
         ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE); codesel.setVisibility(View.GONE); elabel.setVisibility(View.GONE);
-        binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE);
+        binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE); binding.blinkCheck.setVisibility(View.GONE);
+        binding.amdProcessorCheck.setVisibility(View.GONE); binding.stackTraceCheck.setVisibility(View.GONE);
+        if ("Windows NT 3.x/4.0".equals(os.GetString("os"))) {
+            binding.blinkCheck.setVisibility(View.VISIBLE);
+            binding.amdProcessorCheck.setVisibility(View.VISIBLE);
+            binding.stackTraceCheck.setVisibility(View.VISIBLE);
+        }
         switch (os.GetString("os")) {
             case "Windows 11":
             case "Windows 10":
@@ -1114,6 +1132,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         server.setChecked(os.GetBool("server"));
         waterMark.setChecked(os.GetBool("watermark"));
         binding.playSound.setChecked(os.GetBool("playsound"));
+        binding.blinkCheck.setChecked(os.GetBool("blinkblink"));
+        binding.amdProcessorCheck.setChecked(os.GetBool("amd"));
+        binding.stackTraceCheck.setChecked(os.GetBool("stack_trace"));
         saveSelection(i);
         for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
             if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {
