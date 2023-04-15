@@ -92,4 +92,5 @@
     <string name="enterName">Sisesta faili nimi</string>
     <string name="isCulprit">4/7 parameetrit</string>
     <string name="done">Valmis</string>
+    <string name="waterMark">Kuva vesimärk</string>
 </resources>

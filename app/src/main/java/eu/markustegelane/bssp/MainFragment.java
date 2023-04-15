@@ -244,6 +244,16 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
+        binding.showWatermark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if ((!locked) && (os != null)) {
+                    os.SetBool("watermark", b);
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                }
+            }
+        });
+
         binding.nineXSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -995,6 +1005,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Switch details = binding.showDetailsCheck;
         Switch pars = binding.showParCodes;
         Switch server = binding.serverScreen;
+        Switch waterMark = binding.showWatermark;
         TextView elabel = binding.eCodeLabel;
 
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
@@ -1062,6 +1073,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         details.setChecked(os.GetBool("show_description"));
         pars.setChecked(os.GetBool("extracodes"));
         server.setChecked(os.GetBool("server"));
+        waterMark.setChecked(os.GetBool("watermark"));
         saveSelection(i);
         for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
             if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {

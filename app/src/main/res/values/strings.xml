@@ -628,4 +628,5 @@
     <string name="enterName">Enter file name</string>
     <string name="isCulprit">4/7 parameters</string>
     <string name="done">Done</string>
+    <string name="waterMark">Display watermark</string>
 </resources>
