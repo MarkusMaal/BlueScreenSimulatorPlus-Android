@@ -629,4 +629,9 @@
     <string name="isCulprit">4/7 parameters</string>
     <string name="done">Done</string>
     <string name="waterMark">Display watermark</string>
+    <string name="version">Version</string>
+    <string name="about">About</string>
+    <string name="devThingie">%s steps to developer</string>
+    <string name="devUnlocked">You are now a developer!</string>
+    <string name="devNoNeed">No need, you are already a developer</string>
 </resources>

@@ -61,6 +61,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     boolean hasFileAccess = true;
 
+    boolean developer = false;
+
     BlueScreen os;
 
     @Override
@@ -70,6 +72,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
     ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        developer = sharedPreferences.getBoolean("developer", false);
         Gson gson = new Gson();
         if (sharedPreferences.getString("bluescreens", null) == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -115,7 +118,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             selection = bluescreens.size() - 1;
         }
         Spinner winspin = binding.winSpinner;
-
+        if (developer) {
+            binding.devOpsText.setVisibility(View.VISIBLE);
+            binding.devOps.setVisibility(View.VISIBLE);
+        }
 
         List<String> friendlyNames = new ArrayList<String>();
         for (BlueScreen element : bluescreens) {

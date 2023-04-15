@@ -5,11 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
@@ -23,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    static int devProgress = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,6 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
     }
 
     @Override
@@ -59,9 +63,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
+        Toast devToast;
         @Override
         @SuppressWarnings("unchecked")
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            devToast = Toast.makeText(getContext(), String.format(getString(R.string.devThingie), String.valueOf(8 - devProgress)), Toast.LENGTH_SHORT);
             addPreferencesFromResource(R.xml.pscreen);
             PreferenceScreen ps = getPreferenceScreen();
             Bundle b = getActivity().getIntent().getExtras();
@@ -234,6 +240,7 @@ public class SettingsActivity extends AppCompatActivity {
                     p.setEnabled(true);
                     p.setSummary(strings.get(s));
                     p.setDefaultValue(strings.get(s));
+                    p.setPersistent(false);
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
                         preference.setSummary(newValue.toString());
                         preference.setDefaultValue(newValue.toString());
@@ -249,9 +256,48 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
 
-
-
+            pc = new PreferenceCategory(ps.getContext());
+            pc.setTitle(R.string.about);
+            ps.addPreference(pc);
+            Preference p = new Preference(ps.getContext());
+            p.setTitle(R.string.version);
+            p.setSummary("0.4 (canary)");
+            p.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(@NonNull Preference preference) {
+                    setToast();
+                    return false;
+                }
+            });
+            ps.addPreference(p);
         }
+
+        public void setToast() {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean dev = sharedPreferences.getBoolean("developer", false);
+            if (!dev) {
+                devProgress += 1;
+            } else {
+                devProgress = 999;
+            }
+            if (devProgress < 8) {
+                devToast.cancel();
+                devToast = Toast.makeText(getContext(), String.format(getString(R.string.devThingie), String.valueOf(8 - devProgress)), Toast.LENGTH_SHORT);
+                devToast.show();
+            } else if (devProgress == 8) {
+                devToast.cancel();
+                devToast = Toast.makeText(getContext(), getString(R.string.devUnlocked), Toast.LENGTH_SHORT);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("developer", true);
+                editor.apply();
+                devToast.show();
+            } else {
+                devToast.cancel();
+                devToast = Toast.makeText(getContext(), getString(R.string.devNoNeed), Toast.LENGTH_SHORT);
+                devToast.show();
+            }
+        }
+
         public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
             blues.set((int)id, modified);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());

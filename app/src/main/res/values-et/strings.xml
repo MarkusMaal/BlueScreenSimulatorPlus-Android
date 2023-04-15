@@ -93,4 +93,9 @@
     <string name="isCulprit">4/7 parameetrit</string>
     <string name="done">Valmis</string>
     <string name="waterMark">Kuva vesimärk</string>
+    <string name="version">Versioon</string>
+    <string name="about">Teave</string>
+    <string name="devThingie">%s sammu arendajani</string>
+    <string name="devUnlocked">Olete nüüd arendaja!</string>
+    <string name="devNoNeed">Pole vaja, olete juba arendaja</string>
 </resources>

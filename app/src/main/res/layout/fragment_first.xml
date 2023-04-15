@@ -298,20 +298,23 @@
                     </com.google.android.flexbox.FlexboxLayout>
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/devOpsText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:layout_weight="0"
+                        android:visibility="gone"
                         android:text="@string/developer" />
 
 
 
                     <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/devOps"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:alignContent="flex_start"
                         app:alignItems="flex_start"
+                        android:visibility="gone"
                         app:flexWrap="wrap">
 
 
