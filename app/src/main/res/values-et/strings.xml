@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BlueScreenSimulatorPlus</string>
+    <string name="app_name">Sinise ekraani simulaator pluss</string>
     <string name="action_settings">Seaded</string>
     <string name="first_fragment_label">Sinise ekraani simulaator pluss</string>
     <string name="second_fragment_label">Teine fragment</string>

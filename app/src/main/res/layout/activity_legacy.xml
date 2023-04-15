@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#008"
@@ -14,4 +15,13 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         app:srcCompat="@color/black" />
+
+    <TextView
+        android:id="@+id/watermark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:textColor="#6fffffff" />
+
 </FrameLayout>

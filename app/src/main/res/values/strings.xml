@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">BlueScreenSimulatorPlus</string>
+    <string name="app_name">Blue screen simulator plus</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Blue Screen Simulator Plus</string>

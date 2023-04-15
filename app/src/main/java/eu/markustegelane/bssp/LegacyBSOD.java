@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import eu.markustegelane.bssp.databinding.ActivityWin7BsodBinding;
+import eu.markustegelane.bssp.databinding.ActivityLegacyBinding;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -131,7 +131,7 @@ public class LegacyBSOD extends AppCompatActivity {
             return false;
         }
     };
-    private ActivityWin7BsodBinding binding;
+    private ActivityLegacyBinding binding;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -140,11 +140,14 @@ public class LegacyBSOD extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         BlueScreen me = (BlueScreen)bundle.getSerializable("bluescreen");
-        binding = ActivityWin7BsodBinding.inflate(getLayoutInflater());
+        binding = ActivityLegacyBinding.inflate(getLayoutInflater());
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding.bsodWindow.setDrawingCacheEnabled(false);
         setContentView(binding.getRoot());
+        if (!me.GetBool("watermark")) {
+            binding.watermark.setVisibility(View.GONE);
+        }
         if (me.GetString("os").equals("Windows 1.x/2.x")) {
             switch(me.GetString("qr_file")) {
                 case "local:0":
