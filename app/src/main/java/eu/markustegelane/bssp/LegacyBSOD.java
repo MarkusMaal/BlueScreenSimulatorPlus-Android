@@ -505,53 +505,55 @@ public class LegacyBSOD extends AppCompatActivity {
             myText.append(txts.get("Troubleshooting text")).append("\n\n");
             myText.append(txts.get("Additional troubleshooting information")).append("\n\n");
         } else if (me.GetString("os").equals("Windows NT 3.x/4.0")) {
-            String processorText = "GenuineIntel";
-            if (me.GetBool("amd")) {
-                processorText = "AuthenticAMD";
-            }
-            myText.append(String.format(txts.get("CPUID formatting"), processorText)).append("\n\n");
-            myText.append(String.format("%-38.38s %-38.38s", txts.get("Stack trace heading"), txts.get("Stack trace heading"))).append("\n");
-            for (int n = 0; n < culpritfiles.size(); n += 2) {
-                String filename1 = (String) culpritfiles.keySet().toArray()[n];
-                if (culpritfiles.get(filename1).length > 2) {
-                    continue;
+            if (me.GetBool("stack_trace")) {
+                String processorText = "GenuineIntel";
+                if (me.GetBool("amd")) {
+                    processorText = "AuthenticAMD";
                 }
-                String filename2 = null;
-                try {
-                    filename2 = (String) culpritfiles.keySet().toArray()[n + 1];
-                    if (culpritfiles.get(filename2).length > 2) {
+                myText.append(String.format(txts.get("CPUID formatting"), processorText)).append("\n\n");
+                myText.append(String.format("%-38.38s %-38.38s", txts.get("Stack trace heading"), txts.get("Stack trace heading"))).append("\n");
+                for (int n = 0; n < culpritfiles.size(); n += 2) {
+                    String filename1 = (String) culpritfiles.keySet().toArray()[n];
+                    if (culpritfiles.get(filename1).length > 2) {
                         continue;
                     }
-                } catch (Exception ignored) {
+                    String filename2 = null;
+                    try {
+                        filename2 = (String) culpritfiles.keySet().toArray()[n + 1];
+                        if (culpritfiles.get(filename2).length > 2) {
+                            continue;
+                        }
+                    } catch (Exception ignored) {
 
-                }
-                String[] codes1 = culpritfiles.get(filename1);
-                if (filename2 != null) {
-                    String[] codes2 = culpritfiles.get(filename2);
-                    myText.append(String.format("%-38.38s %-38.41s", String.format(txts.get("Stack trace table formatting"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), filename1), String.format(txts.get("Stack trace table formatting"), me.GenHex(8, codes2[0]), me.GenHex(8, codes2[1]), filename2)));
-                } else {
-                    myText.append(String.format("%-38.38s", String.format(txts.get("Stack trace table formatting"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), filename1)));
-                }
-                myText.append("\n");
-            }
-            myText.append("\n\n");
-            if (txts.get("Memory address dump table") != null) {
-                myText.append(txts.get("Memory address dump heading")).append("\n");
-                for (int n = 0; n < culpritfiles.size(); n++) {
-                    String filename1 = (String) culpritfiles.keySet().toArray()[n];
-                    if (culpritfiles.get(filename1).length < 6) {
-                        continue;
                     }
                     String[] codes1 = culpritfiles.get(filename1);
-                    // 6 code variant for backwards compatibility
+                    if (filename2 != null) {
+                        String[] codes2 = culpritfiles.get(filename2);
+                        myText.append(String.format("%-38.38s %-38.41s", String.format(txts.get("Stack trace table formatting"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), filename1), String.format(txts.get("Stack trace table formatting"), me.GenHex(8, codes2[0]), me.GenHex(8, codes2[1]), filename2)));
+                    } else {
+                        myText.append(String.format("%-38.38s", String.format(txts.get("Stack trace table formatting"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), filename1)));
+                    }
+                    myText.append("\n");
+                }
+                myText.append("\n\n");
+                if (txts.get("Memory address dump table") != null) {
+                    myText.append(txts.get("Memory address dump heading")).append("\n");
+                    for (int n = 0; n < culpritfiles.size(); n++) {
+                        String filename1 = (String) culpritfiles.keySet().toArray()[n];
+                        if (culpritfiles.get(filename1).length < 6) {
+                            continue;
+                        }
+                        String[] codes1 = culpritfiles.get(filename1);
+                        // 6 code variant for backwards compatibility
                         if (culpritfiles.get(filename1).length != 6) {
                             myText.append(String.format(txts.get("Memory address dump table"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), me.GenHex(8, codes1[2]), me.GenHex(8, codes1[3]), me.GenHex(8, codes1[4]), me.GenHex(8, codes1[5]), me.GenHex(8, codes1[6]), filename1)).append("\n");
                         } else {
                             myText.append(String.format(txts.get("Memory address dump table"), me.GenHex(8, codes1[0]), me.GenHex(8, codes1[1]), me.GenHex(8, codes1[2]), me.GenHex(8, codes1[3]), me.GenHex(8, codes1[4]), me.GenHex(8, codes1[5]), filename1)).append("\n");
                         }
+                    }
                 }
+                myText.append("\n");
             }
-            myText.append("\n");
             myText.append(txts.get("Troubleshooting text"));
         }
         errorMessage = myText.toString().split("\n");

@@ -379,16 +379,22 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         };
 
         binding.blinkCheck.setOnCheckedChangeListener((compoundButton, b) -> {
-            os.SetBool("blinkblink", b);
-            saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            if ((!locked) && (os != null)) {
+                os.SetBool("blinkblink", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            }
         });
         binding.amdProcessorCheck.setOnCheckedChangeListener(((compoundButton, b) -> {
-            os.SetBool("amd", b);
-            saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            if ((!locked) && (os != null)) {
+                os.SetBool("amd", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            }
         }));
         binding.stackTraceCheck.setOnCheckedChangeListener(((compoundButton, b) -> {
-            os.SetBool("stack_trace", b);
-            saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            if ((!locked) && (os != null)) {
+                os.SetBool("stack_trace", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            }
         }));
         binding.codeEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
