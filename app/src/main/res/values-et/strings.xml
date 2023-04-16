@@ -110,4 +110,5 @@
     <string name="setCulpritFile">Määra probleemne fail</string>
     <string name="filePreset">Vali fail</string>
     <string name="fileCustom">Kohandatud fail</string>
+    <string name="showMoreInfo">Kuva lisainfo probleemse faili kohta</string>
 </resources>

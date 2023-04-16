@@ -646,4 +646,5 @@
     <string name="setCulpritFile">Set culprit file</string>
     <string name="filePreset">Choose file</string>
     <string name="fileCustom">Custom file</string>
+    <string name="showMoreInfo">Show additional info about culprit file</string>
 </resources>

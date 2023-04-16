@@ -249,6 +249,15 @@ public class BlueScreen implements Serializable {
         return ints.getOrDefault(name, 1);
     }
 
+
+    public String GetText(String key) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> texts = gson.fromJson(this.GetTexts(), type);
+        return texts.getOrDefault(key, "");
+    }
+
+
     public void SetInt(String name, int value) {
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, Integer>>(){}.getType();
@@ -611,6 +620,7 @@ public class BlueScreen implements Serializable {
                 PushText("Culprit file", "The problem seems to be caused by the following file: ");
                 PushText("Physical memory dump", "Beginning dump of physical memory\nPhysical memory dump complete.");
                 PushText("Technical support", "Contact your system administrator or technical support group for further\nassistance.");
+                PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
                 SetBool("auto", true);
                 SetInt("scale", 75);
                 SetFont("Lucida Console", Typeface.NORMAL);

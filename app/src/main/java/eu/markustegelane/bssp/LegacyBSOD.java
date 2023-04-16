@@ -214,20 +214,33 @@ public class LegacyBSOD extends AppCompatActivity {
             Type type = new TypeToken<Map<String, String>>() {
             }.getType();
             texts = gson.fromJson(me.GetTexts(), type);
+            int add = 0;
+            int add2 = 0;
+            if (!me.GetBool("show_description")) {
+                add = 30;
+                add2 = 8;
+            }
+
             if (!me.GetString("os").equals("Windows CE")) {
                 DrawCanvas(0, me, 0);
+                int finalAdd = add;
+                int finalAdd2 = add2;
                 new CountDownTimer(interval * 100L, interval) {
                     public void onTick(long millisUntilFinished) {
                         int progress;
                         progress = (int) ((interval * 100 - millisUntilFinished) / interval);
-                        if (!me.GetBool("extrafile") && !me.GetBool("show_file")) {
+                        if (!me.GetString("os").equals("Windows XP")) {
+                            if (!me.GetBool("extrafile") && !me.GetBool("show_file")) {
+                                DrawCanvas(progress, me, 0);
+                            } else if (me.GetBool("show_file") && !me.GetBool("extrafile")) {
+                                DrawCanvas(progress, me, -8 + finalAdd2);
+                            } else if (me.GetBool("extrafile") && !me.GetBool("show_file")) {
+                                DrawCanvas(progress, me, -8 + finalAdd2);
+                            } else if (me.GetBool("extrafile") && me.GetBool("show_file")) {
+                                DrawCanvas(progress, me, -36 + finalAdd);
+                            }
+                        } else {
                             DrawCanvas(progress, me, 0);
-                        } else if (me.GetBool("show_file") && !me.GetBool("extrafile")) {
-                            DrawCanvas(progress, me, -8);
-                        } else if (me.GetBool("extrafile") && !me.GetBool("show_file")) {
-                            DrawCanvas(progress, me, -8);
-                        } else if (me.GetBool("extrafile") && me.GetBool("show_file")) {
-                            DrawCanvas(progress, me, -36);
                         }
                     }
 
@@ -238,24 +251,24 @@ public class LegacyBSOD extends AppCompatActivity {
                             switch (me.GetString("os")) {
                                 case "Windows 7":
                                     if (!me.GetBool("extrafile") && !me.GetBool("show_file")) {
-                                        DrawCanvas(100, me, -8);
+                                        DrawCanvas(100, me, -8 + finalAdd2);
                                     } else if (me.GetBool("extrafile") && !me.GetBool("show_file")) {
-                                        DrawCanvas(100, me, -40);
+                                        DrawCanvas(100, me, -40 + finalAdd);
                                     } else if (!me.GetBool("extrafile") && me.GetBool("show_file")) {
-                                        DrawCanvas(100, me, -40);
+                                        DrawCanvas(100, me, -40 + finalAdd);
                                     } else if (me.GetBool("extrafile") && me.GetBool("show_file")) {
-                                        DrawCanvas(100, me, -64);
+                                        DrawCanvas(100, me, -64 + finalAdd);
                                     }
                                     break;
                                 case "Windows Vista":
                                     if (!me.GetBool("extrafile") && !me.GetBool("show_file")) {
-                                        DrawCanvas(100, me, -8);
+                                        DrawCanvas(100, me, -8 + finalAdd2);
                                     } else if (me.GetBool("extrafile") && !me.GetBool("show_file")) {
-                                        DrawCanvas(100, me, -40);
+                                        DrawCanvas(100, me, -40 + finalAdd);
                                     } else if (!me.GetBool("extrafile") && me.GetBool("show_file")) {
-                                        DrawCanvas(100, me, -40);
+                                        DrawCanvas(100, me, -40 + finalAdd);
                                     } else if (me.GetBool("extrafile") && me.GetBool("show_file")) {
-                                        DrawCanvas(100, me, -64);
+                                        DrawCanvas(100, me, -64 + finalAdd);
                                     }
                                 case "Windows XP":
                                     DrawCanvas(100, me, 0);
@@ -824,7 +837,9 @@ public class LegacyBSOD extends AppCompatActivity {
             if (me.GetBool("show_file")) {
                 yourText += "\n\n" + texts.get("Culprit file") + me.GetString("culprit");
             }
-            yourText += "\n\n" + me.GetString("code").split(" ")[0];
+            if (me.GetBool("show_description")) {
+                yourText += "\n\n" + me.GetString("code").split(" ")[0];
+            }
             yourText += "\n\n" + texts.get("Troubleshooting introduction");
             yourText += "\n\n" + texts.get("Troubleshooting") + "\n\n";
             yourText += texts.get("Technical information") + "\n\n";
@@ -838,7 +853,9 @@ public class LegacyBSOD extends AppCompatActivity {
                 case "Windows XP":
                     yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
                     if (me.GetBool("extrafile")) {
-                        yourText += String.format(texts.get("Culprit file memory address"), me.GetString("culprit"), me.GenHex(8, fileCodes[0]), me.GenHex(8, fileCodes[1]), me.GenHex(8, fileCodes[2]));
+                        if (texts.get("Culprit file memory address") != null) {
+                            yourText += "\n\n\n" + String.format(texts.get("Culprit file memory address"), me.GetString("culprit"), me.GenHex(8, fileCodes[0]), me.GenHex(8, fileCodes[1]), me.GenHex(8, fileCodes[2]).toLowerCase());
+                        }
                     }
                     yourText += "\n\n\n";
                     if (!me.GetBool("extrafile")) {

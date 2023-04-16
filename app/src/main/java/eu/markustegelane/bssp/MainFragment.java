@@ -258,6 +258,19 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
+        binding.moreFileInfoCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if ((!locked) && (os != null)) {
+                    os.SetBool("extrafile", b);
+                    if (os.GetText("Culprit file memory address").equals("")) {
+                        os.PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
+                    }
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                }
+            }
+        });
+
         binding.showWatermark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -1141,6 +1154,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Switch pars = binding.showParCodes;
         Switch server = binding.serverScreen;
         Switch waterMark = binding.showWatermark;
+        Switch fileInfo = binding.moreFileInfoCheck;
         TextView elabel = binding.eCodeLabel;
 
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
@@ -1148,11 +1162,16 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE); codesel.setVisibility(View.GONE); elabel.setVisibility(View.GONE);
         binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE); binding.blinkCheck.setVisibility(View.GONE);
         binding.amdProcessorCheck.setVisibility(View.GONE); binding.stackTraceCheck.setVisibility(View.GONE);
-        binding.setCulpritButton.setVisibility(View.GONE); binding.culpritCheck.setVisibility(View.GONE);
+        binding.setCulpritButton.setVisibility(View.GONE); binding.culpritCheck.setVisibility(View.GONE); binding.moreFileInfoCheck.setVisibility(View.GONE);
         if ("Windows NT 3.x/4.0".equals(os.GetString("os"))) {
             binding.blinkCheck.setVisibility(View.VISIBLE);
             binding.amdProcessorCheck.setVisibility(View.VISIBLE);
             binding.stackTraceCheck.setVisibility(View.VISIBLE);
+        }
+        String s = os.GetString("os");
+        if ("Windows XP".equals(s) || "Windows Vista".equals(s) || "Windows 7".equals(s)) {
+            binding.moreFileInfoCheck.setVisibility(View.VISIBLE);
+            ac.setVisibility(View.VISIBLE);
         }
         switch (os.GetString("os")) {
             case "Windows 11":
@@ -1232,6 +1251,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.amdProcessorCheck.setChecked(os.GetBool("amd"));
         binding.stackTraceCheck.setChecked(os.GetBool("stack_trace"));
         binding.culpritCheck.setChecked(os.GetBool("show_file"));
+        binding.moreFileInfoCheck.setChecked(os.GetBool("extrafile"));
         if (!binding.culpritCheck.isChecked()) {
             binding.setCulpritButton.setVisibility(View.GONE);
         }
