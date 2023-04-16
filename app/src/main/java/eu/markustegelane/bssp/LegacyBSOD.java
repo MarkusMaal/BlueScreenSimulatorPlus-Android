@@ -552,7 +552,7 @@ public class LegacyBSOD extends AppCompatActivity {
         String errorDescripy = me.GetString("code").split(" ")[0];
         myText.append(errorDescripy);
         int linelen = errorDescripy.length() + 44;
-        if (me.GetBool("show_file")) {
+        if (me.GetBool("show_file") && me.GetString("os").equals("Windows NT 3.x/4.0")) {
             if (me.GetString("culprit").length() > 14) {
             myText.append("*** Address ")
                 .append(me.GenHex(8, "RRRRRRRR").toLowerCase())
@@ -569,6 +569,17 @@ public class LegacyBSOD extends AppCompatActivity {
                         .append(me.GenHex(8, "RRRRRRRR").toLowerCase())
                         .append(" - ")
                         .append(me.GetString("culprit").toLowerCase());
+            }
+        } else {
+            myText.append("\n\n");
+            String[] fileAddresses = culpritfiles.get(culpritfiles.keySet().stream().findFirst().get());
+            String outText = String.format(txts.get("File information"), me.GenHex(8, fileAddresses[0]), me.GenHex(8, fileAddresses[0]), me.GenHex(8, fileAddresses[0]).toLowerCase(), me.GetString("culprit"));
+            if (outText.length() < 81) {
+                myText.append(outText);
+            } else {
+                myText.append(outText.substring(0, 80))
+                        .append("\n")
+                        .append(outText.substring(80));
             }
         }
         myText.append("\n\n");
