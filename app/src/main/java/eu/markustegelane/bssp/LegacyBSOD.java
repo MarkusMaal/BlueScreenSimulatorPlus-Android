@@ -64,7 +64,7 @@ public class LegacyBSOD extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
-    public static int interval = 500;
+    public static int interval = 100;
     private final Handler mHideHandler = new Handler(Looper.myLooper());
     private View mContentView;
     private String memcodes;
@@ -77,6 +77,8 @@ public class LegacyBSOD extends AppCompatActivity {
 
     private Bitmap BufferA;
     private Bitmap BufferB;
+
+    private String[] fileCodes;
 
     List<Bitmap> characters = new ArrayList<>();
 
@@ -148,6 +150,17 @@ public class LegacyBSOD extends AppCompatActivity {
         if (!me.GetBool("watermark")) {
             binding.watermark.setVisibility(View.GONE);
         }
+        if (me.GetBool("extrafile")) {
+            Gson gson = new Gson();
+            Type arrayType = new TypeToken<Map<String, String[]>>() {
+            }.getType();
+            Map<String, String[]> codes;
+            codes = gson.fromJson(me.GetFiles(), arrayType);
+            fileCodes = codes.get(codes.keySet().stream().findFirst().get().toString());
+            for (int i = 0; i < fileCodes.length; i++) {
+                fileCodes[i] = me.GenHex(8, fileCodes[i]);
+            }
+        }
         if (me.GetString("os").equals("Windows 1.x/2.x")) {
             switch(me.GetString("qr_file")) {
                 case "local:0":
@@ -207,7 +220,15 @@ public class LegacyBSOD extends AppCompatActivity {
                     public void onTick(long millisUntilFinished) {
                         int progress;
                         progress = (int) ((interval * 100 - millisUntilFinished) / interval);
-                        DrawCanvas(progress, me, 0);
+                        if (!me.GetBool("extrafile") && !me.GetBool("show_file")) {
+                            DrawCanvas(progress, me, 0);
+                        } else if (me.GetBool("show_file") && !me.GetBool("extrafile")) {
+                            DrawCanvas(progress, me, -8);
+                        } else if (me.GetBool("extrafile") && !me.GetBool("show_file")) {
+                            DrawCanvas(progress, me, -8);
+                        } else if (me.GetBool("extrafile") && me.GetBool("show_file")) {
+                            DrawCanvas(progress, me, -36);
+                        }
                     }
 
                     public void onFinish() {
@@ -216,14 +237,26 @@ public class LegacyBSOD extends AppCompatActivity {
                         } else {
                             switch (me.GetString("os")) {
                                 case "Windows 7":
-                                    if (!me.GetBool("showfile")) {
+                                    if (!me.GetBool("extrafile") && !me.GetBool("show_file")) {
                                         DrawCanvas(100, me, -8);
-                                    } else {
+                                    } else if (me.GetBool("extrafile") && !me.GetBool("show_file")) {
+                                        DrawCanvas(100, me, -40);
+                                    } else if (!me.GetBool("extrafile") && me.GetBool("show_file")) {
+                                        DrawCanvas(100, me, -40);
+                                    } else if (me.GetBool("extrafile") && me.GetBool("show_file")) {
                                         DrawCanvas(100, me, -64);
                                     }
                                     break;
                                 case "Windows Vista":
-                                    DrawCanvas(100, me, -8);
+                                    if (!me.GetBool("extrafile") && !me.GetBool("show_file")) {
+                                        DrawCanvas(100, me, -8);
+                                    } else if (me.GetBool("extrafile") && !me.GetBool("show_file")) {
+                                        DrawCanvas(100, me, -40);
+                                    } else if (!me.GetBool("extrafile") && me.GetBool("show_file")) {
+                                        DrawCanvas(100, me, -40);
+                                    } else if (me.GetBool("extrafile") && me.GetBool("show_file")) {
+                                        DrawCanvas(100, me, -64);
+                                    }
                                 case "Windows XP":
                                     DrawCanvas(100, me, 0);
                                 default:
@@ -238,7 +271,11 @@ public class LegacyBSOD extends AppCompatActivity {
                     public void onTick(long millisUntilFinished) {
                         int progress;
                         progress = me.GetInt("timer") - (int) ((me.GetInt("timer") * 1000 + 1000 - millisUntilFinished) / 1000);
-                        DrawCanvas(progress, me, 0);
+                        if (!me.GetBool("extrafile")) {
+                            DrawCanvas(progress, me, 0);
+                        } else {
+                            DrawCanvas(progress, me, -16);
+                        }
                     }
 
                     public void onFinish() {
@@ -784,6 +821,9 @@ public class LegacyBSOD extends AppCompatActivity {
         String yourText = "\n";
         if (!me.GetString("os").equals("Windows CE")) {
             yourText += texts.get("A problem has been detected...");
+            if (me.GetBool("show_file")) {
+                yourText += "\n\n" + texts.get("Culprit file") + me.GetString("culprit");
+            }
             yourText += "\n\n" + me.GetString("code").split(" ")[0];
             yourText += "\n\n" + texts.get("Troubleshooting introduction");
             yourText += "\n\n" + texts.get("Troubleshooting") + "\n\n";
@@ -794,12 +834,16 @@ public class LegacyBSOD extends AppCompatActivity {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(w, h, conf);
         Canvas canvas = new Canvas (bmp);
-        try {
             switch (me.GetString("os")) {
                 case "Windows XP":
                     yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
+                    if (me.GetBool("extrafile")) {
+                        yourText += String.format(texts.get("Culprit file memory address"), me.GetString("culprit"), me.GenHex(8, fileCodes[0]), me.GenHex(8, fileCodes[1]), me.GenHex(8, fileCodes[2]));
+                    }
                     yourText += "\n\n\n";
-                    yourText += texts.get("Physical memory dump") + "\n" + texts.get("Technical support");
+                    if (!me.GetBool("extrafile")) {
+                        yourText += texts.get("Physical memory dump") + "\n" + texts.get("Technical support");
+                    }
                     break;
                 case "Windows CE":
                     yourText += texts.get("A problem has occurred...") + "\n";
@@ -810,16 +854,14 @@ public class LegacyBSOD extends AppCompatActivity {
                     break;
                 default:
                     yourText += String.format(texts.get("Technical information formatting"), me.GetString("code").split(" ")[1].replace("(", "").replace(")", ""), memcodes);
+                    if (me.GetBool("extrafile")) {
+                        yourText += "\n\n" + String.format(texts.get("Culprit file memory address"), me.GetString("culprit"), fileCodes[0], fileCodes[1], fileCodes[2]);
+                    }
                     yourText += "\n\n\n" + texts.get("Collecting data for crash dump") + "\n";
                     yourText += texts.get("Initializing crash dump") + "\n" + texts.get("Begin dump") + "\n";
                     yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", String.valueOf(progress)));
                     break;
             }
-        }
-        catch (Exception e)
-        {
-            Toast.makeText(getWindow().getContext(), e.toString(), Toast.LENGTH_SHORT).show();
-        }
         if (!me.GetString("os").equals("Windows XP")) {
             if (progress == 100) {
                 yourText += "\n" + texts.get("End dump");

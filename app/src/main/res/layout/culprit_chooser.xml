@@ -45,7 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
             android:entries="@array/CulpritFiles"
-            android:padding="20sp" />
+            android:padding="20sp"
+            android:spinnerMode="dialog" />
 
         <EditText
             android:id="@+id/eFileEditText"
