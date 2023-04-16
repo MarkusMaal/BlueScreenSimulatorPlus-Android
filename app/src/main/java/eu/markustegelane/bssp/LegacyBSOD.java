@@ -549,7 +549,29 @@ public class LegacyBSOD extends AppCompatActivity {
         }
         String[] errorMessage;
         StringBuilder myText = new StringBuilder(String.format(txts.get("Error code formatting"), me.GetString("code").split(" ")[1].substring(1, 11), me.GenAddress(4, 8, false).replace(", ", ",")) + "\n");
-        myText.append(me.GetString("code").split(" ")[0]).append("\n\n");
+        String errorDescripy = me.GetString("code").split(" ")[0];
+        myText.append(errorDescripy);
+        int linelen = errorDescripy.length() + 44;
+        if (me.GetBool("show_file")) {
+            if (me.GetString("culprit").length() > 14) {
+            myText.append("*** Address ")
+                .append(me.GenHex(8, "RRRRRRRR").toLowerCase())
+                .append(" has base at ")
+                .append(me.GenHex(8, "RRRRRRRR").toLowerCase())
+                .append(" - ")
+                .append(me.GetString("culprit").toLowerCase().substring(0, 14));
+            if (me.GetString("culprit").toLowerCase().substring(14).length() > 0) {
+                myText.append("\n").append(me.GetString("culprit").toLowerCase().substring(14));
+            } } else {
+                myText.append("*** Address ")
+                        .append(me.GenHex(8, "RRRRRRRR").toLowerCase())
+                        .append(" has base at ")
+                        .append(me.GenHex(8, "RRRRRRRR").toLowerCase())
+                        .append(" - ")
+                        .append(me.GetString("culprit").toLowerCase());
+            }
+        }
+        myText.append("\n\n");
         if (me.GetString("os").equals("Windows 2000")) {
             myText.append(txts.get("Troubleshooting introduction")).append("\n\n");
             myText.append(txts.get("Troubleshooting text")).append("\n\n");
