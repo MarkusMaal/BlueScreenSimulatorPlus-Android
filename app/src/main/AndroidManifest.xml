@@ -27,10 +27,6 @@
             android:exported="false"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".ParameterEditor"
-            android:exported="false"
-            android:label="@string/title_activity_parameter_editor" />
-        <activity
             android:name=".LegacyBSOD"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"

@@ -872,7 +872,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     public String GenerateSaveData(String format) {
         StringBuilder fileData = new StringBuilder();
-        fileData.append("*** Blue screen simulator plus " + format + " ***");
+        fileData.append("*** Blue screen simulator plus ").append(format).append(" ***");
         Gson gson = new Gson();
         Type strType = new TypeToken<Map<String, String>>() {
         }.getType();
