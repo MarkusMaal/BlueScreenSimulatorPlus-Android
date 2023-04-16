@@ -63,6 +63,7 @@ public class ModernBSOD extends AppCompatActivity {
     public static Boolean watermark = true;
     public static Boolean blackscreen = false;
     public static Boolean server = false;
+    public static Boolean show_file = false;
 
     public static int interval = 500;
     public static float scale = 0.75f;
@@ -156,6 +157,7 @@ public class ModernBSOD extends AppCompatActivity {
         device = me.GetBool("device");
         blackscreen = me.GetBool("blackscreen");
         server = me.GetBool("server");
+        show_file = me.GetBool("show_file");
         mVisible = true;
         TextView techInfo = findViewById(R.id.technicalDetails);
         TextView descripy = findViewById(R.id.errorDescription);
@@ -185,13 +187,22 @@ public class ModernBSOD extends AppCompatActivity {
             descripy.setText(texts.get("Information text without dump"));
         }
         String ecode = texts.get("Error code");
+        String suffix = "";
+        if (show_file && me.GetString("os").equals("Windows 8/8.1")) {
+            suffix = " (" + me.GetString("culprit") + ")";
+        }
         if (ecode == null) {
             ecode = "";
         }
         if (showDetails) {
-            techInfo.setText(String.format(ecode, errorCode.split(" ")[0]));
+            techInfo.setText(String.format(ecode, errorCode.split(" ")[0] + suffix));
         } else {
-            techInfo.setText(String.format(ecode, errorCode.split(" ")[1].replace("(", "").replace(")", "")));
+            techInfo.setText(String.format(ecode, errorCode.split(" ")[1].replace("(", "").replace(")", "") + suffix));
+        }
+        if (show_file) {
+            if (!me.GetString("os").equals("Windows 8/8.1")) {
+                techInfo.setText(String.format("%s\n\n%s", techInfo.getText(), String.format(texts.get("Culprit file"), me.GetString("culprit"))));
+            }
         }
         fl.setBackgroundColor(me.GetTheme(true, false));
         if (blackscreen) {
@@ -199,7 +210,7 @@ public class ModernBSOD extends AppCompatActivity {
         }
         if (insiderPreview) {
             fl.setBackgroundColor(Color.argb(255, 0, 128, 0));
-            if (me.GetString("os").equals("Windows 11")) {
+            if (me.GetString("os").equals("Windows 11") || me.GetBool("device")) {
                 descripy.setText(descripy.getText().toString().replace("device", "Windows Insider Build"));
             } else {
                 descripy.setText(descripy.getText().toString().replace("PC", "Windows Insider Build"));

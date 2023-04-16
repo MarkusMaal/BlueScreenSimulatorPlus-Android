@@ -643,4 +643,7 @@
     <string name="aboutFonts">Fonts</string>
     <string name="aboutSource">Source code</string>
     <string name="aboutSourceDescription">The code for this app is publically available under the GPL-v3 license</string>
+    <string name="setCulpritFile">Set culprit file</string>
+    <string name="filePreset">Choose file</string>
+    <string name="fileCustom">Custom file</string>
 </resources>

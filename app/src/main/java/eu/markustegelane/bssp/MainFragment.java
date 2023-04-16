@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -377,7 +378,81 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 }
             }
         };
+        binding.culpritCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("show_file", b);
+                if (b) {
+                    binding.setCulpritButton.setVisibility(View.VISIBLE);
+                } else {
+                    binding.setCulpritButton.setVisibility(View.GONE);
+                }
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            }
+        });
 
+        binding.setCulpritButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                View culpritView = LayoutInflater.from(getContext()).inflate(R.layout.culprit_chooser, null);
+                final RadioButton cust = culpritView.findViewById(R.id.customRadio);
+                final RadioButton preset = culpritView.findViewById(R.id.presetRadio);
+                final EditText cfile = culpritView.findViewById(R.id.eFileEditText);
+                final Spinner fileSelect = culpritView.findViewById(R.id.eFileSpinner);
+                String culprit_file = os.GetString("culprit");
+                boolean useCustom = true;
+                for (int i = 0; i < fileSelect.getAdapter().getCount(); i++) {
+                    String current_file = fileSelect.getAdapter().getItem(i).toString().split(":")[0];
+                    if (culprit_file.equals(current_file)) {
+                        fileSelect.setSelection(i);
+                        useCustom = false;
+                        break;
+                    }
+                }
+                if (useCustom) {
+                    fileSelect.setVisibility(View.GONE);
+                    cfile.setText(culprit_file);
+                    cfile.setVisibility(View.VISIBLE);
+                    preset.setChecked(false);
+                    cust.setChecked(true);
+                }
+
+                cust.setOnCheckedChangeListener((compoundButton, b) -> {
+                    if (b) {
+                        cfile.setVisibility(View.VISIBLE);
+                        fileSelect.setVisibility(View.GONE);
+                        cfile.setText(fileSelect.getAdapter().getItem((int)fileSelect.getSelectedItemId()).toString().split(":")[0]);
+                    } else {
+                        cfile.setVisibility(View.GONE);
+                        fileSelect.setVisibility(View.VISIBLE);
+                        String selectedFile = cfile.getText().toString();
+                        for (int i = 0; i < fileSelect.getAdapter().getCount(); i++) {
+                            String currentFile = fileSelect.getAdapter().getItem(i).toString();
+                            if (selectedFile.equals(currentFile.split(":")[0])) {
+                                fileSelect.setSelection(i);
+                                break;
+                            }
+                        }
+                    }
+                });
+                builder.setView(culpritView);
+                builder.setCancelable(false)
+                        .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (cust.isChecked()) {
+                                    os.SetString("culprit", cfile.getText().toString());
+                                } else {
+                                    os.SetString("culprit", fileSelect.getAdapter().getItem((int)fileSelect.getSelectedItemId()).toString().split(":")[0]);
+                                }
+                                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel), null);
+                AlertDialog ad = builder.create();
+                ad.show();
+            }
+        });
         binding.blinkCheck.setOnCheckedChangeListener((compoundButton, b) -> {
             if ((!locked) && (os != null)) {
                 os.SetBool("blinkblink", b);
@@ -1065,6 +1140,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         ntEdit.setVisibility(View.GONE); parEdit.setVisibility(View.GONE); codesel.setVisibility(View.GONE); elabel.setVisibility(View.GONE);
         binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE); binding.blinkCheck.setVisibility(View.GONE);
         binding.amdProcessorCheck.setVisibility(View.GONE); binding.stackTraceCheck.setVisibility(View.GONE);
+        binding.setCulpritButton.setVisibility(View.GONE); binding.culpritCheck.setVisibility(View.GONE);
         if ("Windows NT 3.x/4.0".equals(os.GetString("os"))) {
             binding.blinkCheck.setVisibility(View.VISIBLE);
             binding.amdProcessorCheck.setVisibility(View.VISIBLE);
@@ -1081,6 +1157,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 server.setVisibility(View.VISIBLE);
                 codesel.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
+                binding.setCulpritButton.setVisibility(View.VISIBLE);
+                binding.culpritCheck.setVisibility(View.VISIBLE);
                 break;
             case "Windows 8/8.1":
                 ac.setVisibility(View.VISIBLE);
@@ -1089,6 +1167,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 parEdit.setVisibility(View.VISIBLE);
                 codesel.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
+                binding.setCulpritButton.setVisibility(View.VISIBLE);
+                binding.culpritCheck.setVisibility(View.VISIBLE);
                 break;
             case "Windows 7":
             case "Windows Vista":
@@ -1103,6 +1183,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 }
                 codesel.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
+                binding.setCulpritButton.setVisibility(View.VISIBLE);
+                binding.culpritCheck.setVisibility(View.VISIBLE);
                 break;
             case "Windows 1.x/2.x":
                 binding.oneSpinner.setVisibility(View.VISIBLE);
@@ -1141,6 +1223,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.blinkCheck.setChecked(os.GetBool("blinkblink"));
         binding.amdProcessorCheck.setChecked(os.GetBool("amd"));
         binding.stackTraceCheck.setChecked(os.GetBool("stack_trace"));
+        binding.culpritCheck.setChecked(os.GetBool("show_file"));
+        if (!binding.culpritCheck.isChecked()) {
+            binding.setCulpritButton.setVisibility(View.GONE);
+        }
         saveSelection(i);
         for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
             if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {

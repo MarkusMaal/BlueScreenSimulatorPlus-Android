@@ -107,4 +107,7 @@
         <item>Windows 2.03 käivitusekraan</item>
         <item>Käivitusekraan puudub</item>
     </string-array>
+    <string name="setCulpritFile">Määra probleemne fail</string>
+    <string name="filePreset">Vali fail</string>
+    <string name="fileCustom">Kohandatud fail</string>
 </resources>

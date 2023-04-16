@@ -96,6 +96,7 @@
                     android:layout_marginEnd="20sp"
                     android:gravity="center"
                     android:minHeight="60sp"
+                    android:visibility="gone"
                     android:text="@string/insiderPreviewCheck"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
@@ -106,6 +107,7 @@
                     android:layout_marginEnd="20sp"
                     android:checked="true"
                     android:minHeight="60sp"
+                    android:visibility="gone"
                     android:text="@string/autoClose"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
@@ -116,6 +118,7 @@
                     android:layout_marginEnd="20sp"
                     android:checked="true"
                     android:minHeight="60sp"
+                    android:visibility="gone"
                     android:text="@string/showDetails"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
@@ -126,6 +129,7 @@
                     android:layout_marginEnd="20sp"
                     android:checked="false"
                     android:minHeight="60sp"
+                    android:visibility="gone"
                     android:text="@string/showPars"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
                 <Switch
@@ -135,6 +139,7 @@
                     android:layout_marginEnd="20sp"
                     android:checked="false"
                     android:minHeight="60sp"
+                    android:visibility="gone"
                     android:text="@string/serverEdition"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
                 <Switch
@@ -154,6 +159,7 @@
                     android:checked="true"
                     android:minHeight="60sp"
                     android:text="@string/playSound"
+                    android:visibility="gone"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
                 <Switch
                     android:id="@+id/blinkCheck"
@@ -184,6 +190,16 @@
                     android:minHeight="60sp"
                     android:visibility="gone"
                     android:text="@string/showStackTrace"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/culpritCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/culprit"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
             </com.google.android.flexbox.FlexboxLayout>
@@ -234,6 +250,15 @@
                         android:layout_marginEnd="20sp"
                         android:layout_weight="1"
                         android:text="@string/advOption" />
+
+                    <Button
+                        android:id="@+id/setCulpritButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        android:text="@string/setCulpritFile" />
                 </com.google.android.flexbox.FlexboxLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -280,6 +305,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20sp"
                             android:layout_weight="0"
+                            android:visibility="gone"
                             android:text="@string/themeHfg" />
                         <Button
                             android:id="@+id/hlBackground"
@@ -287,6 +313,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20sp"
                             android:layout_weight="0"
+                            android:visibility="gone"
                             android:text="@string/themeHbg" />
                     </com.google.android.flexbox.FlexboxLayout>
 
