@@ -3,6 +3,7 @@ package eu.markustegelane.bssp;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -34,6 +36,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -65,6 +70,7 @@ public class LegacyBSOD extends AppCompatActivity {
      */
     private static final int UI_ANIMATION_DELAY = 300;
     public static int interval = 100;
+    private boolean er = false;
     private final Handler mHideHandler = new Handler(Looper.myLooper());
     private View mContentView;
     private String memcodes;
@@ -73,12 +79,16 @@ public class LegacyBSOD extends AppCompatActivity {
     private int caret_y = 0;
     private int w;
     private int h;
+    private Boolean by = false;
     private Boolean visible = true;
 
     private Bitmap BufferA;
     private Bitmap BufferB;
 
     private String[] fileCodes;
+    private boolean rb = false;
+    private int tbg;
+    private int tfg;
 
     List<Bitmap> characters = new ArrayList<>();
 
@@ -110,6 +120,7 @@ public class LegacyBSOD extends AppCompatActivity {
             hide();
         }
     };
+
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
@@ -147,6 +158,25 @@ public class LegacyBSOD extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding.bsodWindow.setDrawingCacheEnabled(false);
         setContentView(binding.getRoot());
+        /* for fun stuff */
+        try { byte[] bytesMessage = me.GetString("culprit").getBytes(StandardCharsets.UTF_8); MessageDigest md = MessageDigest.getInstance("MD5");
+              byte[] md5digest = md.digest(bytesMessage);
+              Eggy(byteArrayToHex(md5digest));} catch (NoSuchAlgorithmException e) { throw new RuntimeException(e); }
+        if (by) {
+            me.SetTheme(Color.rgb(0, 0, 255), Color.rgb(255, 255, 0), false);
+            me.SetTheme(Color.rgb(255, 255, 0), Color.rgb(0, 0, 255), true);
+        } else if (er) {
+            me.SetTheme(Color.rgb(255, 255, 255), Color.rgb(120, 120, 255), false);
+            me.SetTheme(Color.rgb(120, 120, 255), Color.rgb(255, 255, 255), true);
+        } else if (me.GetTheme(false, false) == me.GetTheme(true, false)) {
+            rb = true;
+            Random r = new Random();
+
+            tbg = Color.rgb(r.nextInt(255), r.nextInt(255), r.nextInt(255));
+            tfg = Color.rgb(r.nextInt(255), r.nextInt(255), r.nextInt(255));
+            me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), false);
+            me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), true);
+        }
         if (!me.GetBool("watermark")) {
             binding.watermark.setVisibility(View.GONE);
         }
@@ -162,6 +192,9 @@ public class LegacyBSOD extends AppCompatActivity {
             }
         }
         if (me.GetString("os").equals("Windows 1.x/2.x")) {
+            Random r = new Random();
+            if (rb) { me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), false);}
+
             switch(me.GetString("qr_file")) {
                 case "local:0":
                     Draw12Canvas(me, 0, true, "Win1");
@@ -173,16 +206,16 @@ public class LegacyBSOD extends AppCompatActivity {
                     Draw12Canvas(me, 0, true, "default");
                     break;
             }
-            Random r = new Random();
             mp = MediaPlayer.create(LegacyBSOD.this, R.raw.beep);
             if (me.GetBool("playsound")) {
                 mp.setLooping(true);
                 mp.start();
             }
-            new CountDownTimer(Long.MAX_VALUE, interval) {
+             new CountDownTimer(Long.MAX_VALUE, interval) {
 
                 @Override
                 public void onTick(long l) {
+                    if (rb) { me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), false);}
                     Draw12Canvas(me,r.nextInt(2) * 12, false, "default");
                 }
 
@@ -225,10 +258,14 @@ public class LegacyBSOD extends AppCompatActivity {
                 DrawCanvas(0, me, 0);
                 int finalAdd = add;
                 int finalAdd2 = add2;
-                new CountDownTimer(interval * 100L, interval) {
+                long end = interval * 100L;
+                if (rb) { end = Long.MAX_VALUE; interval = 10; }
+                new CountDownTimer(end, interval) {
                     public void onTick(long millisUntilFinished) {
                         int progress;
                         progress = (int) ((interval * 100 - millisUntilFinished) / interval);
+                        if (rb) { progress = 0; }
+                        if(rb) { me.SetTheme(NextRain(true, me.GetTheme(true, false)), NextRain(false, me.GetTheme(false, false)), false);}
                         if (!me.GetString("os").equals("Windows XP")) {
                             if (!me.GetBool("extrafile") && !me.GetBool("show_file")) {
                                 DrawCanvas(progress, me, 0);
@@ -280,10 +317,15 @@ public class LegacyBSOD extends AppCompatActivity {
                 }.start();
             } else {
                 DrawCanvas(me.GetInt("timer"), me, 0);
-                new CountDownTimer(1000 * (long)me.GetInt("timer") + 1000, 1000) {
+                int ce_interval = 1000;
+                long end = ce_interval * (long)me.GetInt("timer") + ce_interval;
+                if (rb) { end = Long.MAX_VALUE; ce_interval = 10; }
+                new CountDownTimer(end, ce_interval) {
                     public void onTick(long millisUntilFinished) {
                         int progress;
                         progress = me.GetInt("timer") - (int) ((me.GetInt("timer") * 1000 + 1000 - millisUntilFinished) / 1000);
+                        if (rb) { progress = 0; }
+                        if(rb) { me.SetTheme(NextRain(true, me.GetTheme(true, false)), NextRain(false, me.GetTheme(false, false)), false);}
                         if (!me.GetBool("extrafile")) {
                             DrawCanvas(progress, me, 0);
                         } else {
@@ -355,6 +397,42 @@ public class LegacyBSOD extends AppCompatActivity {
         //binding.bsodWindow.setScaleY(((float)me.GetInt("scale")) / 100);
     }
 
+    void Eggy(String hash) {
+        switch (hash) {
+            case "2bf84fb23286854982db8ec5af73c05d":
+                Intent b = new Intent(Intent.ACTION_VIEW, Uri.parse(
+                        "h" + /* ow */ "t" /* o */ + "t" /* ake a */ + "p" /* is */ + "s" + ":/"
+                                + "/" + /* j */
+                                "he" + /* llscape */
+                                "l" + /* ies behind */
+                                "lo" + /* oving and caring */
+                                "ki" + /* kittens */
+                                "tty" + /* is a nightmare */ "." /*..*/ +
+                                "fan" /* s */ + "do" + /* n't */ "m" + /*ake you cry*/ "." +
+                                "com" /* ing to a */ + "/wiki" /* near you */ +
+                                "/Hello" + /*, world! */
+                                "_K" + /*_*/
+                                /* Make */ "it" + /* the best */ "t" + /* hing */ "y" /* ou've ever created! */));
+                startActivity(b);
+                finish();
+                break;
+            case "51f7b567b750cbe96ee6b27849cc9d25":
+                by = true;
+                break;
+            case "f55e66df8c62d983625450d5e86e7023":
+                er = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public static String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for(byte b: a)
+            sb.append(String.format("%02x", b));
+        return sb.toString();
+    }
     private void Draw12Canvas(BlueScreen me, Integer shift, boolean newImage, String type) {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 
@@ -384,7 +462,7 @@ public class LegacyBSOD extends AppCompatActivity {
             canvas.drawBitmap(BufferA, 0, -shift, null);
         }
         int i = 0;
-        if (newImage) {
+        if (newImage || rb) {
             int[] pixels;
             int bg;
             int fg;
@@ -427,7 +505,7 @@ public class LegacyBSOD extends AppCompatActivity {
             Paint tPaint = new Paint();
             tPaint.setFilterBitmap(false);
             tPaint.setColor(me.GetTheme(true, false));
-            canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
+            if (!rb) { canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint); }
             switch (type) {
                 case "Win1":
                     bmp = BitmapFactory.decodeResource(getResources(), R.drawable.win1_splash);
@@ -833,6 +911,33 @@ public class LegacyBSOD extends AppCompatActivity {
         return newBitmap;
     }
 
+    private int NextRain(boolean bg, int current) {
+        int r = Color.red(current);
+        int g = Color.green(current);
+        int b = Color.blue(current);
+        int target = tbg;
+        int tr = Color.red(tbg);
+        int tg = Color.green(tbg);
+        int tb = Color.blue(tbg);
+        if (!bg) {
+            target = tfg;
+            tr = Color.red(tfg);
+            tg = Color.green(tfg);
+            tb = Color.blue(tfg);
+        }
+        if (current == target) {
+            Random rnd = new Random();
+            if (bg) { tbg = Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)); }
+            else { tfg = Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255));  }
+        }
+        if (r < tr) { r += 1; }
+        else if (r > tr) { r -= 1; }
+        if (g < tg) { g += 1; }
+        else if (g > tg) { g -= 1; }
+        if (b < tb) { b += 1; }
+        else if (b > tb) { b -= 1; }
+        return Color.rgb(r, g, b);
+    }
     private Map<Character, Bitmap> ColorizeAlphabet(Map<Character, Bitmap> source, int bg, int fg, String alphabet) {
         //String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
         Map<Character, Bitmap> output = new LinkedHashMap<>();
