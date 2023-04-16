@@ -35,7 +35,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -483,7 +483,7 @@ public class LegacyBSOD extends AppCompatActivity {
         bmp.setPremultiplied(false);
         bmp.setHasAlpha(false);
         Canvas canvas = new Canvas(bmp);
-        Map<Character, Bitmap> alphabetPics = new Hashtable<>();
+        Map<Character, Bitmap> alphabetPics = new LinkedHashMap<>();
         w = rasters.getWidth() / alphabet.length();
         int x = 0;
         h = rasters.getHeight();
@@ -615,7 +615,7 @@ public class LegacyBSOD extends AppCompatActivity {
         bmp.setPremultiplied(false);
         bmp.setHasAlpha(false);
         Canvas canvas = new Canvas(bmp);
-        Map<Character, Bitmap> alphabetPics = new Hashtable<>();
+        Map<Character, Bitmap> alphabetPics = new LinkedHashMap<>();
         w = rasters.getWidth() / alphabet.length();
         int x = 0;
         h = rasters.getHeight();
@@ -752,7 +752,7 @@ public class LegacyBSOD extends AppCompatActivity {
 
     private Map<Character, Bitmap> ColorizeAlphabet(Map<Character, Bitmap> source, int bg, int fg, String alphabet) {
         //String alphabet = "?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~1234567890:,.+*!_-()/\\\\' ";
-        Map<Character, Bitmap> output = new Hashtable<>();
+        Map<Character, Bitmap> output = new LinkedHashMap<>();
         for (char letter: alphabet.toCharArray()) {
             Bitmap currentLetter = source.get(letter);
             currentLetter.setPremultiplied(false);

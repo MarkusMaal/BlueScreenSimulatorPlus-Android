@@ -445,6 +445,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                                 } else {
                                     os.SetString("culprit", fileSelect.getAdapter().getItem((int)fileSelect.getSelectedItemId()).toString().split(":")[0]);
                                 }
+                                if ((os.GetString("os").equals("Windows XP")) || (os.GetString("os").equals("Windows Vista")) || (os.GetString("os").equals("Windows 7"))) {
+
+                                    Map <String, String[]> files;
+                                    Type arrayType = new TypeToken<Map<String, String[]>>() {}.getType();
+                                    Gson gson = new Gson();
+                                    files = gson.fromJson(os.GetFiles(), arrayType);
+                                    os.RenameFile(files.keySet().stream().findFirst().toString(), os.GetString("culprit"));
+                                }
                                 saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                             }
                         })

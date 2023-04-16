@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -52,18 +52,18 @@ public class BlueScreen implements Serializable {
         this.highlight_bg = Color.argb(255, 255, 255, 255);
         this.highlight_fg = Color.argb(255, 0, 0, 0);
         if (autosetup) { this.os = base_os; }
-        this.titles = gson.toJson(new Hashtable<String, String>());
-        this.texts = gson.toJson(new Hashtable<String, String>());
+        this.titles = gson.toJson(new LinkedHashMap<String, String>());
+        this.texts = gson.toJson(new LinkedHashMap<String, String>());
 
-        this.codefiles = gson.toJson(new Hashtable<String, String[]>());
+        this.codefiles = gson.toJson(new LinkedHashMap<String, String[]>());
 
-        this.ints = gson.toJson(new Hashtable<String, Integer>());
+        this.ints = gson.toJson(new LinkedHashMap<String, Integer>());
 
-        this.bools = gson.toJson(new Hashtable<String, Boolean>());
+        this.bools = gson.toJson(new LinkedHashMap<String, Boolean>());
 
-        this.strings = gson.toJson(new Hashtable<String, String>());
+        this.strings = gson.toJson(new LinkedHashMap<String, String>());
 
-        this.progression = gson.toJson(new Hashtable<Integer, Integer>());
+        this.progression = gson.toJson(new LinkedHashMap<Integer, Integer>());
 
         this.font = Typeface.create("Lucida Console", Typeface.NORMAL);
         this.activity = activity;
@@ -130,13 +130,13 @@ public class BlueScreen implements Serializable {
 
     public void ClearAllTitleTexts() {
         Gson gson = new Gson();
-        this.titles = gson.toJson(new Hashtable<String, String>());
-        this.texts = gson.toJson(new Hashtable<String, String>());
+        this.titles = gson.toJson(new LinkedHashMap<String, String>());
+        this.texts = gson.toJson(new LinkedHashMap<String, String>());
     }
 
     public void ClearProgress() {
         Gson gson = new Gson();
-        this.progression = gson.toJson(new Hashtable<Integer, Integer>());
+        this.progression = gson.toJson(new LinkedHashMap<Integer, Integer>());
     }
 
     public void SetString(String name, String value) {
@@ -304,7 +304,7 @@ public class BlueScreen implements Serializable {
     public void SetAllProgression(int[] keys, int[] values)
     {
         Gson gson = new Gson();
-        Map <Integer, Integer> progression = new Hashtable<Integer, Integer>();
+        Map <Integer, Integer> progression = new LinkedHashMap<Integer, Integer>();
 
         for (int i = 0; i < keys.length; i++)
         {
@@ -399,7 +399,7 @@ public class BlueScreen implements Serializable {
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String[]>>(){}.getType();
         Map<String, String[]> codefiles = gson.fromJson(this.codefiles, type);
-        Map<String, String[]> newfiles = new Hashtable<>();
+        Map<String, String[]> newfiles = new LinkedHashMap<>();
         for (Map.Entry<String, String[]> kvp : codefiles.entrySet())
         {
             if (Objects.equals(kvp.getKey(), key))
