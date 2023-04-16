@@ -451,7 +451,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                                     Type arrayType = new TypeToken<Map<String, String[]>>() {}.getType();
                                     Gson gson = new Gson();
                                     files = gson.fromJson(os.GetFiles(), arrayType);
-                                    os.RenameFile(files.keySet().stream().findFirst().toString(), os.GetString("culprit"));
+                                    os.RenameFile(files.keySet().stream().findFirst().get().toString(), os.GetString("culprit"));
                                 }
                                 saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                             }
