@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/errorDescripyView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            android:text="@string/ecDescription" />
+
+        <EditText
+            android:id="@+id/errorDescripy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:padding="20sp"
+            android:text="IRQL_NOT_LESS_OR_EQUAL" />
+
+        <TextView
+            android:id="@+id/errorHexView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            android:text="@string/ecCode" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/hexPrefixView"
+                android:layout_width="25dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="10sp"
+                android:layout_weight="1"
+                android:freezesText="false"
+                android:gravity="center"
+                android:text="0x" />
+
+            <EditText
+                android:id="@+id/errorHex"
+                android:layout_width="342dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:maxLength="8"
+                android:maxLines="1"
+                android:padding="20sp"
+                android:digits="0123456789ABCDEF"
+                android:text="0000000A" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

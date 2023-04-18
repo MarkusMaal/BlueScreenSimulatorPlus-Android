@@ -111,4 +111,7 @@
     <string name="filePreset">Vali fail</string>
     <string name="fileCustom">Kohandatud fail</string>
     <string name="showMoreInfo">Kuva lisainfo probleemse faili kohta</string>
+    <string name="customError">Kohandatud veakood</string>
+    <string name="ecDescription">Vea kirjeldus</string>
+    <string name="ecCode">Heksakood</string>
 </resources>

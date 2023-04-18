@@ -647,4 +647,7 @@
     <string name="filePreset">Choose file</string>
     <string name="fileCustom">Custom file</string>
     <string name="showMoreInfo">Show additional info about culprit file</string>
+    <string name="customError">Custom error code</string>
+    <string name="ecDescription">Error description</string>
+    <string name="ecCode">Hex code</string>
 </resources>

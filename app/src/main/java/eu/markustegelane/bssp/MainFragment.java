@@ -299,7 +299,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.ecodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if ((!locked) && (os != null)) {
+                if ((!locked) && (os != null) && (binding.ecodeSpinner.getVisibility() == View.VISIBLE)) {
                     os.SetString("code", adapterView.getItemAtPosition(i).toString());
                     saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 }
@@ -720,6 +720,34 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
                 builder.setMessage(getString(R.string.resetAllWarning)).setPositiveButton(getString(R.string.yes), dialogClickListener)
                         .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle(getString(R.string.resetAll)).show();
+            }
+        });
+
+        binding.customErrorCodeCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if ((!locked) && (os != null)) {
+                    if (!b) {
+                        binding.ecodeSpinner.setSelection(0);
+                        binding.ecodeSpinner.setVisibility(View.VISIBLE);
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        View ecode_maker = LayoutInflater.from(getContext()).inflate(R.layout.ecode_maker, null);
+                        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                String descripy = ((EditText)ecode_maker.findViewById(R.id.errorDescripy)).getText().toString();
+                                String hex = ((EditText)ecode_maker.findViewById(R.id.errorHex)).getText().toString();
+                                os.SetString("code", String.format("%s (%s)", descripy, hex.toUpperCase()));
+                                binding.ecodeSpinner.setVisibility(View.GONE);
+                            }
+                        });
+                        builder.setCancelable(false);
+                        builder.setView(ecode_maker);
+                        AlertDialog ad = builder.create();
+                        ad.show();
+                    }
+                }
             }
         });
     }
@@ -1163,6 +1191,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE); binding.blinkCheck.setVisibility(View.GONE);
         binding.amdProcessorCheck.setVisibility(View.GONE); binding.stackTraceCheck.setVisibility(View.GONE);
         binding.setCulpritButton.setVisibility(View.GONE); binding.culpritCheck.setVisibility(View.GONE); binding.moreFileInfoCheck.setVisibility(View.GONE);
+        binding.customErrorCodeCheck.setVisibility(View.GONE); binding.customErrorCodeCheck.setChecked(false);
         if ("Windows NT 3.x/4.0".equals(os.GetString("os"))) {
             binding.blinkCheck.setVisibility(View.VISIBLE);
             binding.amdProcessorCheck.setVisibility(View.VISIBLE);
@@ -1186,6 +1215,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 elabel.setVisibility(View.VISIBLE);
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
+                binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
                 break;
             case "Windows 8/8.1":
                 ac.setVisibility(View.VISIBLE);
@@ -1196,6 +1226,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 elabel.setVisibility(View.VISIBLE);
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
+                binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
                 break;
             case "Windows 7":
             case "Windows Vista":
@@ -1212,6 +1243,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 elabel.setVisibility(View.VISIBLE);
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
+                binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
                 break;
             case "Windows 1.x/2.x":
                 binding.oneSpinner.setVisibility(View.VISIBLE);
@@ -1256,11 +1288,17 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             binding.setCulpritButton.setVisibility(View.GONE);
         }
         saveSelection(i);
+        boolean foundCode = false;
         for (int j = 0; j < eCodeSpin.getAdapter().getCount(); j++) {
             if (eCodeSpin.getItemAtPosition(j).toString().equals(ecode)) {
                 eCodeSpin.setSelection(j);
+                foundCode = true;
                 break;
             }
+        }
+        if (!foundCode) {
+            eCodeSpin.setVisibility(View.GONE);
+            binding.customErrorCodeCheck.setChecked(true);
         }
         for (int j = 0; j < binding.oneSpinner.getAdapter().getCount(); j++) {
             if (binding.oneSpinner.getItemAtPosition(j).toString().equals(os.GetString("qr_file"))) {
