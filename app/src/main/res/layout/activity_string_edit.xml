@@ -102,6 +102,13 @@
             android:layout_margin="20dp"
             android:text="@string/ok" />
 
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="New" />
+
         <!--sample view to preview selected color by user-->
         <!--by default this has been set to darker gery-->
         <!--this can be overridden after user choose the

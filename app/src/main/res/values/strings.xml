@@ -21,6 +21,13 @@
         <item>System is busy</item>
         <item>System is unresponsive</item>
     </string-array>
+    <string-array name="types">
+        <item>string</item>
+        <item>boolean</item>
+        <item>integer</item>
+        <item>titles</item>
+        <item>texts</item>
+    </string-array>
     <string-array name="OperatingSystems">
         <item>Windows 11</item>
         <item>Windows 10</item>
