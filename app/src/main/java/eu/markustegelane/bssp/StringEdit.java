@@ -50,23 +50,7 @@ public class StringEdit extends AppCompatActivity {
         bsods = (List<BlueScreen>)bundle.getSerializable("bluescreens");
         titleBar.setTitle(os.GetString("friendlyname"));
         Spinner slist = findViewById(R.id.settingList);
-
-
-        List<String> strings = new ArrayList<String>();
-        Gson gson = new Gson();
-        Type typeStringString = new TypeToken<Map<String, String>>(){}.getType();
-        Type typeStringBool = new TypeToken<Map<String, Boolean>>(){}.getType();
-        Type typeStringInteger = new TypeToken<Map<String, Integer>>(){}.getType();
-        ((Map<String, String>) gson.fromJson(os.AllStrings(), typeStringString)).forEach((key, value) -> strings.add(key + " [string]"));
-        ((Map<String, String>) gson.fromJson(os.GetTitles(), typeStringString)).forEach((key, value) -> strings.add(key + " [title]"));
-        ((Map<String, String>) gson.fromJson(os.GetTexts(), typeStringString)).forEach((key, value) -> strings.add(key + " [text]"));
-        ((Map<String, Boolean>) gson.fromJson(os.AllBools(), typeStringBool)).forEach((key, value) -> strings.add(key + " [boolean]"));
-        ((Map<String, Integer>) gson.fromJson(os.AllInts(), typeStringInteger)).forEach((key, value) -> strings.add(key + " [integer]"));
-
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<String> catAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings);
-        slist.setAdapter(catAdapter);
-
+        RefreshSpinner(os);
         findViewById(R.id.okButton).setOnClickListener(v -> {
             Intent firstFrg = new Intent(v.getContext(), MainActivity.class);
             Bundle b = new Bundle();
@@ -106,22 +90,7 @@ public class StringEdit extends AppCompatActivity {
                 }
                 saveSettings(bsods, os, os_id);
                 bsods.set(os_id, os);
-
-
-                List<String> strings = new ArrayList<String>();
-                Gson gson = new Gson();
-                Type typeStringString = new TypeToken<Map<String, String>>(){}.getType();
-                Type typeStringBool = new TypeToken<Map<String, Boolean>>(){}.getType();
-                Type typeStringInteger = new TypeToken<Map<String, Integer>>(){}.getType();
-                ((Map<String, String>) gson.fromJson(os.AllStrings(), typeStringString)).forEach((k, value) -> strings.add(k + " [string]"));
-                ((Map<String, String>) gson.fromJson(os.GetTitles(), typeStringString)).forEach((k, value) -> strings.add(k + " [title]"));
-                ((Map<String, String>) gson.fromJson(os.GetTexts(), typeStringString)).forEach((k, value) -> strings.add(k + " [text]"));
-                ((Map<String, Boolean>) gson.fromJson(os.AllBools(), typeStringBool)).forEach((k, value) -> strings.add(k + " [boolean]"));
-                ((Map<String, Integer>) gson.fromJson(os.AllInts(), typeStringInteger)).forEach((k, value) -> strings.add(k + " [integer]"));
-
-                // Create an ArrayAdapter using the string array and a default spinner layout
-                ArrayAdapter<String> catAdapter = new ArrayAdapter<>(getWindow().getContext(), android.R.layout.simple_list_item_1, strings);
-                slist.setAdapter(catAdapter);
+                RefreshSpinner(os);
             }
         });
 
@@ -187,21 +156,7 @@ public class StringEdit extends AppCompatActivity {
                         saveSettings(bsods, os, os_id);
                         bsods.set(os_id, os);
 
-
-                        List<String> strings = new ArrayList<String>();
-                        Gson gson = new Gson();
-                        Type typeStringString = new TypeToken<Map<String, String>>(){}.getType();
-                        Type typeStringBool = new TypeToken<Map<String, Boolean>>(){}.getType();
-                        Type typeStringInteger = new TypeToken<Map<String, Integer>>(){}.getType();
-                        ((Map<String, String>) gson.fromJson(os.AllStrings(), typeStringString)).forEach((k, value) -> strings.add(k + " [string]"));
-                        ((Map<String, String>) gson.fromJson(os.GetTitles(), typeStringString)).forEach((k, value) -> strings.add(k + " [title]"));
-                        ((Map<String, String>) gson.fromJson(os.GetTexts(), typeStringString)).forEach((k, value) -> strings.add(k + " [text]"));
-                        ((Map<String, Boolean>) gson.fromJson(os.AllBools(), typeStringBool)).forEach((k, value) -> strings.add(k + " [boolean]"));
-                        ((Map<String, Integer>) gson.fromJson(os.AllInts(), typeStringInteger)).forEach((k, value) -> strings.add(k + " [integer]"));
-
-                        // Create an ArrayAdapter using the string array and a default spinner layout
-                        ArrayAdapter<String> catAdapter = new ArrayAdapter<>(getWindow().getContext(), android.R.layout.simple_list_item_1, strings);
-                        slist.setAdapter(catAdapter);
+                        RefreshSpinner(os);
                     }
                 });
                 builder.setCancelable(false);
@@ -358,6 +313,24 @@ public class StringEdit extends AppCompatActivity {
         });
     }
 
+    @SuppressWarnings("unchecked")
+    private void RefreshSpinner(BlueScreen os) {
+        Spinner slist = findViewById(R.id.settingList);
+        List<String> strings = new ArrayList<String>();
+        Gson gson = new Gson();
+        Type typeStringString = new TypeToken<Map<String, String>>(){}.getType();
+        Type typeStringBool = new TypeToken<Map<String, Boolean>>(){}.getType();
+        Type typeStringInteger = new TypeToken<Map<String, Integer>>(){}.getType();
+        ((Map<String, String>) gson.fromJson(os.AllStrings(), typeStringString)).forEach((k, value) -> strings.add(k + " [string]"));
+        ((Map<String, String>) gson.fromJson(os.GetTitles(), typeStringString)).forEach((k, value) -> strings.add(k + " [title]"));
+        ((Map<String, String>) gson.fromJson(os.GetTexts(), typeStringString)).forEach((k, value) -> strings.add(k + " [text]"));
+        ((Map<String, Boolean>) gson.fromJson(os.AllBools(), typeStringBool)).forEach((k, value) -> strings.add(k + " [boolean]"));
+        ((Map<String, Integer>) gson.fromJson(os.AllInts(), typeStringInteger)).forEach((k, value) -> strings.add(k + " [integer]"));
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> catAdapter = new ArrayAdapter<>(getWindow().getContext(), android.R.layout.simple_list_item_1, strings);
+        slist.setAdapter(catAdapter);
+    }
 
     public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
         blues.set((int)id, modified);
