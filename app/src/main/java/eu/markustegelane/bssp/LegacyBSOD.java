@@ -191,6 +191,12 @@ public class LegacyBSOD extends AppCompatActivity {
                 fileCodes[i] = me.GenHex(8, fileCodes[i]);
             }
         }
+
+        if ((me.GetBool("playsound") && me.GetString("os").equals("Windows 1.x/2.x")) || me.GetString("culprit").equals("Beep.SYS")) {
+            mp = MediaPlayer.create(LegacyBSOD.this, R.raw.beep);
+            mp.setLooping(true);
+            mp.start();
+        }
         if (me.GetString("os").equals("Windows 1.x/2.x")) {
             Random r = new Random();
             if (rb) { me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), false);}
@@ -205,11 +211,6 @@ public class LegacyBSOD extends AppCompatActivity {
                 case "local:null":
                     Draw12Canvas(me, 0, true, "default");
                     break;
-            }
-            mp = MediaPlayer.create(LegacyBSOD.this, R.raw.beep);
-            if (me.GetBool("playsound")) {
-                mp.setLooping(true);
-                mp.start();
             }
              new CountDownTimer(Long.MAX_VALUE, interval) {
 
