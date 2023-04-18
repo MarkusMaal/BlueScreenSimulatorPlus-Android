@@ -309,10 +309,12 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 devProgress = 999;
             }
-            if (devProgress < 5) {
+            if ((devProgress < 8) && (devProgress > 1)) {
                 devToast.cancel();
                 devToast = Toast.makeText(getContext(), String.format(getString(R.string.devThingie), String.valueOf(8 - devProgress)), Toast.LENGTH_SHORT);
                 devToast.show();
+            } else if (devProgress < 2) {
+                return;
             } else if (devProgress == 8) {
                 devToast.cancel();
                 devToast = Toast.makeText(getContext(), getString(R.string.devUnlocked), Toast.LENGTH_SHORT);
