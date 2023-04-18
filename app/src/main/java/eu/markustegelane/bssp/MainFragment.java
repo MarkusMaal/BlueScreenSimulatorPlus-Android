@@ -738,7 +738,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String descripy = ((EditText)ecode_maker.findViewById(R.id.errorDescripy)).getText().toString();
                                 String hex = ((EditText)ecode_maker.findViewById(R.id.errorHex)).getText().toString();
-                                os.SetString("code", String.format("%s (%s)", descripy, hex.toUpperCase()));
+                                os.SetString("code", String.format("%s (0x%s)", descripy, hex.toUpperCase()));
                                 binding.ecodeSpinner.setVisibility(View.GONE);
                             }
                         });
