@@ -102,6 +102,46 @@ public class BlueScreen implements Serializable {
         this.bools = gson.toJson(bools);
     }
 
+    public void DelBool(String name) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Boolean>>(){}.getType();
+        Map<String, Boolean> bools = gson.fromJson(this.bools, type);
+        bools.remove(name);
+        this.bools = gson.toJson(bools);
+    }
+
+    public void DelString(String name) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> strings = gson.fromJson(this.strings, type);
+        strings.remove(name);
+        this.strings = gson.toJson(strings);
+    }
+
+    public void DelInt(String name) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Integer>>(){}.getType();
+        Map<String, Integer> ints = gson.fromJson(this.ints, type);
+        ints.remove(name);
+        this.ints = gson.toJson(ints);
+    }
+
+    public void DelTitle(String name) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> strings = gson.fromJson(this.titles, type);
+        strings.remove(name);
+        this.titles = gson.toJson(strings);
+    }
+
+    public void DelText(String name) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Map<String, String> strings = gson.fromJson(this.texts, type);
+        strings.remove(name);
+        this.texts = gson.toJson(strings);
+    }
+
 
     public String GetString (String name) {
         Gson gson = new Gson();

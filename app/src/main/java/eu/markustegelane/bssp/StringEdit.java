@@ -78,6 +78,53 @@ public class StringEdit extends AppCompatActivity {
             finish();
         });
 
+        findViewById(R.id.removeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String selectedItem = ((Spinner)findViewById(R.id.settingList)).getSelectedItem().toString();
+                String[] fullnamearr = selectedItem.split(" ");
+                List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
+                String key = "";
+                key = String.join(" ", ls.subList(0, ls.size() - 1));
+                String type = ls.get(ls.size() - 1);
+                switch (type) {
+                    case "[boolean]":
+                        os.DelBool(key);
+                        break;
+                    case "[integer]":
+                        os.DelInt(key);
+                        break;
+                    case "[string]":
+                        os.DelString(key);
+                        break;
+                    case "[text]":
+                        os.DelText(key);
+                        break;
+                    case "[title]":
+                        os.DelTitle(key);
+                        break;
+                }
+                saveSettings(bsods, os, os_id);
+                bsods.set(os_id, os);
+
+
+                List<String> strings = new ArrayList<String>();
+                Gson gson = new Gson();
+                Type typeStringString = new TypeToken<Map<String, String>>(){}.getType();
+                Type typeStringBool = new TypeToken<Map<String, Boolean>>(){}.getType();
+                Type typeStringInteger = new TypeToken<Map<String, Integer>>(){}.getType();
+                ((Map<String, String>) gson.fromJson(os.AllStrings(), typeStringString)).forEach((k, value) -> strings.add(k + " [string]"));
+                ((Map<String, String>) gson.fromJson(os.GetTitles(), typeStringString)).forEach((k, value) -> strings.add(k + " [title]"));
+                ((Map<String, String>) gson.fromJson(os.GetTexts(), typeStringString)).forEach((k, value) -> strings.add(k + " [text]"));
+                ((Map<String, Boolean>) gson.fromJson(os.AllBools(), typeStringBool)).forEach((k, value) -> strings.add(k + " [boolean]"));
+                ((Map<String, Integer>) gson.fromJson(os.AllInts(), typeStringInteger)).forEach((k, value) -> strings.add(k + " [integer]"));
+
+                // Create an ArrayAdapter using the string array and a default spinner layout
+                ArrayAdapter<String> catAdapter = new ArrayAdapter<>(getWindow().getContext(), android.R.layout.simple_list_item_1, strings);
+                slist.setAdapter(catAdapter);
+            }
+        });
+
         findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

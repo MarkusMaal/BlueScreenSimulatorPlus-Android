@@ -109,6 +109,13 @@
             android:layout_margin="20dp"
             android:text="New" />
 
+        <Button
+            android:id="@+id/removeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            android:text="Remove" />
+
         <!--sample view to preview selected color by user-->
         <!--by default this has been set to darker gery-->
         <!--this can be overridden after user choose the
