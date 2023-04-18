@@ -58,7 +58,7 @@
                 android:maxLength="8"
                 android:maxLines="1"
                 android:padding="20sp"
-                android:digits="0123456789ABCDEF"
+                android:digits="0123456789ABCDEFabcdef"
                 android:text="0000000A" />
         </LinearLayout>
 
