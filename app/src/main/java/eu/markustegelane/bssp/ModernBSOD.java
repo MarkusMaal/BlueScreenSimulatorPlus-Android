@@ -227,15 +227,18 @@ public class ModernBSOD extends AppCompatActivity {
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout);
         ll.setScaleX(scale);
         ll.setScaleY(scale);
+        ll.setMinimumWidth((int)((float)ll.getWidth() * scale));
         if (server) {
+            binding.errorDescription.setPadding(0, me.GetInt("margin-y"), 0, 0);
             ll.setVerticalGravity(Gravity.TOP);
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
             params.gravity = Gravity.TOP;
             ll.setLayoutParams(params);
+        } else {
+            binding.sadSmile.setPadding(0, me.GetInt("margin-y"), 0, 0);
         }
         //ll.setTop(me.GetInt("margin-y"));
         ll.setPadding(me.GetInt("margin-x"), me.GetInt("margin-y"), 0, 0);
-        binding.sadSmile.setPadding(0, me.GetInt("margin-y"), 0, 0);
         if (me.GetString("os").equals("Windows 8/8.1")) {
             binding.errorProgress.setVisibility(View.GONE);
             binding.qrCode.setVisibility(View.GONE);
