@@ -223,6 +223,7 @@ public class ModernBSOD extends AppCompatActivity {
             descripy.setText(descripy.getText().toString().replace("PC", "device"));
         }
         scale = (float)me.GetInt("scale") / 100;
+
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout);
         ll.setScaleX(scale);
         ll.setScaleY(scale);
@@ -234,6 +235,7 @@ public class ModernBSOD extends AppCompatActivity {
         }
         //ll.setTop(me.GetInt("margin-y"));
         ll.setPadding(me.GetInt("margin-x"), me.GetInt("margin-y"), 0, 0);
+        binding.sadSmile.setPadding(0, me.GetInt("margin-y"), 0, 0);
         if (me.GetString("os").equals("Windows 8/8.1")) {
             binding.errorProgress.setVisibility(View.GONE);
             binding.qrCode.setVisibility(View.GONE);
