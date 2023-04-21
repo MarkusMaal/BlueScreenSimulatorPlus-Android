@@ -239,6 +239,10 @@ public class ModernBSOD extends AppCompatActivity {
             binding.qrCode.setVisibility(View.GONE);
             binding.moreInfo.setVisibility(View.GONE);
             binding.linLay1.setPadding(0, -20, 0, 0);
+        } else {
+            binding.qrCode.setMinimumWidth(me.GetInt("qr_size"));
+            binding.qrCode.setMinimumHeight(me.GetInt("qr_size"));
+            binding.linLay1.setMinimumHeight(me.GetInt("qr_size"));
         }
 
         if (me.GetBool("extracodes")) {

@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15sp"
                 android:layout_weight="1"
-                android:minWidth="250sp"
+                android:scaleType="fitStart"
                 app:srcCompat="@mipmap/bsod_qr_foreground"
                 tools:srcCompat="@mipmap/bsod_qr_foreground" />
 
