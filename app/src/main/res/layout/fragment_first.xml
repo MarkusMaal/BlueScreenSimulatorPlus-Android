@@ -290,6 +290,15 @@
                         android:layout_weight="1"
                         android:visibility="gone"
                         android:text="@string/setCulpritFile" />
+
+                    <Button
+                        android:id="@+id/progressEditor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        android:text="@string/title_activity_error_code_editor" />
                 </com.google.android.flexbox.FlexboxLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

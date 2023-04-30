@@ -115,4 +115,5 @@
     <string name="ecDescription">Vea kirjeldus</string>
     <string name="ecCode">Heksakood</string>
     <string name="deviceNotPC">Asenda \"PC\" \"device-iga\"</string>
+    <string name="title_activity_error_code_editor">Progressiredaktor</string>
 </resources>

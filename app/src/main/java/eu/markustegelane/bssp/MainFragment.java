@@ -499,18 +499,29 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         }));
-        binding.codeEditButton.setOnClickListener(new View.OnClickListener() {
+        binding.codeEditButton.setOnClickListener(view12 -> {
+            Intent i = new Intent(getContext(), CodeEdit.class);
+            Bundle b = new Bundle();
+            BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
+            b.putSerializable("bluescreen", me);
+            b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
+            b.putSerializable("bluescreens", (Serializable) bluescreens);
+            i.putExtras(b);
+            startActivity(i);
+            getActivity().finish();
+        });
+
+        binding.progressEditor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getContext(), CodeEdit.class);
+                Intent i = new Intent(getContext(), ErrorCodeEditor.class);
                 Bundle b = new Bundle();
                 BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
                 b.putSerializable("bluescreen", me);
-                b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
+                b.putInt("bluescreen_id", (int)binding.winSpinner.getSelectedItemId());
                 b.putSerializable("bluescreens", (Serializable) bluescreens);
                 i.putExtras(b);
                 startActivity(i);
-                getActivity().finish();
             }
         });
 
@@ -1199,6 +1210,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE); binding.blinkCheck.setVisibility(View.GONE);
         binding.amdProcessorCheck.setVisibility(View.GONE); binding.stackTraceCheck.setVisibility(View.GONE);
         binding.setCulpritButton.setVisibility(View.GONE); binding.culpritCheck.setVisibility(View.GONE); binding.moreFileInfoCheck.setVisibility(View.GONE);
+        binding.progressEditor.setVisibility(View.GONE);
         deviceCheck.setVisibility(View.GONE);
         binding.customErrorCodeCheck.setVisibility(View.GONE); binding.customErrorCodeCheck.setChecked(false);
         if ("Windows NT 3.x/4.0".equals(os.GetString("os"))) {
@@ -1228,6 +1240,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
                 binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
+                binding.progressEditor.setVisibility(View.VISIBLE);
                 break;
             case "Windows 8/8.1":
                 ac.setVisibility(View.VISIBLE);
@@ -1239,6 +1252,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
                 binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
+                binding.progressEditor.setVisibility(View.VISIBLE);
                 break;
             case "Windows 7":
             case "Windows Vista":
