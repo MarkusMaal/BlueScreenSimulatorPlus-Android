@@ -511,48 +511,40 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             getActivity().finish();
         });
 
-        binding.progressEditor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getContext(), ErrorCodeEditor.class);
-                Bundle b = new Bundle();
-                BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
-                b.putSerializable("bluescreen", me);
-                b.putInt("bluescreen_id", (int)binding.winSpinner.getSelectedItemId());
-                b.putSerializable("bluescreens", (Serializable) bluescreens);
-                i.putExtras(b);
-                startActivity(i);
-            }
+        binding.progressEditor.setOnClickListener(view13 -> {
+            Intent i = new Intent(getContext(), ErrorCodeEditor.class);
+            Bundle b = new Bundle();
+            BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
+            b.putSerializable("bluescreen", me);
+            b.putInt("bluescreen_id", (int)binding.winSpinner.getSelectedItemId());
+            b.putSerializable("bluescreens", (Serializable) bluescreens);
+            i.putExtras(b);
+            startActivity(i);
+            getActivity().finish();
         });
 
-        binding.ntCodeEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent nt = new Intent(getContext(), NTCodeEdit.class);
-                Bundle b =  new Bundle();
-                BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
-                b.putSerializable("bluescreen", me);
-                b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
-                b.putSerializable("bluescreens", (Serializable) bluescreens);
-                nt.putExtras(b);
-                startActivity(nt);
-                getActivity().finish();
-            }
+        binding.ntCodeEditButton.setOnClickListener(view14 -> {
+            Intent nt = new Intent(getContext(), NTCodeEdit.class);
+            Bundle b =  new Bundle();
+            BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
+            b.putSerializable("bluescreen", me);
+            b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
+            b.putSerializable("bluescreens", (Serializable) bluescreens);
+            nt.putExtras(b);
+            startActivity(nt);
+            getActivity().finish();
         });
 
-        binding.advancedOptionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent s = new Intent(getContext(), SettingsActivity.class);
-                Bundle b = new Bundle();
-                BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
-                b.putSerializable("bluescreen", me);
-                b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
-                b.putSerializable("bluescreens", (Serializable) bluescreens);
-                s.putExtras(b);
-                startActivity(s);
-                getActivity().finish();
-            }
+        binding.advancedOptionButton.setOnClickListener(view15 -> {
+            Intent s = new Intent(getContext(), SettingsActivity.class);
+            Bundle b = new Bundle();
+            BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
+            b.putSerializable("bluescreen", me);
+            b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
+            b.putSerializable("bluescreens", (Serializable) bluescreens);
+            s.putExtras(b);
+            startActivity(s);
+            getActivity().finish();
         });
 
         binding.textForeground.setOnClickListener(new View.OnClickListener() {

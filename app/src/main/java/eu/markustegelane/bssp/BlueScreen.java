@@ -507,6 +507,7 @@ public class BlueScreen implements Serializable {
 
     public void SetDefaultProgression()
     {
+        Random r = new Random();
         int totalmillis = 100;
         int percent = 0;
         while (percent < 100)

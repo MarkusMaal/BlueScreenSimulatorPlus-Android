@@ -659,4 +659,14 @@
     <string name="ecCode">Hex code</string>
     <string name="deviceNotPC">Replace \"PC\" with \"device\"</string>
     <string name="title_activity_error_code_editor">Error progress editor</string>
+    <string name="kfPlus">KF+</string>
+    <string name="kfMinus">KF-</string>
+    <string name="delKf">DKF</string>
+    <string name="addKf">AKF</string>
+    <string name="rndShort">Rand</string>
+    <string name="save">Save</string>
+    <string name="auto" translatable="false">Gen</string>
+    <string name="clear">Clear</string>
+    <string name="length">Length (ms)</string>
+    <string name="preview">Preview: %s</string>
 </resources>

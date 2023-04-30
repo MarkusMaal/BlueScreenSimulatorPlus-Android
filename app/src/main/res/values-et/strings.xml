@@ -116,4 +116,13 @@
     <string name="ecCode">Heksakood</string>
     <string name="deviceNotPC">Asenda \"PC\" \"device-iga\"</string>
     <string name="title_activity_error_code_editor">Progressiredaktor</string>
+    <string name="kfPlus">VK+</string>
+    <string name="kfMinus">VK-</string>
+    <string name="delKf">EVK</string>
+    <string name="addKf">LVK</string>
+    <string name="rndShort">Juhus</string>
+    <string name="save">Salvesta</string>
+    <string name="clear">Tühjenda</string>
+    <string name="length">Pikkus (ms)</string>
+    <string name="preview">Eelvaade: %s</string>
 </resources>
