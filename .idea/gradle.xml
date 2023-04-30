@@ -9,8 +9,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="/internal_storage/FE107DD3107D937F/ASProjektid/BlueScreenSimulatorPlus" />
+            <option value="/internal_storage/FE107DD3107D937F/ASProjektid/BlueScreenSimulatorPlus/app" />
           </set>
         </option>
       </GradleProjectSettings>

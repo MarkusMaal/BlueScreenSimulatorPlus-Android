@@ -26,6 +26,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import eu.markustegelane.bssp.databinding.ActivityModernBinding;
@@ -65,7 +67,7 @@ public class ModernBSOD extends AppCompatActivity {
     public static Boolean server = false;
     public static Boolean show_file = false;
 
-    public static int interval = 500;
+    public static int interval = 10;
     public static float scale = 0.75f;
     public static String errorCode = "IRQL_NOT_LESS_OR_EQUAL (0x0000000a)";
     private View mContentView;
@@ -142,6 +144,7 @@ public class ModernBSOD extends AppCompatActivity {
         BlueScreen me = (BlueScreen)bundle.getSerializable("bluescreen");
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Type proType = new TypeToken<Map<Integer, Integer>>(){}.getType();
         Map<String, String> texts = gson.fromJson(me.GetTexts(), type);
         eu.markustegelane.bssp.databinding.ActivityModernBinding binding = ActivityModernBinding.inflate(getLayoutInflater());
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -220,14 +223,19 @@ public class ModernBSOD extends AppCompatActivity {
             descripy.setText(descripy.getText().toString().replace("PC", "device"));
         }
         scale = (float)me.GetInt("scale") / 100;
+
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout);
         ll.setScaleX(scale);
         ll.setScaleY(scale);
+        ll.setMinimumWidth((int)((float)ll.getWidth() * scale));
         if (server) {
+            binding.errorDescription.setPadding(0, me.GetInt("margin-y"), 0, 0);
             ll.setVerticalGravity(Gravity.TOP);
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
             params.gravity = Gravity.TOP;
             ll.setLayoutParams(params);
+        } else {
+            binding.sadSmile.setPadding(0, me.GetInt("margin-y"), 0, 0);
         }
         //ll.setTop(me.GetInt("margin-y"));
         ll.setPadding(me.GetInt("margin-x"), me.GetInt("margin-y"), 0, 0);
@@ -236,6 +244,10 @@ public class ModernBSOD extends AppCompatActivity {
             binding.qrCode.setVisibility(View.GONE);
             binding.moreInfo.setVisibility(View.GONE);
             binding.linLay1.setPadding(0, -20, 0, 0);
+        } else {
+            binding.qrCode.setMinimumWidth(me.GetInt("qr_size"));
+            binding.qrCode.setMinimumHeight(me.GetInt("qr_size"));
+            binding.linLay1.setMinimumHeight(me.GetInt("qr_size"));
         }
 
         if (me.GetBool("extracodes")) {
@@ -246,19 +258,33 @@ public class ModernBSOD extends AppCompatActivity {
             codes += me.GenAddress(4, 16, false).replace(", ", "\n");
             binding.parameters.setText(codes);
         }
-
-        new CountDownTimer(interval * 100L, interval) {
+        int length = me.GetInt("progressmillis");
+        if (length < 1) {
+            length = 100;
+        }
+        int finalLength = length;
+        new CountDownTimer((long) finalLength * interval, interval) {
+            final Map<Integer, Integer> prog = gson.fromJson(me.AllProgress(), proType);
+            String proText = "0";
+            List<Integer> ignorable = new ArrayList<>();
             public void onTick(long millisUntilFinished) {
-                Long progress;
-                progress = (Long)((interval * 100L - millisUntilFinished) / interval);
+                Integer cs = (int)((finalLength * interval - millisUntilFinished) / interval);
+                String newText = proText;
+                for (Integer i: prog.keySet()) {
+                    if ((cs > i) && (!ignorable.contains(i))) {
+                        newText = String.valueOf(prog.get(i) + Integer.parseInt(proText));
+                        proText = newText;
+                        ignorable.add(i);
+                    }
+                }
                 TextView progressText = (TextView)findViewById(R.id.errorProgress);
                 try {
                     if (me.GetString("os").equals("Windows 8/8.1")) {
                         if (autoClose) {
-                            descripy.setText(String.format(texts.get("Information text with dump"), progress.toString()));
+                            descripy.setText(String.format(texts.get("Information text with dump"), newText.toString()));
                         }
                     } else {
-                        progressText.setText(String.format(texts.get("Progress"), progress.toString()));
+                        progressText.setText(String.format(texts.get("Progress"), newText.toString()));
                     }
                 } catch (Exception e) {
                     throw e;
