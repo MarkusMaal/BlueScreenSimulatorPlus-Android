@@ -114,4 +114,5 @@
     <string name="customError">Kohandatud veakood</string>
     <string name="ecDescription">Vea kirjeldus</string>
     <string name="ecCode">Heksakood</string>
+    <string name="deviceNotPC">Asenda \"PC\" \"device-iga\"</string>
 </resources>

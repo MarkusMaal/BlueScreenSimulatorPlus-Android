@@ -657,4 +657,5 @@
     <string name="customError">Custom error code</string>
     <string name="ecDescription">Error description</string>
     <string name="ecCode">Hex code</string>
+    <string name="deviceNotPC">Replace \"PC\" with \"device\"</string>
 </resources>

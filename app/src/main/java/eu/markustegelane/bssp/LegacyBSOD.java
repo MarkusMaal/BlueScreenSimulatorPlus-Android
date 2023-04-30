@@ -649,7 +649,7 @@ public class LegacyBSOD extends AppCompatActivity {
                         .append(" - ")
                         .append(me.GetString("culprit").toLowerCase());
             }
-        } else {
+        } else if (!me.GetString("os").equals("Windows NT 3.x/4.0")){
             myText.append("\n\n");
             String[] fileAddresses = culpritfiles.get(culpritfiles.keySet().stream().findFirst().get());
             String outText = String.format(txts.get("File information"), me.GenHex(8, fileAddresses[0]), me.GenHex(8, fileAddresses[0]), me.GenHex(8, fileAddresses[0]).toLowerCase(), me.GetString("culprit"));

@@ -159,6 +159,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
+        binding.deviceCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("device", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            }
+        });
+
         binding.executeButton.setOnClickListener(view1 -> {
             switch (bluescreens.get((int)winspin.getSelectedItemId()).GetString("os")) {
                 case "Windows 8/8.1":
@@ -1183,6 +1190,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Switch server = binding.serverScreen;
         Switch waterMark = binding.showWatermark;
         Switch fileInfo = binding.moreFileInfoCheck;
+        Switch deviceCheck = binding.deviceCheck;
         TextView elabel = binding.eCodeLabel;
 
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
@@ -1191,6 +1199,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE); binding.blinkCheck.setVisibility(View.GONE);
         binding.amdProcessorCheck.setVisibility(View.GONE); binding.stackTraceCheck.setVisibility(View.GONE);
         binding.setCulpritButton.setVisibility(View.GONE); binding.culpritCheck.setVisibility(View.GONE); binding.moreFileInfoCheck.setVisibility(View.GONE);
+        deviceCheck.setVisibility(View.GONE);
         binding.customErrorCodeCheck.setVisibility(View.GONE); binding.customErrorCodeCheck.setChecked(false);
         if ("Windows NT 3.x/4.0".equals(os.GetString("os"))) {
             binding.blinkCheck.setVisibility(View.VISIBLE);
@@ -1201,6 +1210,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         if ("Windows XP".equals(s) || "Windows Vista".equals(s) || "Windows 7".equals(s)) {
             binding.moreFileInfoCheck.setVisibility(View.VISIBLE);
             ac.setVisibility(View.VISIBLE);
+        }
+        if (os.GetString("os").equals("Windows 10")) {
+            deviceCheck.setVisibility(View.VISIBLE);
         }
         switch (os.GetString("os")) {
             case "Windows 11":
@@ -1284,6 +1296,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.stackTraceCheck.setChecked(os.GetBool("stack_trace"));
         binding.culpritCheck.setChecked(os.GetBool("show_file"));
         binding.moreFileInfoCheck.setChecked(os.GetBool("extrafile"));
+        deviceCheck.setChecked(os.GetBool("device"));
         if (!binding.culpritCheck.isChecked()) {
             binding.setCulpritButton.setVisibility(View.GONE);
         }

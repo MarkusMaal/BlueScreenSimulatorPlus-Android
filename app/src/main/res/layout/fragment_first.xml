@@ -101,6 +101,17 @@
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
                 <Switch
+                    android:id="@+id/deviceCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:gravity="center"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/deviceNotPC"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+                <Switch
                     android:id="@+id/autoCloseCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
