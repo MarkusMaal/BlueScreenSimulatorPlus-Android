@@ -125,4 +125,5 @@
     <string name="clear">Tühjenda</string>
     <string name="length">Pikkus (ms)</string>
     <string name="preview">Eelvaade: %s</string>
+    <string name="feelingunlucky">Ehk mul ei vea</string>
 </resources>

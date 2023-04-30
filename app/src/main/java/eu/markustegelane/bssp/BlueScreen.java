@@ -89,6 +89,33 @@ public class BlueScreen implements Serializable {
         }
     }
 
+    public void Shuffle() {
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Boolean>>(){}.getType();
+        Map<String, Boolean> bools = gson.fromJson(this.bools, type);
+        for (String key: bools.keySet()) {
+            bools.replace(key, r.nextInt(10) > 4);
+        }
+        String[] screen_modes = this.activity.getResources().getStringArray(R.array.NineXErrors);
+        String[] error_codes = this.activity.getResources().getStringArray(R.array.ErrorCodes);
+        String[] win1_modes = {"local:0", "local:1", "local:null"};
+        this.SetString("qr_file", "local:1");
+        this.SetString("code", error_codes[r.nextInt(error_codes.length)]);
+        switch (this.GetString("os")) {
+            case "Windows 10":
+            case "Windows 11":
+                this.SetInt("qr_size", 100);
+                break;
+            case "Windows 9x/Me":
+                this.SetString("screen_mode", screen_modes[r.nextInt(screen_modes.length)]);
+                break;
+            case "Windows 1.x/2.x":
+                this.SetString("qr_file", win1_modes[r.nextInt(win1_modes.length)]);
+                break;
+        }
+        this.bools = gson.toJson(bools);
+    }
+
 
     public void SetBool(String name, boolean value) {
         Gson gson = new Gson();
@@ -526,6 +553,7 @@ public class BlueScreen implements Serializable {
         }
         SetInt("progressmillis", totalmillis);
     }
+
     // default hacks for specific OS
     public void SetOSSpecificDefaults()
     {

@@ -31,13 +31,13 @@
     <string-array name="OperatingSystems">
         <item>Windows 11</item>
         <item>Windows 10</item>
-        <item>Windows 8.x</item>
+        <item>Windows 8/8.1</item>
         <item>Windows 7</item>
         <item>Windows Vista</item>
         <item>Windows XP</item>
         <item>Windows CE</item>
         <item>Windows 2000</item>
-        <item>Windows NT 3.x/4.x</item>
+        <item>Windows NT 3.x/4.0</item>
         <item>Windows 9x/Me</item>
         <item>Windows 3.1x</item>
         <item>Windows 1.x/2.x</item>
@@ -669,4 +669,5 @@
     <string name="clear">Clear</string>
     <string name="length">Length (ms)</string>
     <string name="preview">Preview: %s</string>
+    <string name="feelingunlucky">I\'m feeling unlucky</string>
 </resources>

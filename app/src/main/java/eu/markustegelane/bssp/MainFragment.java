@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import eu.markustegelane.bssp.databinding.FragmentFirstBinding;
 public class MainFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -63,6 +64,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
     boolean hasFileAccess = true;
 
     boolean developer = false;
+
+    Random r = new Random();
 
     BlueScreen os;
 
@@ -163,6 +166,44 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             if ((!locked) && (os != null)) {
                 os.SetBool("device", b);
                 saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            }
+        });
+
+        binding.unluckyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] oses = getResources().getStringArray(R.array.OperatingSystems);
+                BlueScreen unlucky = new BlueScreen(oses[r.nextInt(oses.length)], true, getActivity());
+                unlucky.Shuffle();
+                switch (unlucky.GetString("os")) {
+                    case "Windows 8/8.1":
+                    case "Windows 10":
+                    case "Windows 11":
+                        Intent i = new Intent(view.getContext(), ModernBSOD.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable("bluescreen", unlucky);
+                        i.putExtras(b);
+                        startActivity(i);
+                        break;
+                    case "Windows 1.x/2.x":
+                    case "Windows 3.1x":
+                    case "Windows 9x/Me":
+                    case "Windows NT 3.x/4.0":
+                    case "Windows 2000":
+                    case "Windows CE":
+                    case "Windows XP":
+                    case "Windows Vista":
+                    case "Windows 7":
+                        i = new Intent(view.getContext(), LegacyBSOD.class);
+                        b = new Bundle();
+                        b.putSerializable("bluescreen", unlucky);
+                        i.putExtras(b);
+                        startActivity(i);
+                        break;
+                    default:
+                        Toast.makeText(getContext(), unlucky.GetString("os"), Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
         });
 

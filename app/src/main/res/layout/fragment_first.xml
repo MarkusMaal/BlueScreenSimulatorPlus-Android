@@ -258,6 +258,16 @@
                         android:layout_weight="0"
                         android:text="@string/execute" />
 
+
+                    <Button
+                        android:id="@+id/unluckyButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="0"
+                        android:text="@string/feelingunlucky" />
+
                     <Button
                         android:id="@+id/ntCodeEditButton"
                         android:layout_width="wrap_content"
