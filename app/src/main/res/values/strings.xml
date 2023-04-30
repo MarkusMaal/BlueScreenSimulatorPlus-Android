@@ -670,4 +670,7 @@
     <string name="length">Length (ms)</string>
     <string name="preview">Preview: %s</string>
     <string name="feelingunlucky">I\'m feeling unlucky</string>
+    <string name="title_activity_bootmgr">BOOTMGR</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

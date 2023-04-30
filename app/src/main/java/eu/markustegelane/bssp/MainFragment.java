@@ -235,6 +235,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     i.putExtras(b);
                     startActivity(i);
                     break;
+                case "BOOTMGR":
+                    i = new Intent(view1.getContext(), BOOTMGR.class);
+                    b = new Bundle();
+                    me = bluescreens.get((int)winspin.getSelectedItemId());
+                    b.putSerializable("bluescreen", me);
+                    i.putExtras(b);
+                    startActivity(i);
+                    break;
                 default:
                     NotImplemented();
                     break;
