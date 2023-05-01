@@ -670,7 +670,9 @@
     <string name="length">Length (ms)</string>
     <string name="preview">Preview: %s</string>
     <string name="feelingunlucky">I\'m feeling unlucky</string>
-    <string name="title_activity_bootmgr">BOOTMGR</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_bootmgr" translatable="false">BOOTMGR</string>
+    <string name="immersive">Fullscreen mode</string>
+    <string name="immersiveDesc">Hides navigation bar and status area when simulating blue screens</string>
+    <string name="ignoreNotch">Use notch area</string>
+    <string name="ignoreNotchDesc">Extends the screen below the notch area</string>
 </resources>

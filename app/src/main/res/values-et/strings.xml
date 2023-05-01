@@ -126,4 +126,8 @@
     <string name="length">Pikkus (ms)</string>
     <string name="preview">Eelvaade: %s</string>
     <string name="feelingunlucky">Ehk mul ei vea</string>
+    <string name="immersive">Täisekraanirežiim</string>
+    <string name="immersiveDesc">Peidab navigatsiooniriba ja olekuriba siniste ekraanide simuleerimise ajaks</string>
+    <string name="ignoreNotch">Kasuta väljalõikeala</string>
+    <string name="ignoreNotchDesc">Laiendab ekraani läbi väljalõikeala</string>
 </resources>

@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -33,8 +32,6 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -64,6 +61,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
     boolean hasFileAccess = true;
 
     boolean developer = false;
+    boolean immersive = false;
+    boolean notch = false;
 
     Random r = new Random();
 
@@ -71,12 +70,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         developer = sharedPreferences.getBoolean("developer", false);
+        immersive = sharedPreferences.getBoolean("immersive", false);
+        notch = sharedPreferences.getBoolean("ignorenotch", false);
         Gson gson = new Gson();
         if (sharedPreferences.getString("bluescreens", null) == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -127,7 +128,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             binding.devOps.setVisibility(View.VISIBLE);
         }
 
-        List<String> friendlyNames = new ArrayList<String>();
+        List<String> friendlyNames = new ArrayList<>();
         for (BlueScreen element : bluescreens) {
             friendlyNames.add(element.GetString("friendlyname"));
         }
@@ -169,41 +170,42 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
-        binding.unluckyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String[] oses = getResources().getStringArray(R.array.OperatingSystems);
-                BlueScreen unlucky = new BlueScreen(oses[r.nextInt(oses.length)], true, getActivity());
-                unlucky.Shuffle();
-                switch (unlucky.GetString("os")) {
-                    case "Windows 8/8.1":
-                    case "Windows 10":
-                    case "Windows 11":
-                        Intent i = new Intent(view.getContext(), ModernBSOD.class);
-                        Bundle b = new Bundle();
-                        b.putSerializable("bluescreen", unlucky);
-                        i.putExtras(b);
-                        startActivity(i);
-                        break;
-                    case "Windows 1.x/2.x":
-                    case "Windows 3.1x":
-                    case "Windows 9x/Me":
-                    case "Windows NT 3.x/4.0":
-                    case "Windows 2000":
-                    case "Windows CE":
-                    case "Windows XP":
-                    case "Windows Vista":
-                    case "Windows 7":
-                        i = new Intent(view.getContext(), LegacyBSOD.class);
-                        b = new Bundle();
-                        b.putSerializable("bluescreen", unlucky);
-                        i.putExtras(b);
-                        startActivity(i);
-                        break;
-                    default:
-                        Toast.makeText(getContext(), unlucky.GetString("os"), Toast.LENGTH_SHORT).show();
-                        break;
-                }
+        binding.unluckyButton.setOnClickListener(view117 -> {
+            String[] oses = getResources().getStringArray(R.array.OperatingSystems);
+            BlueScreen unlucky = new BlueScreen(oses[r.nextInt(oses.length)], true, getActivity());
+            unlucky.Shuffle();
+            switch (unlucky.GetString("os")) {
+                case "Windows 8/8.1":
+                case "Windows 10":
+                case "Windows 11":
+                    Intent i = new Intent(view117.getContext(), ModernBSOD.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("bluescreen", unlucky);
+                    b.putBoolean("immersive", immersive);
+                    b.putBoolean("ignorenotch", notch);
+                    i.putExtras(b);
+                    startActivity(i);
+                    break;
+                case "Windows 1.x/2.x":
+                case "Windows 3.1x":
+                case "Windows 9x/Me":
+                case "Windows NT 3.x/4.0":
+                case "Windows 2000":
+                case "Windows CE":
+                case "Windows XP":
+                case "Windows Vista":
+                case "Windows 7":
+                    i = new Intent(view117.getContext(), LegacyBSOD.class);
+                    b = new Bundle();
+                    b.putSerializable("bluescreen", unlucky);
+                    b.putBoolean("immersive", immersive);
+                    b.putBoolean("ignorenotch", notch);
+                    i.putExtras(b);
+                    startActivity(i);
+                    break;
+                default:
+                    Toast.makeText(getContext(), unlucky.GetString("os"), Toast.LENGTH_SHORT).show();
+                    break;
             }
         });
 
@@ -216,6 +218,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     Bundle b = new Bundle();
                     BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
                     b.putSerializable("bluescreen", me);
+                    b.putBoolean("immersive", immersive);
+                    b.putBoolean("ignorenotch", notch);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -232,6 +236,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b = new Bundle();
                     me = bluescreens.get((int)winspin.getSelectedItemId());
                     b.putSerializable("bluescreen", me);
+                    b.putBoolean("immersive", immersive);
+                    b.putBoolean("ignorenotch", notch);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -240,6 +246,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b = new Bundle();
                     me = bluescreens.get((int)winspin.getSelectedItemId());
                     b.putSerializable("bluescreen", me);
+                    b.putBoolean("immersive", immersive);
+                    b.putBoolean("ignorenotch", notch);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -260,80 +268,59 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             startActivity(s);
         });
 
-        binding.autoCloseCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if ((!locked) && (os != null)) {
-                    try {
-                        os.SetBool("autoclose", b);
-                        saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
-                    } catch (Exception ignored) {
-                        Intent i = getActivity().getIntent();
-                        getActivity().finish();
-                        startActivity(i);
-                    }
+        binding.autoCloseCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                try {
+                    os.SetBool("autoclose", b);
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                } catch (Exception ignored) {
+                    Intent i = getActivity().getIntent();
+                    getActivity().finish();
+                    startActivity(i);
                 }
             }
         });
-        binding.insiderCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if ((!locked) && (os != null)) {
-                    os.SetBool("green", b);
-                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
-                }
+        binding.insiderCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("green", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         });
-        binding.showDetailsCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if ((!locked) && (os != null)) {
-                    os.SetBool("show_description", b);
-                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
-                }
+        binding.showDetailsCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("show_description", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         });
 
-        binding.showParCodes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if ((!locked) && (os != null)) {
-                    os.SetBool("extracodes", b);
-                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
-                }
+        binding.showParCodes.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("extracodes", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         });
 
-        binding.serverScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if ((!locked) && (os != null)) {
-                    os.SetBool("server", b);
-                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
-                }
+        binding.serverScreen.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("server", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         });
 
-        binding.moreFileInfoCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if ((!locked) && (os != null)) {
-                    os.SetBool("extrafile", b);
-                    if (os.GetText("Culprit file memory address").equals("")) {
-                        os.PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
-                    }
-                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+        binding.moreFileInfoCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("extrafile", b);
+                if (os.GetText("Culprit file memory address").equals("")) {
+                    os.PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
                 }
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         });
 
-        binding.showWatermark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if ((!locked) && (os != null)) {
-                    os.SetBool("watermark", b);
-                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
-                }
+        binding.showWatermark.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("watermark", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         });
 
@@ -408,43 +395,40 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         };
 
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        locked = true;
-                        bluescreens.clear();
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                        Gson gson = new Gson();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        bluescreens.add(new BlueScreen("Windows 1.x/2.x", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows 3.1x", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows 9x/Me", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows CE", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows 2000", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows XP", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows Vista", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows 7", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows 8/8.1", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows 10", true, getActivity()));
-                        bluescreens.add(new BlueScreen("Windows 11", true, getActivity()));
-                        String json = gson.toJson(bluescreens);
-                        editor.putString("bluescreens", json);
-                        editor.putInt("selectedItem", 0);
-                        editor.apply();
-                        Toast.makeText(getContext(), getString(R.string.resetFinished), Toast.LENGTH_SHORT).show();
-                        Intent i = getActivity().getIntent();
-                        getActivity().finish();
-                        startActivity(i);
-                        getActivity().finish();
-                        break;
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    locked = true;
+                    bluescreens.clear();
+                    SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    Gson gson = new Gson();
+                    SharedPreferences.Editor editor = sharedPreferences1.edit();
+                    bluescreens.add(new BlueScreen("Windows 1.x/2.x", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows 3.1x", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows 9x/Me", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows CE", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows 2000", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows XP", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows Vista", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows 7", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows 8/8.1", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows 10", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows 11", true, getActivity()));
+                    String json = gson.toJson(bluescreens);
+                    editor.putString("bluescreens", json);
+                    editor.putInt("selectedItem", 0);
+                    editor.apply();
+                    Toast.makeText(getContext(), getString(R.string.resetFinished), Toast.LENGTH_SHORT).show();
+                    Intent i = getActivity().getIntent();
+                    getActivity().finish();
+                    startActivity(i);
+                    getActivity().finish();
+                    break;
 
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        Toast.makeText(getContext(), getString(R.string.noChange), Toast.LENGTH_SHORT).show();
-                        break;
-                }
+                case DialogInterface.BUTTON_NEGATIVE:
+                    Toast.makeText(getContext(), getString(R.string.noChange), Toast.LENGTH_SHORT).show();
+                    break;
             }
         };
         binding.culpritCheck.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -459,76 +443,70 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
-        binding.setCulpritButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                View culpritView = LayoutInflater.from(getContext()).inflate(R.layout.culprit_chooser, null);
-                final RadioButton cust = culpritView.findViewById(R.id.customRadio);
-                final RadioButton preset = culpritView.findViewById(R.id.presetRadio);
-                final EditText cfile = culpritView.findViewById(R.id.eFileEditText);
-                final Spinner fileSelect = culpritView.findViewById(R.id.eFileSpinner);
-                String culprit_file = os.GetString("culprit");
-                boolean useCustom = true;
-                for (int i = 0; i < fileSelect.getAdapter().getCount(); i++) {
-                    String current_file = fileSelect.getAdapter().getItem(i).toString().split(":")[0];
-                    if (culprit_file.equals(current_file)) {
-                        fileSelect.setSelection(i);
-                        useCustom = false;
-                        break;
-                    }
+        binding.setCulpritButton.setOnClickListener(view116 -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            View culpritView = LayoutInflater.from(getContext()).inflate(R.layout.culprit_chooser, null);
+            final RadioButton cust = culpritView.findViewById(R.id.customRadio);
+            final RadioButton preset = culpritView.findViewById(R.id.presetRadio);
+            final EditText cfile = culpritView.findViewById(R.id.eFileEditText);
+            final Spinner fileSelect = culpritView.findViewById(R.id.eFileSpinner);
+            String culprit_file = os.GetString("culprit");
+            boolean useCustom = true;
+            for (int i = 0; i < fileSelect.getAdapter().getCount(); i++) {
+                String current_file = fileSelect.getAdapter().getItem(i).toString().split(":")[0];
+                if (culprit_file.equals(current_file)) {
+                    fileSelect.setSelection(i);
+                    useCustom = false;
+                    break;
                 }
-                if (useCustom) {
-                    fileSelect.setVisibility(View.GONE);
-                    cfile.setText(culprit_file);
-                    cfile.setVisibility(View.VISIBLE);
-                    preset.setChecked(false);
-                    cust.setChecked(true);
-                }
+            }
+            if (useCustom) {
+                fileSelect.setVisibility(View.GONE);
+                cfile.setText(culprit_file);
+                cfile.setVisibility(View.VISIBLE);
+                preset.setChecked(false);
+                cust.setChecked(true);
+            }
 
-                cust.setOnCheckedChangeListener((compoundButton, b) -> {
-                    if (b) {
-                        cfile.setVisibility(View.VISIBLE);
-                        fileSelect.setVisibility(View.GONE);
-                        cfile.setText(fileSelect.getAdapter().getItem((int)fileSelect.getSelectedItemId()).toString().split(":")[0]);
-                    } else {
-                        cfile.setVisibility(View.GONE);
-                        fileSelect.setVisibility(View.VISIBLE);
-                        String selectedFile = cfile.getText().toString();
-                        for (int i = 0; i < fileSelect.getAdapter().getCount(); i++) {
-                            String currentFile = fileSelect.getAdapter().getItem(i).toString();
-                            if (selectedFile.equals(currentFile.split(":")[0])) {
-                                fileSelect.setSelection(i);
-                                break;
-                            }
+            cust.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b) {
+                    cfile.setVisibility(View.VISIBLE);
+                    fileSelect.setVisibility(View.GONE);
+                    cfile.setText(fileSelect.getAdapter().getItem((int)fileSelect.getSelectedItemId()).toString().split(":")[0]);
+                } else {
+                    cfile.setVisibility(View.GONE);
+                    fileSelect.setVisibility(View.VISIBLE);
+                    String selectedFile = cfile.getText().toString();
+                    for (int i = 0; i < fileSelect.getAdapter().getCount(); i++) {
+                        String currentFile = fileSelect.getAdapter().getItem(i).toString();
+                        if (selectedFile.equals(currentFile.split(":")[0])) {
+                            fileSelect.setSelection(i);
+                            break;
                         }
                     }
-                });
-                builder.setView(culpritView);
-                builder.setCancelable(false)
-                        .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if (cust.isChecked()) {
-                                    os.SetString("culprit", cfile.getText().toString());
-                                } else {
-                                    os.SetString("culprit", fileSelect.getAdapter().getItem((int)fileSelect.getSelectedItemId()).toString().split(":")[0]);
-                                }
-                                if ((os.GetString("os").equals("Windows XP")) || (os.GetString("os").equals("Windows Vista")) || (os.GetString("os").equals("Windows 7"))) {
+                }
+            });
+            builder.setView(culpritView);
+            builder.setCancelable(false)
+                    .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                        if (cust.isChecked()) {
+                            os.SetString("culprit", cfile.getText().toString());
+                        } else {
+                            os.SetString("culprit", fileSelect.getAdapter().getItem((int)fileSelect.getSelectedItemId()).toString().split(":")[0]);
+                        }
+                        if ((os.GetString("os").equals("Windows XP")) || (os.GetString("os").equals("Windows Vista")) || (os.GetString("os").equals("Windows 7"))) {
 
-                                    Map <String, String[]> files;
-                                    Type arrayType = new TypeToken<Map<String, String[]>>() {}.getType();
-                                    Gson gson = new Gson();
-                                    files = gson.fromJson(os.GetFiles(), arrayType);
-                                    os.RenameFile(files.keySet().stream().findFirst().get().toString(), os.GetString("culprit"));
-                                }
-                                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.cancel), null);
-                AlertDialog ad = builder.create();
-                ad.show();
-            }
+                            Map <String, String[]> files;
+                            Type arrayType = new TypeToken<Map<String, String[]>>() {}.getType();
+                            Gson gson = new Gson();
+                            files = gson.fromJson(os.GetFiles(), arrayType);
+                            os.RenameFile(files.keySet().stream().findFirst().get().toString(), os.GetString("culprit"));
+                        }
+                        saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                    })
+                    .setNegativeButton(getString(R.string.cancel), null);
+            AlertDialog ad = builder.create();
+            ad.show();
         });
         binding.blinkCheck.setOnCheckedChangeListener((compoundButton, b) -> {
             if ((!locked) && (os != null)) {
@@ -596,216 +574,154 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             getActivity().finish();
         });
 
-        binding.textForeground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ColorChooser(os.GetTheme(false, false), String.format(getString(R.string.selectColor), getString(R.string.foregroundCol)), false, false);
-            }
+        binding.textForeground.setOnClickListener(view115 -> ColorChooser(os.GetTheme(false, false), String.format(getString(R.string.selectColor), getString(R.string.foregroundCol)), false, false));
 
+        binding.textBackground.setOnClickListener(view114 -> ColorChooser(os.GetTheme(true, false), String.format(getString(R.string.selectColor), getString(R.string.backgroundCol)), true, false));
+
+        binding.hlForeground.setOnClickListener(view113 -> ColorChooser(os.GetTheme(false, true), String.format(getString(R.string.selectColor), String.format("%s %s", getString(R.string.highlight_), getString(R.string.foregroundCol))), false, true));
+
+        binding.hlBackground.setOnClickListener(view112 -> ColorChooser(os.GetTheme(true, true), String.format(getString(R.string.selectColor), String.format("%s %s", getString(R.string.highlight_), getString(R.string.backgroundCol))), true, true));
+
+        binding.delPreset.setOnClickListener(view111 -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            TypedValue tv = new TypedValue();
+            getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
+            builder.setMessage(getString(R.string.delConfigWarning)).setPositiveButton(getString(R.string.yes), delPresetListener)
+                    .setNegativeButton(getString(R.string.no), delPresetListener).setTitle(getString(R.string.delConfig)).setIcon(tv.resourceId).show();
         });
 
-        binding.textBackground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ColorChooser(os.GetTheme(true, false), String.format(getString(R.string.selectColor), getString(R.string.backgroundCol)), true, false);
-            }
-
-        });
-
-        binding.hlForeground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ColorChooser(os.GetTheme(false, true), String.format(getString(R.string.selectColor), String.format("%s %s", getString(R.string.highlight_), getString(R.string.foregroundCol))), false, true);
-            }
-
-        });
-
-        binding.hlBackground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ColorChooser(os.GetTheme(true, true), String.format(getString(R.string.selectColor), String.format("%s %s", getString(R.string.highlight_), getString(R.string.backgroundCol))), true, true);
-            }
-
-        });
-
-        binding.delPreset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                TypedValue tv = new TypedValue();
-                getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
-                builder.setMessage(getString(R.string.delConfigWarning)).setPositiveButton(getString(R.string.yes), delPresetListener)
-                        .setNegativeButton(getString(R.string.no), delPresetListener).setTitle(getString(R.string.delConfig)).setIcon(tv.resourceId).show();
-            }
-        });
-
-        binding.addPreset.setOnClickListener(new View.OnClickListener() {
-            @Override
+        binding.addPreset.setOnClickListener(view110 -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            TypedValue tv = new TypedValue();
+            View new_view = LayoutInflater.from(getContext()).inflate(R.layout.new_view, null);
+            final Spinner templateSelector = new_view.findViewById(R.id.osSpinner);
+            final Spinner osSelector = new_view.findViewById(R.id.osSpinner2);
+            final EditText friendlyText = new_view.findViewById(R.id.editTextTemplate);
+            final TextView tv4 = new_view.findViewById(R.id.textView4);
             @SuppressLint("UseSwitchCompatOrMaterialCode")
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                TypedValue tv = new TypedValue();
-                View new_view = LayoutInflater.from(getContext()).inflate(R.layout.new_view, null);
-                final Spinner templateSelector = new_view.findViewById(R.id.osSpinner);
-                final Spinner osSelector = new_view.findViewById(R.id.osSpinner2);
-                final EditText friendlyText = new_view.findViewById(R.id.editTextTemplate);
-                final TextView tv4 = new_view.findViewById(R.id.textView4);
-                final Switch allowCust = new_view.findViewById(R.id.allowCust);
-                templateSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (!allowCust.isChecked()) {
-                            osSelector.setSelection(i);
-                        }
+            final Switch allowCust = new_view.findViewById(R.id.allowCust);
+            templateSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view110, int i, long l) {
+                    if (!allowCust.isChecked()) {
+                        osSelector.setSelection(i);
                     }
+                }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
 
-                    }
-                });
+                }
+            });
 
-                allowCust.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if (!b) {
-                            osSelector.setVisibility(View.GONE);
-                            tv4.setVisibility(View.GONE);
-                            osSelector.setSelection((int)templateSelector.getSelectedItemId());
-                        } else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            TypedValue tv = new TypedValue();
-                            getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
-                            builder.setMessage(getString(R.string.hybridWarn)).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            osSelector.setVisibility(View.VISIBLE);
-                                            tv4.setVisibility(View.VISIBLE);
-                                        }
-                                    })
-                                    .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            compoundButton.setChecked(false);
-                                        }
-                                    }).setIcon(tv.resourceId).setTitle(getString(R.string.danger)).show();
-                        }
-                    }
-                });
-                getActivity().getTheme().resolveAttribute(android.R.attr.dialogIcon, tv, true);
-                builder.setView(new_view);
-                builder.setCancelable(false)
-                        .setPositiveButton(getString(R.string.ok),
-                                (dialogInterface, i) -> {
-                                    BlueScreen newScreen = new BlueScreen(templateSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString(), false, getActivity());
-                                    newScreen.os = osSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString();
-                                    newScreen.SetOSSpecificDefaults();
-                                    newScreen.os = osSelector.getAdapter().getItem((int)osSelector.getSelectedItemId()).toString();
-                                    newScreen.SetString("friendlyname", friendlyText.getText().toString());
-                                    bluescreens.add(newScreen);
-                                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
-                                    Intent in = new Intent(getContext(), MainActivity.class);
-                                    startActivity(in);
-                                    getActivity().overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
-                                    getActivity().finish();
-                                })
-                        .setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {
-
-                        });
-
-                AlertDialog ad = builder.create();
-                ad.show();
-            }
-        });
-
-        binding.resetHacks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                TypedValue tv = new TypedValue();
-                getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
-                builder.setMessage(getString(R.string.currentReset)).setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                String backupName = os.GetString("friendlyname");
-                                bluescreens.set((int)winspin.getSelectedItemId(), new BlueScreen(os.GetString("os"), true, getActivity()));
-                                os = bluescreens.get((int)winspin.getSelectedItemId());
-                                os.SetString("friendlyname", backupName);
-                                saveSettings(bluescreens, os, winspin.getSelectedItemId());
+            allowCust.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (!b) {
+                    osSelector.setVisibility(View.GONE);
+                    tv4.setVisibility(View.GONE);
+                    osSelector.setSelection((int)templateSelector.getSelectedItemId());
+                } else {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                    TypedValue tv1 = new TypedValue();
+                    getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv1, true);
+                    builder1.setMessage(getString(R.string.hybridWarn)).setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                        osSelector.setVisibility(View.VISIBLE);
+                        tv4.setVisibility(View.VISIBLE);
+                    })
+                            .setNegativeButton(getString(R.string.no), (dialogInterface, i) -> compoundButton.setChecked(false)).setIcon(tv1.resourceId).setTitle(getString(R.string.danger)).show();
+                }
+            });
+            getActivity().getTheme().resolveAttribute(android.R.attr.dialogIcon, tv, true);
+            builder.setView(new_view);
+            builder.setCancelable(false)
+                    .setPositiveButton(getString(R.string.ok),
+                            (dialogInterface, i) -> {
+                                BlueScreen newScreen = new BlueScreen(templateSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString(), false, getActivity());
+                                newScreen.os = osSelector.getAdapter().getItem((int)templateSelector.getSelectedItemId()).toString();
+                                newScreen.SetOSSpecificDefaults();
+                                newScreen.os = osSelector.getAdapter().getItem((int)osSelector.getSelectedItemId()).toString();
+                                newScreen.SetString("friendlyname", friendlyText.getText().toString());
+                                bluescreens.add(newScreen);
+                                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                                 Intent in = new Intent(getContext(), MainActivity.class);
                                 startActivity(in);
                                 getActivity().overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
                                 getActivity().finish();
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle(getString(R.string.resetAllConfig)).show();
-            }
+                            })
+                    .setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {
+
+                    });
+
+            AlertDialog ad = builder.create();
+            ad.show();
         });
 
-        binding.loadConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (hasFileAccess) {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().toString()), "*/*");
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    startActivityForResult(Intent.createChooser(intent, "Open .."), 21);
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    TypedValue tv = new TypedValue();
-                    getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
-                    builder.setMessage("Couldn't access the file, because file permissions weren't granted. Re-launch or check app settings.").setPositiveButton(getString(R.string.ok), null)
-                            .setIcon(tv.resourceId).setTitle("Permission denied").show();
-                }
-            }
+        binding.resetHacks.setOnClickListener(view19 -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            TypedValue tv = new TypedValue();
+            getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
+            builder.setMessage(getString(R.string.currentReset)).setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                String backupName = os.GetString("friendlyname");
+                bluescreens.set((int)winspin.getSelectedItemId(), new BlueScreen(os.GetString("os"), true, getActivity()));
+                os = bluescreens.get((int)winspin.getSelectedItemId());
+                os.SetString("friendlyname", backupName);
+                saveSettings(bluescreens, os, winspin.getSelectedItemId());
+                Intent in = new Intent(getContext(), MainActivity.class);
+                startActivity(in);
+                getActivity().overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
+                getActivity().finish();
+            })
+                    .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle(getString(R.string.resetAllConfig)).show();
         });
 
-        binding.saveConfig.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().toString()), "text/bs2cfg");
+        binding.loadConfig.setOnClickListener(view18 -> {
+            if (hasFileAccess) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().toString()), "*/*");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(Intent.createChooser(intent, "Save as .."), 22);
-            }
-        });
-
-        binding.resetAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                startActivityForResult(Intent.createChooser(intent, "Open .."), 21);
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 TypedValue tv = new TypedValue();
                 getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
-                builder.setMessage(getString(R.string.resetAllWarning)).setPositiveButton(getString(R.string.yes), dialogClickListener)
-                        .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle(getString(R.string.resetAll)).show();
+                builder.setMessage("Couldn't access the file, because file permissions weren't granted. Re-launch or check app settings.").setPositiveButton(getString(R.string.ok), null)
+                        .setIcon(tv.resourceId).setTitle("Permission denied").show();
             }
         });
 
-        binding.customErrorCodeCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if ((!locked) && (os != null)) {
-                    if (!b) {
-                        binding.ecodeSpinner.setSelection(0);
-                        binding.ecodeSpinner.setVisibility(View.VISIBLE);
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        View ecode_maker = LayoutInflater.from(getContext()).inflate(R.layout.ecode_maker, null);
-                        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                String descripy = ((EditText)ecode_maker.findViewById(R.id.errorDescripy)).getText().toString();
-                                String hex = ((EditText)ecode_maker.findViewById(R.id.errorHex)).getText().toString();
-                                os.SetString("code", String.format("%s (0x%s)", descripy, hex.toUpperCase()));
-                                binding.ecodeSpinner.setVisibility(View.GONE);
-                            }
-                        });
-                        builder.setCancelable(false);
-                        builder.setView(ecode_maker);
-                        AlertDialog ad = builder.create();
-                        ad.show();
-                    }
+        binding.saveConfig.setOnClickListener(view17 -> {
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().toString()), "text/bs2cfg");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(Intent.createChooser(intent, "Save as .."), 22);
+        });
+
+        binding.resetAll.setOnClickListener(view16 -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            TypedValue tv = new TypedValue();
+            getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
+            builder.setMessage(getString(R.string.resetAllWarning)).setPositiveButton(getString(R.string.yes), dialogClickListener)
+                    .setNegativeButton(getString(R.string.no), dialogClickListener).setIcon(tv.resourceId).setTitle(getString(R.string.resetAll)).show();
+        });
+
+        binding.customErrorCodeCheck.setOnCheckedChangeListener((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                if (!b) {
+                    binding.ecodeSpinner.setSelection(0);
+                    binding.ecodeSpinner.setVisibility(View.VISIBLE);
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    View ecode_maker = LayoutInflater.from(getContext()).inflate(R.layout.ecode_maker, null);
+                    builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                        String descripy = ((EditText)ecode_maker.findViewById(R.id.errorDescripy)).getText().toString();
+                        String hex = ((EditText)ecode_maker.findViewById(R.id.errorHex)).getText().toString();
+                        os.SetString("code", String.format("%s (0x%s)", descripy, hex.toUpperCase()));
+                        binding.ecodeSpinner.setVisibility(View.GONE);
+                    });
+                    builder.setCancelable(false);
+                    builder.setView(ecode_maker);
+                    AlertDialog ad = builder.create();
+                    ad.show();
                 }
             }
         });
@@ -833,7 +749,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     break;
                 case 21:
                     uri = data.getData();
-                    InputStream is = null;
+                    InputStream is;
                     try {
                         is = getActivity().getContentResolver().openInputStream(uri);
                     } catch (IOException e) {
@@ -946,7 +862,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             Spinner winspin = binding.winSpinner;
 
 
-            List<String> friendlyNames = new ArrayList<String>();
+            List<String> friendlyNames = new ArrayList<>();
             for (BlueScreen element : bluescreens) {
                 friendlyNames.add(element.GetString("friendlyname"));
             }
@@ -1158,29 +1074,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 .initialColor(color)
                 .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                 .density(10)
-                .setOnColorSelectedListener(new OnColorSelectedListener() {
-                    @Override
-                    public void onColorSelected(int selectedColor) {
+                .setOnColorSelectedListener(selectedColor -> {
 
-                    }
                 })
-                .setPositiveButton(R.string.ok, new ColorPickerClickListener() {
-                    @Override
-                    public void onClick(DialogInterface d, int lastSelectedColor, Integer[] allColors) {
-                        if (bg) {
-                            os.SetTheme(lastSelectedColor, os.GetTheme(false, hl), hl);
-                        } else {
-                            os.SetTheme(os.GetTheme(true, hl), lastSelectedColor, hl);
-                        }
-                        saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+                .setPositiveButton(R.string.ok, (d, lastSelectedColor, allColors) -> {
+                    if (bg) {
+                        os.SetTheme(lastSelectedColor, os.GetTheme(false, hl), hl);
+                    } else {
+                        os.SetTheme(os.GetTheme(true, hl), lastSelectedColor, hl);
                     }
+                    saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                 })
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getContext(), String.format("%s!", getString(R.string.cancelled)), Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> Toast.makeText(getContext(), String.format("%s!", getString(R.string.cancelled)), Toast.LENGTH_SHORT).show())
                 .showAlphaSlider(false)
                 .showColorEdit(true)
                 .setColorEditTextColor(textColor)
@@ -1241,7 +1146,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Switch pars = binding.showParCodes;
         Switch server = binding.serverScreen;
         Switch waterMark = binding.showWatermark;
-        Switch fileInfo = binding.moreFileInfoCheck;
         Switch deviceCheck = binding.deviceCheck;
         TextView elabel = binding.eCodeLabel;
 

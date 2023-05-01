@@ -16,6 +16,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreference;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -184,10 +185,10 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
 
+            pc = new PreferenceCategory(ps.getContext());
+            pc.setTitle(R.string.strings);
+            ps.addPreference(pc);
             if (strings.size() > 0) {
-                pc = new PreferenceCategory(ps.getContext());
-                pc.setTitle(R.string.strings);
-                ps.addPreference(pc);
                 for (String s : strings.keySet()) {
                     EditTextPreference p = new EditTextPreference(ps.getContext());
                     boolean ignoreSetting = false;
@@ -257,6 +258,29 @@ public class SettingsActivity extends AppCompatActivity {
                     pc.addPreference(p);
                 }
             }
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SwitchPreference ip = new SwitchPreference(ps.getContext());
+            ip.setTitle(getString(R.string.immersive));
+            ip.setSummary(getString(R.string.immersiveDesc));
+            ip.setDefaultValue(sharedPreferences.getBoolean("immersive", false));
+            ip.setOnPreferenceChangeListener((preference, newValue) -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("immersive", (Boolean) newValue);
+                editor.apply();
+                return true;
+            });
+            pc.addPreference(ip);
+            SwitchPreference np = new SwitchPreference(ps.getContext());
+            np.setTitle(getString(R.string.ignoreNotch));
+            np.setSummary(getString(R.string.ignoreNotchDesc));
+            np.setDefaultValue(sharedPreferences.getBoolean("ignorenotch", false));
+            np.setOnPreferenceChangeListener((preference, newValue) -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("ignorenotch", (Boolean) newValue);
+                editor.apply();
+                return true;
+            });
+            pc.addPreference(np);
 
             pc = new PreferenceCategory(ps.getContext());
             pc.setTitle(R.string.about);
