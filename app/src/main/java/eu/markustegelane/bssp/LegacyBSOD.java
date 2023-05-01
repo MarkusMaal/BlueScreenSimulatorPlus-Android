@@ -173,23 +173,30 @@ public class LegacyBSOD extends AppCompatActivity {
         binding.bsodWindow.setDrawingCacheEnabled(false);
         setContentView(binding.getRoot());
         /* for fun stuff */
-        try { byte[] bytesMessage = me.GetString("culprit").getBytes(StandardCharsets.UTF_8); MessageDigest md = MessageDigest.getInstance("MD5");
-              byte[] md5digest = md.digest(bytesMessage);
-              Eggy(byteArrayToHex(md5digest));} catch (NoSuchAlgorithmException e) { throw new RuntimeException(e); }
-        if (by) {
-            me.SetTheme(Color.rgb(0, 0, 255), Color.rgb(255, 255, 0), false);
-            me.SetTheme(Color.rgb(255, 255, 0), Color.rgb(0, 0, 255), true);
-        } else if (er) {
-            me.SetTheme(Color.rgb(255, 255, 255), Color.rgb(120, 120, 255), false);
-            me.SetTheme(Color.rgb(120, 120, 255), Color.rgb(255, 255, 255), true);
-        } else if (me.GetTheme(false, false) == me.GetTheme(true, false)) {
-            rb = true;
-            Random r = new Random();
+        if (bundle.getBoolean("egg")) {
+            try {
+                byte[] bytesMessage = me.GetString("culprit").getBytes(StandardCharsets.UTF_8);
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                byte[] md5digest = md.digest(bytesMessage);
+                Eggy(byteArrayToHex(md5digest));
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+            if (by) {
+                me.SetTheme(Color.rgb(0, 0, 255), Color.rgb(255, 255, 0), false);
+                me.SetTheme(Color.rgb(255, 255, 0), Color.rgb(0, 0, 255), true);
+            } else if (er) {
+                me.SetTheme(Color.rgb(255, 255, 255), Color.rgb(120, 120, 255), false);
+                me.SetTheme(Color.rgb(120, 120, 255), Color.rgb(255, 255, 255), true);
+            } else if (me.GetTheme(false, false) == me.GetTheme(true, false)) {
+                rb = true;
+                Random r = new Random();
 
-            tbg = Color.rgb(r.nextInt(255), r.nextInt(255), r.nextInt(255));
-            tfg = Color.rgb(r.nextInt(255), r.nextInt(255), r.nextInt(255));
-            me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), false);
-            me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), true);
+                tbg = Color.rgb(r.nextInt(255), r.nextInt(255), r.nextInt(255));
+                tfg = Color.rgb(r.nextInt(255), r.nextInt(255), r.nextInt(255));
+                me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), false);
+                me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), true);
+            }
         }
         if (!me.GetBool("watermark")) {
             binding.watermark.setVisibility(View.GONE);
@@ -985,6 +992,9 @@ public class LegacyBSOD extends AppCompatActivity {
     private void DrawCanvas(int progress, BlueScreen me, int shift) {
         int w = 640, h = 480;
         String yourText = "\n";
+        if (me.GetFamily() == null) {
+            me.SetFont("Inconsolata", me.GetStyle(), 16f);
+        }
         if (!me.GetString("os").equals("Windows CE")) {
             yourText += texts.get("A problem has been detected...");
             if (me.GetBool("show_file")) {
@@ -1043,8 +1053,18 @@ public class LegacyBSOD extends AppCompatActivity {
         tPaint.setColor(me.GetTheme(true, false));
         canvas.drawRect(0, 0, w, h, tPaint);
         for (String line: yourText.split("\n")) {
-            tPaint.setTextSize(16);
+            tPaint.setTextSize(me.GetSize());
+
             Typeface typeface = ResourcesCompat.getFont(this, R.font.inconsolata);
+            int checkExist = getWindow().getContext().getResources().getIdentifier(me.GetFamily().toLowerCase().replace(" ", "_"), "font", getWindow().getContext().getPackageName());
+            if (checkExist != 0) {
+                typeface = ResourcesCompat.getFont(this, getWindow().getContext().getResources().getIdentifier(me.GetFamily().toLowerCase().replace(" ", "_"), "font", getWindow().getContext().getPackageName()));
+            } else {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    Typeface.Builder tb = new Typeface.Builder("/system/fonts/" + me.GetFamily() + ".ttf");
+                    typeface = tb.build();
+                }
+            }
             tPaint.setAntiAlias(true);
             tPaint.setTypeface(typeface);
             tPaint.setColor(me.GetTheme(false, false));

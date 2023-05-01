@@ -90,13 +90,23 @@ public class BOOTMGR extends AppCompatActivity {
         tPaint.setColor(me.GetTheme(false, false));
         canvas.drawRect(20, 10, w - 40, 44, tPaint);
         canvas.drawRect(20, h - 44, w - 40, h - 10, tPaint);
+
         Typeface tf = ResourcesCompat.getFont(this, R.font.inconsolata);
+        int checkExist = getWindow().getContext().getResources().getIdentifier(me.GetFamily().toLowerCase().replace(" ", "_"), "font", getWindow().getContext().getPackageName());
+        if (checkExist != 0) {
+            tf = ResourcesCompat.getFont(this, getWindow().getContext().getResources().getIdentifier(me.GetFamily().toLowerCase().replace(" ", "_"), "font", getWindow().getContext().getPackageName()));
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Typeface.Builder tb = new Typeface.Builder("/system/fonts/" + me.GetFamily() + ".ttf");
+                tf = tb.build();
+            }
+        }
         DrawText(txts.get("Troubleshooting introduction"), 84, 20, canvas, bmp, me.GetTheme(false, false), "", 0, tf);
         DrawText(txts.get("Troubleshooting"), 180, 60, canvas, bmp, me.GetTheme(false, false), "", 0, tf);
         DrawText(txts.get("Troubleshooting without disc"), 300, 20, canvas, bmp, me.GetTheme(false, false), "", 0, tf);
         DrawText(txts.get("Status"), 436, 69, canvas, bmp, me.GetTheme(false, false), me.GetString("code").toLowerCase(), me.GetTheme(false, true), tf);
         DrawText(txts.get("Info"), 498, 69, canvas, bmp, me.GetTheme(false, false), txts.get("Error description"), me.GetTheme(false, true), tf);
-        tPaint.setTextSize(24);
+        tPaint.setTextSize(me.GetSize());
         tPaint.setAntiAlias(true);
         tPaint.setTypeface(tf);
         tPaint.setStyle(Paint.Style.FILL);

@@ -108,7 +108,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_light"
                     android:text="@string/Win11_Moreinfo"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/technicalDetails"

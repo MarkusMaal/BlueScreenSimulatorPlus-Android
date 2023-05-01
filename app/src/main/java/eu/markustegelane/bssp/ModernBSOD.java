@@ -4,6 +4,7 @@ import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -156,6 +158,9 @@ public class ModernBSOD extends AppCompatActivity {
             }
         }
         BlueScreen me = (BlueScreen)bundle.getSerializable("bluescreen");
+        if (me.GetFamily() == null) {
+            me.SetFont("Ubuntu Light", me.GetStyle(), 23f);
+        }
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String>>(){}.getType();
         Type proType = new TypeToken<Map<Integer, Integer>>(){}.getType();
@@ -181,6 +186,28 @@ public class ModernBSOD extends AppCompatActivity {
         TextView emoticon = findViewById(R.id.sadSmile);
         TextView progress = findViewById(R.id.errorProgress);
         TextView moreInfo = findViewById(R.id.moreInfo);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.ubuntu_light);
+        int checkExist = getWindow().getContext().getResources().getIdentifier(me.GetFamily().toLowerCase().replace(" ", "_"), "font", getWindow().getContext().getPackageName());
+        if (checkExist != 0) {
+            typeface = ResourcesCompat.getFont(this, getWindow().getContext().getResources().getIdentifier(me.GetFamily().toLowerCase().replace(" ", "_"), "font", getWindow().getContext().getPackageName()));
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Typeface.Builder tb = new Typeface.Builder("/system/fonts/" + me.GetFamily() + ".ttf");
+                typeface = tb.build();
+            }
+        }
+        techInfo.setTypeface(typeface);
+        descripy.setTypeface(typeface);
+        emoticon.setTypeface(typeface);
+        progress.setTypeface(typeface);
+        moreInfo.setTypeface(typeface);
+
+        descripy.setTextSize(me.GetSize());
+        progress.setTextSize(me.GetSize());
+        emoticon.setTextSize(me.GetSize()/23*100);
+        moreInfo.setTextSize(me.GetSize()/23*14);
+        techInfo.setTextSize(me.GetSize()/23*12);
+
         descripy.setHorizontallyScrolling(true);
         techInfo.setHorizontallyScrolling(true);
         emoticon.setHorizontallyScrolling(true);

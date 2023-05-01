@@ -21,6 +21,7 @@ import androidx.preference.SwitchPreference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -258,6 +259,45 @@ public class SettingsActivity extends AppCompatActivity {
                     pc.addPreference(p);
                 }
             }
+            if (me.GetBool("font_support")) {
+                ListPreference fp = new ListPreference(ps.getContext());
+                String path = "/system/fonts";
+                File file = new File(path);
+                File ff[] = file.listFiles();
+                StringBuilder fonts = new StringBuilder();
+                fonts.append("Ubuntu").append("\n");
+                fonts.append("Ubuntu Light").append("\n");
+                fonts.append("Inconsolata").append("\n");
+                for (File font : ff) {
+                    fonts.append(font.getName().replace(".ttf", "")).append("\n");
+                }
+                String[] fonts_arr = fonts.toString().split("\n");
+                fp.setEntries(fonts_arr);
+                fp.setEntryValues(fonts_arr);
+                fp.setKey("font" + new Random().nextInt(Integer.MAX_VALUE));
+                fp.setTitle(getString(R.string.font));
+                fp.setDefaultValue(me.GetFamily());
+                fp.setSummary(me.GetFamily());
+                fp.setOnPreferenceChangeListener((preference, newValue) -> {
+                    me.SetFont(newValue.toString(), me.GetStyle(), me.GetSize());
+                    preference.setSummary(newValue.toString());
+                    saveSettings(bsods, me, os_id);
+                    return true;
+                });
+                pc.addPreference(fp);
+                EditTextPreference ts = new EditTextPreference(ps.getContext());
+                ts.setDefaultValue(String.valueOf(me.GetSize()));
+                ts.setTitle(getString(R.string.fontsize));
+                ts.setSummary(String.valueOf(me.GetSize()));
+                ts.setKey("size" + new Random().nextInt(Integer.MAX_VALUE));
+                ts.setOnPreferenceChangeListener((preference, newValue) -> {
+                    me.SetFont(me.GetFamily(), me.GetStyle(), Float.parseFloat(newValue.toString()));
+                    preference.setSummary(newValue.toString());
+                    saveSettings(bsods, me, os_id);
+                    return true;
+                });
+                pc.addPreference(ts);
+            }
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             SwitchPreference ip = new SwitchPreference(ps.getContext());
             ip.setTitle(getString(R.string.immersive));
@@ -281,6 +321,17 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
             pc.addPreference(np);
+            SwitchPreference ep = new SwitchPreference(ps.getContext());
+            ep.setTitle(getString(R.string.enableEgg));
+            ep.setSummary(getString(R.string.enableEggDesc));
+            ep.setDefaultValue(sharedPreferences.getBoolean("egg", true));
+            ep.setOnPreferenceChangeListener((preference, newValue) -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("egg", (Boolean) newValue);
+                editor.apply();
+                return true;
+            });
+            pc.addPreference(ep);
 
             pc = new PreferenceCategory(ps.getContext());
             pc.setTitle(R.string.about);

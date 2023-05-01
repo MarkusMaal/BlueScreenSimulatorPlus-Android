@@ -42,6 +42,10 @@ public class BlueScreen implements Serializable {
     String strings;
     String progression;
 
+    String font_family;
+    int font_style;
+    Float font_size;
+
     transient private final Random r;
 
     public BlueScreen(String base_os, boolean autosetup, Activity activity) {
@@ -337,12 +341,40 @@ public class BlueScreen implements Serializable {
         this.ints = gson.toJson(ints);
     }
 
-    public void SetFont(String font_family, int style) {
+    public void SetFont(String font_family, int style, float size) {
+        this.font_family = font_family;
+        this.font_style = style;
+        this.font_size = size;
         this.font = Typeface.create(font_family, style);
     }
 
     public Typeface GetFont() {
         return this.font;
+    }
+
+    public String GetFamily() {
+        return this.font_family;
+    }
+
+    public float GetSize() {
+        if (this.font_size != null) {
+            return this.font_size;
+        } else {
+            switch (this.GetString("os")) {
+                case "Windows 11":
+                case "Windows 10":
+                case "Windows 8/8.1":
+                    return 23f;
+                case "BOOTMGR":
+                    return 24f;
+                default:
+                    return 16f;
+            }
+        }
+    }
+
+    public int GetStyle() {
+        return this.font_style;
     }
 
     public String GetTitles() {
@@ -563,7 +595,7 @@ public class BlueScreen implements Serializable {
             case "BOOTMGR":
                 SetTheme(RGB(0, 0, 0), RGB(192, 192, 192), false);
                 SetTheme(RGB(0, 0, 0), RGB(255, 255, 255), true);
-                SetFont("Consolas", Typeface.NORMAL);
+                SetFont("Inconsolata", Typeface.NORMAL, 24f);
                 PushTitle("Main", "Windows Boot Manager");
                 PushText("Troubleshooting introduction", "Windows failed to start. A recent hardware or software change might be the\ncause.To fix the problem:");
                 PushText("Troubleshooting", "1. Insert your Windows installation disc and restart your computer.\n2. Choose your language settings, and then click \"Next.\"\n3. Click \"Repair your computer.\"");
@@ -628,7 +660,7 @@ public class BlueScreen implements Serializable {
                 PushText("Technical information formatting", "*** STOP: %s (%s)");
                 PushText("Restart message", "The computer will restart automatically\nafter %s seconds.");
                 SetInt("timer", 30);
-                SetFont("Lucida Console", Typeface.NORMAL);
+                SetFont("Inconsolata", Typeface.NORMAL, 16f);
                 SetString("friendlyname", "Windows CE 5.0 and later (750x400, Standard)");
 
                 SetInt("scale", 75);
@@ -669,7 +701,7 @@ public class BlueScreen implements Serializable {
                 PushText("Troubleshooting text", "Check for viruses on your computer. Remove any newly installed\nhard drives or hard drive controllers. Check your hard drive\nto make sure it is properly configured and terminated.\nRun CHKDSK /F to check for hard drive corruption, and then\nrestart your computer.");
                 PushText("Additional troubleshooting information", "Refer to your Getting Started manual for more information on\ntroubleshooting Stop errors.");
                 PushText("File information", "*** Address %s base at %s, DateStamp %s - %s");
-                SetFont("Lucida Console", Typeface.BOLD);
+                SetFont("Inconsolata", Typeface.BOLD, 8f);
                 SetInt("scale", 75);
                 SetString("friendlyname", "Windows 2000 Professional/Server Family (640x480, Standard)");
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
@@ -692,7 +724,7 @@ public class BlueScreen implements Serializable {
                 PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
                 SetBool("auto", true);
                 SetInt("scale", 75);
-                SetFont("Lucida Console", Typeface.NORMAL);
+                SetFont("Inconsolata", Typeface.NORMAL, 16f);
                 SetString("friendlyname", "Windows XP (640x480, Standard)");
                 String[] inspirb = { "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
                 SetString("culprit", GenFile(true, this.activity));
@@ -718,7 +750,7 @@ public class BlueScreen implements Serializable {
                 PushText("Culprit file", "The problem seems to be caused by the following file: ");
                 PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
                 PushText("Technical support", "Contact your system admin or technical support group for further assistance.");
-                SetFont("Lucida Console", Typeface.NORMAL);
+                SetFont("Inconsolata", Typeface.NORMAL, 16f);
                 SetInt("scale", 75);
                 SetString("friendlyname", "Windows Vista (640x480, Standard)");
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
@@ -745,7 +777,7 @@ public class BlueScreen implements Serializable {
                 PushText("Culprit file", "The problem seems to be caused by the following file: ");
                 PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
                 PushText("Technical support", "Contact your system admin or technical support group for further assistance.");
-                SetFont("Consolas", Typeface.NORMAL);
+                SetFont("Inconsolata", Typeface.NORMAL, 16f);
                 SetInt("scale", 75);
                 SetString("friendlyname", "Windows 7 (640x480, ClearType)");
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
@@ -763,7 +795,7 @@ public class BlueScreen implements Serializable {
                 PushText("Information text with dump", "Your PC ran into a problem and needs to restart. We're just\ncollecting some error info, and then you can restart. (%s%%\ncomplete)");
                 PushText("Information text without dump", "Your PC ran into a problem that it couldn't\nhandle and now it needs to restart.");
                 PushText("Error code", "You can search for the error online: %s");
-                SetFont("Segoe UI Semilight", Typeface.NORMAL);
+                SetFont("Ubuntu", Typeface.NORMAL, 23f);
                 SetTheme(RGB(16, 113, 170), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 8/8.1 (Native, ClearType)");
                 SetInt("margin-x", 9);
@@ -787,7 +819,7 @@ public class BlueScreen implements Serializable {
                 SetInt("qr_size", 110);
                 SetInt("scale", 75);
                 SetString("qr_file", "local:0");
-                SetFont("Segoe UI Semilight", Typeface.NORMAL);
+                SetFont("Ubuntu", Typeface.NORMAL, 23f);
                 SetTheme(RGB(16, 113, 170), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 10 (Native, ClearType)");
                 SetInt("margin-x", 9);
@@ -814,7 +846,7 @@ public class BlueScreen implements Serializable {
                 SetInt("qr_size", 110);
                 SetInt("scale", 75);
                 SetString("qr_file", "local:0");
-                SetFont("Segoe UI Semilight", Typeface.NORMAL);
+                SetFont("Ubuntu Light", Typeface.NORMAL, 23f);
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 11 (Native, ClearType)");
                 SetInt("margin-x", 9);

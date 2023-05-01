@@ -129,5 +129,9 @@
     <string name="immersive">Täisekraanirežiim</string>
     <string name="immersiveDesc">Peidab navigatsiooniriba ja olekuriba siniste ekraanide simuleerimise ajaks</string>
     <string name="ignoreNotch">Kasuta väljalõikeala</string>
-    <string name="ignoreNotchDesc">Laiendab ekraani läbi väljalõikeala</string>
+    <string name="ignoreNotchDesc">Laiendab ekraani läbi väljalõikeala. See suvand ei mõjuta seadmeid, millel puudub läbilõikeala.</string>
+    <string name="enableEgg">Luba salafunktsioonid</string>
+    <string name="enableEggDesc">Sellel rakendusel on mõned saladused varuks. Lülitage see suvand välja, kui te neid avastada/kasutada ei soovi.</string>
+    <string name="font">Kirjatüüp</string>
+    <string name="fontsize">Kirja suurus</string>
 </resources>

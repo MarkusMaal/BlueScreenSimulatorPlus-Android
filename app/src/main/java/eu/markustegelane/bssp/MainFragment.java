@@ -64,6 +64,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
     boolean immersive = false;
     boolean notch = false;
 
+    boolean egg = true;
+
     Random r = new Random();
 
     BlueScreen os;
@@ -78,6 +80,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         developer = sharedPreferences.getBoolean("developer", false);
         immersive = sharedPreferences.getBoolean("immersive", false);
         notch = sharedPreferences.getBoolean("ignorenotch", false);
+        egg = sharedPreferences.getBoolean("egg", true);
         Gson gson = new Gson();
         if (sharedPreferences.getString("bluescreens", null) == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -183,6 +186,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putSerializable("bluescreen", unlucky);
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
+                    b.putBoolean("egg", egg);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -200,6 +204,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putSerializable("bluescreen", unlucky);
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
+                    b.putBoolean("egg", egg);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -220,6 +225,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putSerializable("bluescreen", me);
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
+                    b.putBoolean("egg", egg);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -238,6 +244,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putSerializable("bluescreen", me);
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
+                    b.putBoolean("egg", egg);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -248,6 +255,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putSerializable("bluescreen", me);
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
+                    b.putBoolean("egg", egg);
                     i.putExtras(b);
                     startActivity(i);
                     break;
