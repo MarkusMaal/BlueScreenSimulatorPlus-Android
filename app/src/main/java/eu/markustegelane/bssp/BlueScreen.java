@@ -795,7 +795,7 @@ public class BlueScreen implements Serializable {
                 PushText("Information text with dump", "Your PC ran into a problem and needs to restart. We're just\ncollecting some error info, and then you can restart. (%s%%\ncomplete)");
                 PushText("Information text without dump", "Your PC ran into a problem that it couldn't\nhandle and now it needs to restart.");
                 PushText("Error code", "You can search for the error online: %s");
-                SetFont("Ubuntu", Typeface.NORMAL, 23f);
+                SetFont("Ubuntu Light", Typeface.NORMAL, 23f);
                 SetTheme(RGB(16, 113, 170), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 8/8.1 (Native, ClearType)");
                 SetInt("margin-x", 9);
@@ -819,7 +819,7 @@ public class BlueScreen implements Serializable {
                 SetInt("qr_size", 110);
                 SetInt("scale", 75);
                 SetString("qr_file", "local:0");
-                SetFont("Ubuntu", Typeface.NORMAL, 23f);
+                SetFont("Ubuntu Light", Typeface.NORMAL, 23f);
                 SetTheme(RGB(16, 113, 170), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 10 (Native, ClearType)");
                 SetInt("margin-x", 9);
