@@ -809,6 +809,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         int fg = Color.rgb(255, 255, 255);
                         int hbg = Color.rgb(255, 255, 255);
                         int hfg = Color.rgb(0,0,0);
+                        String family = "Inconsolata";
+                        float size = 16f;
                         String[] entries = subsection_withoutheading.split(";");
                         for (String entry: entries) {
                             if (!entry.replace("\n", "").equals("")) {
@@ -836,6 +838,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                                     case "text":
                                         bs.PushText(key, UnsanitizeString(value));
                                         break;
+                                    case "format":
+                                        switch (key) {
+                                            case "fontfamily":
+                                                family = value;
+                                                break;
+                                            case "style":
+                                                break;
+                                            case "size":
+                                                size = Float.parseFloat(value);
+                                                bs.SetFont(family, bs.GetStyle(), size);
+                                                break;
+                                        }
                                     case "theme":
                                         switch (key) {
                                             case "bg":
@@ -1011,18 +1025,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                             .append(";");
                 }
             }
-                    /*if (bs.GetBool("font_support")) {
-                        fileData.append("\n\n[format]");
-                        fileData.append("\nfontfamily=")
-                                .append(((Typeface)bs.GetFont()).getStyle())
-                                .append(";");
-                        fileData.append("\nsize=")
-                                .append("8")
-                                .append(";");
-                        fileData.append("\nstyle=")
-                                .append(((Typeface)bs.GetFont()).getStyle())
-                                .append(";");
-                    }*/
+            if (bs.GetBool("font_support")) {
+                fileData.append("\n\n[format]");
+                fileData.append("\nfontfamily=")
+                        .append(bs.GetFamily())
+                        .append(";");
+                fileData.append("\nsize=")
+                        .append(bs.GetSize())
+                        .append(";");
+                fileData.append("\nstyle=")
+                        .append(bs.GetStyle())
+                        .append(";");
+            }
         }
         return fileData.toString();
     }
