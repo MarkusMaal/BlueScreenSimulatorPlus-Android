@@ -3,6 +3,7 @@ package eu.markustegelane.bssp;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.DisplayMetrics;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -590,6 +591,11 @@ public class BlueScreen implements Serializable {
     public void SetOSSpecificDefaults()
     {
         SetBool("watermark", true);
+        DisplayMetrics metrics = this.activity.getResources().getDisplayMetrics();
+        @SuppressWarnings("SuspiciousNameCombination")
+        int window_height = metrics.widthPixels;
+        if (metrics.heightPixels < window_height) { window_height = metrics.heightPixels; }
+        int device_height = window_height / metrics.densityDpi;
         switch (this.os)
         {
             case "BOOTMGR":
@@ -795,12 +801,12 @@ public class BlueScreen implements Serializable {
                 PushText("Information text with dump", "Your PC ran into a problem and needs to restart. We're just\ncollecting some error info, and then you can restart. (%s%%\ncomplete)");
                 PushText("Information text without dump", "Your PC ran into a problem that it couldn't\nhandle and now it needs to restart.");
                 PushText("Error code", "You can search for the error online: %s");
-                SetFont("Ubuntu Light", Typeface.NORMAL, 23f);
                 SetTheme(RGB(16, 113, 170), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 8/8.1 (Native, ClearType)");
                 SetInt("margin-x", 9);
                 SetInt("margin-y", 12);
-                SetInt("scale", 75);
+                SetFont("Ubuntu Light", Typeface.NORMAL, 64f / metrics.density);
+                SetInt("scale", (int)(65 + device_height * 5));
 
                 SetBool("autoclose", true);
                 SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
@@ -816,12 +822,12 @@ public class BlueScreen implements Serializable {
                 PushText("Culprit file", "What failed: %s");
                 PushText("Error code", "If you call a support person, give them this info:\n\nStop code: %s");
                 PushText("Progress", "%s%% complete");
-                SetInt("qr_size", 110);
-                SetInt("scale", 75);
                 SetString("qr_file", "local:0");
-                SetFont("Ubuntu Light", Typeface.NORMAL, 23f);
                 SetTheme(RGB(16, 113, 170), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 10 (Native, ClearType)");
+                SetFont("Ubuntu Light", Typeface.NORMAL, 64f / metrics.density);
+                SetInt("scale", (int)(65 + device_height * 5));
+                SetInt("qr_size", window_height / 8);
                 SetInt("margin-x", 9);
                 SetInt("margin-y", 12);
 
@@ -843,12 +849,12 @@ public class BlueScreen implements Serializable {
                 PushText("Culprit file", "What failed: %s");
                 PushText("Error code", "If you call a support person, give them this info:\n\nStop code: %s");
                 PushText("Progress", "%s%% complete");
-                SetInt("qr_size", 110);
-                SetInt("scale", 75);
                 SetString("qr_file", "local:0");
-                SetFont("Ubuntu Light", Typeface.NORMAL, 23f);
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 11 (Native, ClearType)");
+                SetFont("Ubuntu Light", Typeface.NORMAL, 64f / metrics.density);
+                SetInt("scale", (int)(65 + device_height * 5));
+                SetInt("qr_size", window_height / 8);
                 SetInt("margin-x", 9);
                 SetInt("margin-y", 12);
 

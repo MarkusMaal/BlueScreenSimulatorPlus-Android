@@ -842,6 +842,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                                         switch (key) {
                                             case "fontfamily":
                                                 family = value;
+                                                bs.SetFont(family, bs.GetStyle(), size);
                                                 break;
                                             case "style":
                                                 break;
