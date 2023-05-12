@@ -7,10 +7,11 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="Android Studio default JDK" />
         <option name="modules">
           <set>
-            <option value="/internal_storage/FE107DD3107D937F/ASProjektid/BlueScreenSimulatorPlus" />
-            <option value="/internal_storage/FE107DD3107D937F/ASProjektid/BlueScreenSimulatorPlus/app" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
       </GradleProjectSettings>
