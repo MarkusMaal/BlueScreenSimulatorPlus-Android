@@ -333,6 +333,17 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
             pc.addPreference(ep);
+            SwitchPreference ns = new SwitchPreference(ps.getContext());
+            ns.setTitle(getString(R.string.nearestScaling));
+            ns.setSummary(getString(R.string.nearestScalingDesc));
+            ns.setDefaultValue(sharedPreferences.getBoolean("nearestscaling", false));
+            ns.setOnPreferenceChangeListener((preference, newValue) -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("nearestscaling", (Boolean) newValue);
+                editor.apply();
+                return true;
+            });
+            pc.addPreference(ns);
 
             pc = new PreferenceCategory(ps.getContext());
             pc.setTitle(R.string.about);

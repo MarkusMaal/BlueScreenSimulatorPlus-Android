@@ -66,6 +66,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     boolean egg = true;
 
+    boolean nearest = false;
+
     Random r = new Random();
 
     BlueScreen os;
@@ -81,6 +83,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         immersive = sharedPreferences.getBoolean("immersive", false);
         notch = sharedPreferences.getBoolean("ignorenotch", false);
         egg = sharedPreferences.getBoolean("egg", true);
+        nearest = sharedPreferences.getBoolean("nearestscaling", false);
         Gson gson = new Gson();
         if (sharedPreferences.getString("bluescreens", null) == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -245,6 +248,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
                     b.putBoolean("egg", egg);
+                    b.putBoolean("nearestscaling", nearest);
                     i.putExtras(b);
                     startActivity(i);
                     break;
