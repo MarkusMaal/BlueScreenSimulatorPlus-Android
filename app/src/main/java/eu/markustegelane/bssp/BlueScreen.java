@@ -783,7 +783,7 @@ public class BlueScreen implements Serializable {
                 PushText("Culprit file", "The problem seems to be caused by the following file: ");
                 PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
                 PushText("Technical support", "Contact your system admin or technical support group for further assistance.");
-                SetFont("Inconsolata", Typeface.NORMAL, 16f);
+                SetFont("sourcecodepro_regular", Typeface.NORMAL, 13f);
                 SetInt("scale", 75);
                 SetString("friendlyname", "Windows 7 (640x480, ClearType)");
                 SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);

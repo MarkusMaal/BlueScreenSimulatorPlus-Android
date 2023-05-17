@@ -1065,6 +1065,7 @@ public class LegacyBSOD extends AppCompatActivity {
                     typeface = tb.build();
                 }
             }
+            //tPaint.setAntiAlias(me.GetString("os").equals("Windows 7"));
             tPaint.setAntiAlias(true);
             tPaint.setTypeface(typeface);
             tPaint.setColor(me.GetTheme(false, false));

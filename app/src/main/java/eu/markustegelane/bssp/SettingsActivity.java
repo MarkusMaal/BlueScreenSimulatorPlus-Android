@@ -268,6 +268,7 @@ public class SettingsActivity extends AppCompatActivity {
                 fonts.append("Ubuntu").append("\n");
                 fonts.append("Ubuntu Light").append("\n");
                 fonts.append("Inconsolata").append("\n");
+                fonts.append("Source Code Pro Regular").append("\n");
                 for (File font : ff) {
                     fonts.append(font.getName().replace(".ttf", "")).append("\n");
                 }
@@ -279,7 +280,7 @@ public class SettingsActivity extends AppCompatActivity {
                 fp.setDefaultValue(me.GetFamily());
                 fp.setSummary(me.GetFamily());
                 fp.setOnPreferenceChangeListener((preference, newValue) -> {
-                    me.SetFont(newValue.toString(), me.GetStyle(), me.GetSize());
+                    me.SetFont(newValue.toString().replace("Source Code Pro Regular", "sourcecodepro_regular"), me.GetStyle(), me.GetSize());
                     preference.setSummary(newValue.toString());
                     saveSettings(bsods, me, os_id);
                     return true;
@@ -349,7 +350,7 @@ public class SettingsActivity extends AppCompatActivity {
             ps.addPreference(p);
             p = new Preference(ps.getContext());
             p.setTitle(R.string.aboutFonts);
-            p.setSummary("Inconsolata\nUbuntu\nUbuntu Light");
+            p.setSummary("Inconsolata\nUbuntu\nUbuntu Light\nSource Code Pro");
             p.setOnPreferenceClickListener(preference -> {
                 if (r.nextBoolean()) {
                     preference.setSummary(Shuffle(preference.getSummary().toString()));
