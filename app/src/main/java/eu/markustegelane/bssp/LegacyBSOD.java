@@ -69,7 +69,7 @@ public class LegacyBSOD extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
-    public static int interval = 100;
+    public static int interval = 400;
     private boolean er = false;
     private final Handler mHideHandler = new Handler(Looper.myLooper());
     private View mContentView;

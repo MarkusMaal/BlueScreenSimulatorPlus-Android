@@ -278,10 +278,10 @@ public class SettingsActivity extends AppCompatActivity {
                 fp.setKey("font" + new Random().nextInt(Integer.MAX_VALUE));
                 fp.setTitle(getString(R.string.font));
                 fp.setDefaultValue(me.GetFamily());
-                fp.setSummary(me.GetFamily());
+                fp.setSummary(me.GetFamily().replace("sourcecodepro_regular", "Source Code Pro Regular"));
                 fp.setOnPreferenceChangeListener((preference, newValue) -> {
                     me.SetFont(newValue.toString().replace("Source Code Pro Regular", "sourcecodepro_regular"), me.GetStyle(), me.GetSize());
-                    preference.setSummary(newValue.toString());
+                    preference.setSummary(newValue.toString().replace("sourcecodepro_regular", "Source Code Pro Regular"));
                     saveSettings(bsods, me, os_id);
                     return true;
                 });
