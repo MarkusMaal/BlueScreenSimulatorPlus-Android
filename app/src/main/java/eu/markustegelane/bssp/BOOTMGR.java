@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowManager;
@@ -30,6 +32,8 @@ public class BOOTMGR extends AppCompatActivity {
     private View mContentView;
 
     BlueScreen me;
+
+    private boolean NEAREST_NEIGHBOR = false;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -75,6 +79,13 @@ public class BOOTMGR extends AppCompatActivity {
             }
         }
         me = (BlueScreen)bundle.getSerializable("bluescreen");
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int swidth = size.x;
+        int sheight = size.y;
+        NEAREST_NEIGHBOR = bundle.getBoolean("nearestscaling");
         Gson gson = new Gson();
         Type strType = new TypeToken<Map<String, String>>() {
         }.getType();
@@ -101,11 +112,11 @@ public class BOOTMGR extends AppCompatActivity {
                 tf = tb.build();
             }
         }
-        DrawText(txts.get("Troubleshooting introduction"), 84, 20, canvas, bmp, me.GetTheme(false, false), "", 0, tf);
-        DrawText(txts.get("Troubleshooting"), 180, 60, canvas, bmp, me.GetTheme(false, false), "", 0, tf);
-        DrawText(txts.get("Troubleshooting without disc"), 300, 20, canvas, bmp, me.GetTheme(false, false), "", 0, tf);
-        DrawText(txts.get("Status"), 436, 69, canvas, bmp, me.GetTheme(false, false), me.GetString("code").toLowerCase(), me.GetTheme(false, true), tf);
-        DrawText(txts.get("Info"), 498, 69, canvas, bmp, me.GetTheme(false, false), txts.get("Error description"), me.GetTheme(false, true), tf);
+        bmp = DrawText(txts.get("Troubleshooting introduction"), 84, 20, canvas, bmp, me.GetTheme(false, false), "", 0, tf);
+        bmp = DrawText(txts.get("Troubleshooting"), 180, 60, canvas, bmp, me.GetTheme(false, false), "", 0, tf);
+        bmp = DrawText(txts.get("Troubleshooting without disc"), 300, 20, canvas, bmp, me.GetTheme(false, false), "", 0, tf);
+        bmp = DrawText(txts.get("Status"), 436, 69, canvas, bmp, me.GetTheme(false, false), me.GetString("code").toLowerCase(), me.GetTheme(false, true), tf);
+        bmp = DrawText(txts.get("Info"), 498, 69, canvas, bmp, me.GetTheme(false, false), txts.get("Error description"), me.GetTheme(false, true), tf);
         tPaint.setTextSize(me.GetSize());
         tPaint.setAntiAlias(true);
         tPaint.setTypeface(tf);
@@ -114,17 +125,18 @@ public class BOOTMGR extends AppCompatActivity {
         float exitWidth = tPaint.measureText(txts.get("Exit") + "  ");
         float titlePosition = (w - 20f) / 2 - titleWidth / 2;
         float exitPosition = (w - 20f) - exitWidth;
-        DrawText(titles.get("Main"), 10, titlePosition, canvas, bmp, me.GetTheme(true, false), "", 0, tf);
-        DrawText(txts.get("Exit"), h - 44, exitPosition, canvas, bmp, me.GetTheme(true, false), "", 0, tf);
-        DrawText(txts.get("Continue"), h - 44, 25, canvas, bmp, me.GetTheme(true, false), "", 0, tf);
+        bmp = DrawText(titles.get("Main"), 10, titlePosition, canvas, bmp, me.GetTheme(true, false), "", 0, tf);
+        bmp = DrawText(txts.get("Exit"), h - 44, exitPosition, canvas, bmp, me.GetTheme(true, false), "", 0, tf);
+        bmp = DrawText(txts.get("Continue"), h - 44, 25, canvas, bmp, me.GetTheme(true, false), "", 0, tf);
+        binding.imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, swidth, sheight, !NEAREST_NEIGHBOR));
     }
 
-    void DrawText(String yourText, int shift, float x_coord, Canvas canvas, Bitmap bmp, int theme, String extra, int themehl, Typeface tf) {
+    Bitmap DrawText(String yourText, int shift, float x_coord, Canvas canvas, Bitmap bmp, int theme, String extra, int themehl, Typeface tf) {
         int i = 0;
         Paint tPaint = new Paint();
         for (String line: yourText.split("\n")) {
             tPaint.setTextSize(24);
-            tPaint.setAntiAlias(true);
+            tPaint.setAntiAlias(!NEAREST_NEIGHBOR);
             tPaint.setTypeface(tf);
             tPaint.setColor(theme);
             tPaint.setStyle(Paint.Style.FILL);
@@ -137,7 +149,7 @@ public class BOOTMGR extends AppCompatActivity {
             //canvas.drawBitmap(bmp, 0f, 0f, null);
             i++;
         }
-        binding.imageView.setImageBitmap(bmp);
+        return bmp;
     }
 
     @Override

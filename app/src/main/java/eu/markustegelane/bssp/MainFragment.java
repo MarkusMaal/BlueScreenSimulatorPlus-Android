@@ -208,9 +208,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
                     b.putBoolean("egg", egg);
+                    b.putBoolean("nearestscaling", nearest);
                     i.putExtras(b);
                     startActivity(i);
-                    break;
                 default:
                     Toast.makeText(getContext(), unlucky.GetString("os"), Toast.LENGTH_SHORT).show();
                     break;
@@ -260,6 +260,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
                     b.putBoolean("egg", egg);
+                    b.putBoolean("nearestscaling", nearest);
                     i.putExtras(b);
                     startActivity(i);
                     break;

@@ -82,6 +82,9 @@ public class LegacyBSOD extends AppCompatActivity {
     private int w;
     private int h;
 
+    private int swidth = 0;
+    private int sheight = 0;
+
     private boolean NEAREST_NEIGHBOR = true;
 
     private Boolean by = false;
@@ -156,6 +159,11 @@ public class LegacyBSOD extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        swidth = size.x;
+        sheight = size.y;
         Bundle bundle = getIntent().getExtras();
         BlueScreen me = (BlueScreen)bundle.getSerializable("bluescreen");
         binding = ActivityLegacyBinding.inflate(getLayoutInflater());
@@ -462,11 +470,6 @@ public class LegacyBSOD extends AppCompatActivity {
         return sb.toString();
     }
     private void Draw12Canvas(BlueScreen me, Integer shift, boolean newImage, String type) {
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int swidth = size.x;
-        int sheight = size.y;
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 
             @Override
@@ -781,16 +784,20 @@ public class LegacyBSOD extends AppCompatActivity {
             k += 1;
         }
 
-        BufferA = bmp.copy(bmp.getConfig(), true);
-        BufferB = bmp.copy(bmp.getConfig(), true);
-        bmp.recycle();
-        bmp = null;
+        Bitmap bmp2 = bmp.copy(bmp.getConfig(), true);
 
-        canvas = new Canvas(BufferB);
+        canvas = new Canvas(bmp2);
         Paint cPaint = new Paint();
         cPaint.setFilterBitmap(false);
         cPaint.setColor(me.GetTheme(false, false));
         canvas.drawRect(0, 2 * h - (h/4f), w, 2 * h - (h / 4f) + ((float)h/4f), cPaint);
+
+        BufferA = Bitmap.createScaledBitmap(bmp, swidth, sheight, !NEAREST_NEIGHBOR);
+        BufferB = Bitmap.createScaledBitmap(bmp2, swidth, sheight, !NEAREST_NEIGHBOR);
+        bmp.recycle();
+        bmp2.recycle();
+        bmp = null;
+        bmp2 = null;
         binding.bsodWindow.setImageBitmap(BufferA);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -1103,7 +1110,7 @@ public class LegacyBSOD extends AppCompatActivity {
                 }
             }
             //tPaint.setAntiAlias(me.GetString("os").equals("Windows 7"));
-            tPaint.setAntiAlias(true);
+            tPaint.setAntiAlias(!NEAREST_NEIGHBOR);
             tPaint.setTypeface(typeface);
             tPaint.setColor(me.GetTheme(false, false));
             tPaint.setStyle(Paint.Style.FILL);
@@ -1114,8 +1121,8 @@ public class LegacyBSOD extends AppCompatActivity {
             //canvas.drawBitmap(bmp, 0f, 0f, null);
             i++;
         }
-
-        binding.bsodWindow.setImageBitmap(bmp);
+        BufferA = Bitmap.createScaledBitmap(bmp, swidth, sheight, !NEAREST_NEIGHBOR);
+        binding.bsodWindow.setImageBitmap(BufferA);
     }
 
     @Override
