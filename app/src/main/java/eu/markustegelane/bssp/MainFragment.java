@@ -603,6 +603,11 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     .setNegativeButton(getString(R.string.no), delPresetListener).setTitle(getString(R.string.delConfig)).setIcon(tv.resourceId).show();
         });
 
+        binding.helpButton.setOnClickListener(view1413 -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("No one's around to help... at least not yet!").setPositiveButton(getString(R.string.ok), delPresetListener).setTitle(getString(R.string.help)).show();
+        });
+
         binding.addPreset.setOnClickListener(view110 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             TypedValue tv = new TypedValue();

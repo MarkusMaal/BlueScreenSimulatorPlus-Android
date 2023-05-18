@@ -134,4 +134,7 @@
     <string name="enableEggDesc">Sellel rakendusel on mõned saladused varuks. Lülitage see suvand välja, kui te neid avastada/kasutada ei soovi.</string>
     <string name="font">Kirjatüüp</string>
     <string name="fontsize">Kirja suurus</string>
+    <string name="nearestScaling">Kasuta plokkskaleerimist</string>
+    <string name="nearestScalingDesc">Võimaldab pärandekraane skaleerida primitiivsema algoritmiga, mis näeb välja teravam, kuid samuti kandilisem</string>
+    <string name="help">Abi</string>
 </resources>
