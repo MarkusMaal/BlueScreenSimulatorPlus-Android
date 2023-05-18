@@ -604,8 +604,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         });
 
         binding.helpButton.setOnClickListener(view1413 -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setMessage("No one's around to help... at least not yet!").setPositiveButton(getString(R.string.ok), delPresetListener).setTitle(getString(R.string.help)).show();
+            Intent s = new Intent(getContext(), HelpActivity.class);
+            startActivity(s);
         });
 
         binding.addPreset.setOnClickListener(view110 -> {
