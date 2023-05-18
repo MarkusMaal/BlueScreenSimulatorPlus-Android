@@ -613,11 +613,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             final TextView tv4 = new_view.findViewById(R.id.textView4);
             @SuppressLint("UseSwitchCompatOrMaterialCode")
             final Switch allowCust = new_view.findViewById(R.id.allowCust);
+            final String[] friendlyTemplateNames = new String[] {"Windows 11 (Native, ClearType)", "Windows 10 (Native, ClearType)",
+                    "Windows 8/8.1 (Native, ClearType)", "Windows 7 (640x480, ClearType)", "Windows Vista (640x480, Standard)",
+                    "Windows XP (640x480, Standard)", "Windows CE 5.0 and later (750x400, Standard)",
+                    "Windows 2000 Professional/Server Family (640x480, Standard)", "Windows NT 4.0/3.x (Text mode, Standard)",
+                    "Windows 9x/Millennium Edition (Text mode, Standard)", "Windows 3.1 (Text mode, Standard)",
+                    "Windows 1.x/2.x (Text mode, Standard)", "Windows Boot Manager (1024x768, ClearType)"};
             templateSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view110, int i, long l) {
                     if (!allowCust.isChecked()) {
                         osSelector.setSelection(i);
+                        friendlyText.setText(friendlyTemplateNames[i]);
                     }
                 }
 
