@@ -1,10 +1,14 @@
 # Blue Screen Simulator Plus for Android
 Welcome to Blue Screen Simulator Plus for Android! This is a simple utility for Android based devices, which lets you simulate various error screens from different Windows versions.
+
 ## Presets
 This app uses presets, which contain settings about themselves (User configurations) and what operating system they should use and thus what options should be visible for the user (OS template).
 These presets are stored in a list, which can be saved inside a configuration file.
 
+![image](file:///android_asset/drawable/structure)
+
 The default presets are the following:
+
 * Windows 11 (Native, ClearType) [Windows 11]
 * Windows 10 (Native, ClearType) [Windows 10]
 * Windows 8/8.1 (Native, ClearType) [Windows 8/8.1]

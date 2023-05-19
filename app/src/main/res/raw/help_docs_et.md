@@ -5,7 +5,10 @@ Tere tulemast sinise ekraani simulaatori Android versiooni! See on lihtne utilli
 See äpp kasutab eelseadistusi, mis sisaldavad sätteid enda kohta (Kasutaja konfiguratsioonid) ning milliseid opsüsteeme nad peaksid kasutama ja seeläbi millised suvandid on kasutajale nähtavad (OS mall).
 Neid eelseadistusi talletatakse loendis, mida saab salvestada konfiguratsioonifaili.
 
+![image](file:///android_asset/drawable/structure)
+
 Vaikeseadistused on järgmised:
+
 * Windows 11 (Native, ClearType) [Windows 11]
 * Windows 10 (Native, ClearType) [Windows 10]
 * Windows 8/8.1 (Native, ClearType) [Windows 8/8.1]
