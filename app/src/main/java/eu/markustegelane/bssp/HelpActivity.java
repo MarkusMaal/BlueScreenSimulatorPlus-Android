@@ -34,7 +34,7 @@ public class HelpActivity extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         int swidth = size.x;
-        int sheight = 5000;
+        int sheight = size.y * 10;
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(swidth, sheight, conf);
         final int text_color;
@@ -88,7 +88,7 @@ public class HelpActivity extends AppCompatActivity {
             String[] paragraphs = markdownText.split("\n\n");
             float h1_size = 120f;
             float h2_size = 80f;
-            float h3_size = 70f;
+            float h3_size = 50f;
             int y = (int)h1_size/2;
             for (String paragraph: paragraphs) {
                 Canvas canvas = new Canvas(bmp);
@@ -97,19 +97,27 @@ public class HelpActivity extends AppCompatActivity {
                 tPaint.setFilterBitmap(false);
                 tPaint.setAntiAlias(true);
                 if (paragraph.startsWith("!")) {
-                    String placeholder = paragraph.split("\\[")[1].split("\\(")[0];
+                    String placeholder = paragraph.split("\\[")[1].split("\\(")[0].split("]")[0];
                     String url = paragraph.split("\\(")[1].split("\\)")[0];
                     if (url.startsWith("file:///android_asset")) {
                         String folder = url.replace("file:///android_asset", "").split("/")[1];
                         String identifier = url.replace("file:///android_asset", "").split("/")[2];
                         int resourceId = this.getResources().getIdentifier(identifier, folder, this.getPackageName());
-                        Bitmap img = BitmapFactory.decodeResource(getResources(), resourceId);
-                        float ratio = (float)img.getWidth() / (float)img.getHeight();
-                        int height = (int)((float)swidth / ratio);
-                        Bitmap drawable = Bitmap.createScaledBitmap(img, swidth, height, true);
-                        canvas.drawBitmap(drawable, 0, y, tPaint);
-                        y += drawable.getHeight() + 150;
-                        continue;
+                        if (resourceId != 0) {
+                            Bitmap img = BitmapFactory.decodeResource(getResources(), resourceId);
+                            Bitmap drawable;
+                            if (swidth < img.getWidth()) {
+                                float ratio = (float) img.getWidth() / (float) img.getHeight();
+                                int height = (int) ((float) swidth / ratio);
+                                drawable = Bitmap.createScaledBitmap(img, swidth, height, true);
+                            } else {
+                                drawable = Bitmap.createScaledBitmap(img, img.getWidth(), img.getHeight(), true);
+                            }
+                            canvas.drawBitmap(drawable, 0, y, tPaint);
+                            y += drawable.getHeight() + 150;
+                            continue;
+                        }
+                        paragraph = placeholder;
                     }
                 }
                 else if (paragraph.startsWith("*")) {
@@ -117,8 +125,8 @@ public class HelpActivity extends AppCompatActivity {
                         Paint cPaint = new Paint();
                         cPaint.setColor(text_color);
                         cPaint.setStyle(Paint.Style.FILL);
-                        canvas.drawCircle(30, y - 20, 10, cPaint);
-                        tPaint.setTextSize(50f);
+                        canvas.drawCircle(30, y - 15, 10, cPaint);
+                        tPaint.setTextSize(40f);
                         tPaint.setStyle(Paint.Style.FILL);
                         //canvas.drawText(paragraph, 0, y, tPaint);
                         int maxChars = (int) ((float) swidth / (tPaint.measureText("i") * 1.9)) - 6;
@@ -147,6 +155,7 @@ public class HelpActivity extends AppCompatActivity {
                     }
                     y += f_size / 2;
                     tPaint.setTextSize(f_size);
+                    tPaint.setUnderlineText(true);
                     tPaint.setStyle(Paint.Style.FILL);
                     int maxChars = (int)((float)swidth / (tPaint.measureText("i") * 1.9));
                     List<String> title_lines = MeasureLines(title, maxChars);
@@ -157,7 +166,8 @@ public class HelpActivity extends AppCompatActivity {
                     y += f_size / 2;
                     paragraph = paragraph.substring(offset);
                 }
-                tPaint.setTextSize(50f);
+                tPaint.setTextSize(40f);
+                tPaint.setUnderlineText(false);
                 tPaint.setStyle(Paint.Style.FILL);
                 //canvas.drawText(paragraph, 0, y, tPaint);
                 int maxChars = (int)((float)swidth / (tPaint.measureText("i") * 1.9));
