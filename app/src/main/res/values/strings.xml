@@ -682,4 +682,5 @@
     <string name="nearestScaling">Use nearest neighbor scaling</string>
     <string name="nearestScalingDesc">Allows legacy blue screens to be scaled using a more primitive nearest neighbor scaling algorithm, which looks crisper, but also blockier</string>
     <string name="help">Help</string>
+    <string name="timer">Timer</string>
 </resources>

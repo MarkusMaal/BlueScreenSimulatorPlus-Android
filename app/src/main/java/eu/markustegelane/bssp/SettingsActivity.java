@@ -161,6 +161,7 @@ public class SettingsActivity extends AppCompatActivity {
                         case "qr_size": p.setTitle(R.string.qrsize); break;
                         case "margin-x": p.setTitle(R.string.xmargin); break;
                         case "margin-y": p.setTitle(R.string.ymargin); break;
+                        case "timer": p.setTitle(R.string.timer); break;
                         case "progressmillis": ignoreSetting = true; break;
                         default: p.setTitle(s); break;
                     }
