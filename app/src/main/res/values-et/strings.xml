@@ -140,4 +140,5 @@
     <string name="timer">Taimer</string>
     <string name="helpBasics">Põhitõed</string>
     <string name="helpUI">Liides</string>
+    <string name="helpFullscreen">Täisekraan</string>
 </resources>

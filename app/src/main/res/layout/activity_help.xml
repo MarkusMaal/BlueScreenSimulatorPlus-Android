@@ -6,60 +6,91 @@
     android:layout_height="match_parent"
     tools:context=".HelpActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_weight="0"
+            android:scrollbars="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/basicsButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/helpBasics" />
+
+                    <Button
+                        android:id="@+id/osOptionsButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_weight="0"
+                        android:text="@string/helpUI" />
+
+                    <Button
+                        android:id="@+id/fsOptionsButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10sp"
+                        android:layout_weight="0"
+                        android:text="@string/helpFullscreen" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/basicsButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="@string/helpBasics" />
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
-                <Button
-                    android:id="@+id/osOptionsButton"
-                    android:layout_width="wrap_content"
+                </ScrollView>
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_launcher_background" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10sp"
-                    android:layout_weight="0"
-                    android:text="@string/helpUI" />
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:visibility="gone" />
+
+
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:visibility="visible"
-                app:srcCompat="@drawable/ic_launcher_background" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:visibility="gone" />
-
-
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -82,7 +82,10 @@ public class HelpActivity extends AppCompatActivity {
                         }
                         in_s = getResources().openRawResource(R.raw.help_docs_et);
                     }
-                    showDocument(in_s);
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    showDocument(in_s, size.y * 4);
                 }
             });
             ((Button)findViewById(R.id.osOptionsButton)).setOnClickListener(new View.OnClickListener() {
@@ -97,7 +100,29 @@ public class HelpActivity extends AppCompatActivity {
                         }
                         in_s = getResources().openRawResource(R.raw.specifics_docs_et);
                     }
-                    showDocument(in_s);
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    showDocument(in_s, size.y * 8);
+                }
+            });
+
+            ((Button)findViewById(R.id.fsOptionsButton)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    InputStream in_s = getResources().openRawResource(R.raw.fullscreen_docs_en);
+                    if (Locale.getDefault().getLanguage().equals("et")) {
+                        try {
+                            in_s.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        in_s = getResources().openRawResource(R.raw.fullscreen_docs_et);
+                    }
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    showDocument(in_s, size.y * 16);
                 }
             });
         }
@@ -106,12 +131,12 @@ public class HelpActivity extends AppCompatActivity {
     }
 
 
-    void showDocument(InputStream in_s) {
+    void showDocument(InputStream in_s, int size_y) {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int swidth = size.x;
-        int sheight = size.y * 10;
+        int sheight = size_y;
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(swidth, sheight, conf);
         final int text_color;
