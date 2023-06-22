@@ -161,6 +161,7 @@ public class SettingsActivity extends AppCompatActivity {
                         case "qr_size": p.setTitle(R.string.qrsize); break;
                         case "margin-x": p.setTitle(R.string.xmargin); break;
                         case "margin-y": p.setTitle(R.string.ymargin); break;
+                        case "timer": p.setTitle(R.string.timer); break;
                         case "progressmillis": ignoreSetting = true; break;
                         default: p.setTitle(s); break;
                     }
@@ -268,6 +269,7 @@ public class SettingsActivity extends AppCompatActivity {
                 fonts.append("Ubuntu").append("\n");
                 fonts.append("Ubuntu Light").append("\n");
                 fonts.append("Inconsolata").append("\n");
+                fonts.append("Source Code Pro Regular").append("\n");
                 for (File font : ff) {
                     fonts.append(font.getName().replace(".ttf", "")).append("\n");
                 }
@@ -277,10 +279,10 @@ public class SettingsActivity extends AppCompatActivity {
                 fp.setKey("font" + new Random().nextInt(Integer.MAX_VALUE));
                 fp.setTitle(getString(R.string.font));
                 fp.setDefaultValue(me.GetFamily());
-                fp.setSummary(me.GetFamily());
+                fp.setSummary(me.GetFamily().replace("sourcecodepro_regular", "Source Code Pro Regular"));
                 fp.setOnPreferenceChangeListener((preference, newValue) -> {
-                    me.SetFont(newValue.toString(), me.GetStyle(), me.GetSize());
-                    preference.setSummary(newValue.toString());
+                    me.SetFont(newValue.toString().replace("Source Code Pro Regular", "sourcecodepro_regular"), me.GetStyle(), me.GetSize());
+                    preference.setSummary(newValue.toString().replace("sourcecodepro_regular", "Source Code Pro Regular"));
                     saveSettings(bsods, me, os_id);
                     return true;
                 });
@@ -332,6 +334,17 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
             pc.addPreference(ep);
+            SwitchPreference ns = new SwitchPreference(ps.getContext());
+            ns.setTitle(getString(R.string.nearestScaling));
+            ns.setSummary(getString(R.string.nearestScalingDesc));
+            ns.setDefaultValue(sharedPreferences.getBoolean("nearestscaling", false));
+            ns.setOnPreferenceChangeListener((preference, newValue) -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("nearestscaling", (Boolean) newValue);
+                editor.apply();
+                return true;
+            });
+            pc.addPreference(ns);
 
             pc = new PreferenceCategory(ps.getContext());
             pc.setTitle(R.string.about);
@@ -349,7 +362,7 @@ public class SettingsActivity extends AppCompatActivity {
             ps.addPreference(p);
             p = new Preference(ps.getContext());
             p.setTitle(R.string.aboutFonts);
-            p.setSummary("Inconsolata\nUbuntu\nUbuntu Light");
+            p.setSummary("Inconsolata\nUbuntu\nUbuntu Light\nSource Code Pro");
             p.setOnPreferenceClickListener(preference -> {
                 if (r.nextBoolean()) {
                     preference.setSummary(Shuffle(preference.getSummary().toString()));

@@ -12,6 +12,7 @@ import android.graphics.DrawFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -69,7 +71,7 @@ public class LegacyBSOD extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
-    public static int interval = 100;
+    public static int interval = 400;
     private boolean er = false;
     private final Handler mHideHandler = new Handler(Looper.myLooper());
     private View mContentView;
@@ -79,6 +81,12 @@ public class LegacyBSOD extends AppCompatActivity {
     private int caret_y = 0;
     private int w;
     private int h;
+
+    private int swidth = 0;
+    private int sheight = 0;
+
+    private boolean NEAREST_NEIGHBOR = true;
+
     private Boolean by = false;
     private Boolean visible = true;
 
@@ -151,11 +159,17 @@ public class LegacyBSOD extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        swidth = size.x;
+        sheight = size.y;
         Bundle bundle = getIntent().getExtras();
         BlueScreen me = (BlueScreen)bundle.getSerializable("bluescreen");
         binding = ActivityLegacyBinding.inflate(getLayoutInflater());
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        NEAREST_NEIGHBOR = bundle.getBoolean("nearestscaling");
         if (bundle.getBoolean("immersive")) {
             this.getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -551,6 +565,9 @@ public class LegacyBSOD extends AppCompatActivity {
                     //set pixels
                     result.setPixels(pixels, 0, width, 0, 0, width, height);
                     BufferA = result.copy(result.getConfig(), true);
+                    if (NEAREST_NEIGHBOR) {
+                        result = Bitmap.createScaledBitmap(result, swidth, sheight, false);
+                    }
                     binding.bsodWindow.setImageBitmap(result);
                     return;
                 case "Win2":
@@ -575,7 +592,11 @@ public class LegacyBSOD extends AppCompatActivity {
                     //set pixels
                     result.setPixels(pixels, 0, width, 0, 0, width, height);
                     BufferA = result.copy(result.getConfig(), true);
-                    binding.bsodWindow.setImageBitmap(result);
+                    if (NEAREST_NEIGHBOR) {
+                        binding.bsodWindow.setImageBitmap(Bitmap.createScaledBitmap(result, swidth, sheight, false));
+                    } else {
+                        binding.bsodWindow.setImageBitmap(result);
+                    }
                     return;
                 default:
                     break;
@@ -604,7 +625,11 @@ public class LegacyBSOD extends AppCompatActivity {
             }
         }
         BufferA = bmp.copy(bmp.getConfig(), true);
-        binding.bsodWindow.setImageBitmap(bmp);
+        if (NEAREST_NEIGHBOR) {
+            binding.bsodWindow.setImageBitmap(Bitmap.createScaledBitmap(bmp, swidth, sheight, false));
+        } else {
+            binding.bsodWindow.setImageBitmap(bmp);
+        }
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void DrawNTCanvas(BlueScreen me) {
@@ -759,16 +784,20 @@ public class LegacyBSOD extends AppCompatActivity {
             k += 1;
         }
 
-        BufferA = bmp.copy(bmp.getConfig(), true);
-        BufferB = bmp.copy(bmp.getConfig(), true);
-        bmp.recycle();
-        bmp = null;
+        Bitmap bmp2 = bmp.copy(bmp.getConfig(), true);
 
-        canvas = new Canvas(BufferB);
+        canvas = new Canvas(bmp2);
         Paint cPaint = new Paint();
         cPaint.setFilterBitmap(false);
         cPaint.setColor(me.GetTheme(false, false));
         canvas.drawRect(0, 2 * h - (h/4f), w, 2 * h - (h / 4f) + ((float)h/4f), cPaint);
+
+        BufferA = Bitmap.createScaledBitmap(bmp, swidth, sheight, !NEAREST_NEIGHBOR);
+        BufferB = Bitmap.createScaledBitmap(bmp2, swidth, sheight, !NEAREST_NEIGHBOR);
+        bmp.recycle();
+        bmp2.recycle();
+        bmp = null;
+        bmp2 = null;
         binding.bsodWindow.setImageBitmap(BufferA);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -895,17 +924,29 @@ public class LegacyBSOD extends AppCompatActivity {
         bmp = DrawText(bmp.getWidth() / 2 - (windowsText.length() * w) / 2, y_offset, w, h, alphabetPics, bmp, windowsText, me.GetTheme(false, true),me.GetTheme(true, true), alphabet);
 
         bmp = DrawText(bmp.getWidth() / 2 - (prompt.length() * w) / 2 - w, i1, w, h, alphabetPics, bmp, prompt, me.GetTheme(false, false), me.GetTheme(true, false), alphabet);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        Bitmap bmp2 = bmp.copy(bmp.getConfig(), true);
 
-        BufferA = bmp.copy(bmp.getConfig(), true);
-        BufferB = bmp.copy(bmp.getConfig(), true);
-        bmp.recycle();
-        bmp = null;
-
-        canvas = new Canvas(BufferB);
+        canvas = new Canvas(bmp2);
         Paint cPaint = new Paint();
         cPaint.setFilterBitmap(false);
         cPaint.setColor(me.GetTheme(true, true));
         canvas.drawRect(caret_x, caret_y, caret_x + w, caret_y + ((float)h/8f), cPaint);
+        if (NEAREST_NEIGHBOR) {
+            BufferA = Bitmap.createScaledBitmap(bmp, width, height, false);
+            BufferB = Bitmap.createScaledBitmap(bmp2, width, height, false);
+        } else {
+            BufferA = bmp.copy(bmp.getConfig(), true);
+            BufferB = bmp2.copy(bmp.getConfig(), true);
+        }
+        bmp.recycle();
+        bmp = null;
+        bmp2.recycle();
+        bmp2 = null;
         binding.bsodWindow.setImageBitmap(BufferA);
     }
 
@@ -915,7 +956,8 @@ public class LegacyBSOD extends AppCompatActivity {
         alphabetPics = ColorizeAlphabet(alphabetPics, bg, fg, alphabet);
         Bitmap newBitmap = Bitmap.createBitmap(original.getWidth(), original.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
-        DrawFilter filter = new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG, 0);
+
+        DrawFilter filter = new PaintFlagsDrawFilter(Paint.DITHER_FLAG, 0);
         canvas.setDrawFilter(filter);
         canvas.drawBitmap(original, 0, 0, null);
         for (String line : text.split("\n")) {
@@ -1011,6 +1053,7 @@ public class LegacyBSOD extends AppCompatActivity {
         }
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(w, h, conf);
+
         Canvas canvas = new Canvas (bmp);
             switch (me.GetString("os")) {
                 case "Windows XP":
@@ -1051,6 +1094,7 @@ public class LegacyBSOD extends AppCompatActivity {
         int i = 0;
         Paint tPaint = new Paint();
         tPaint.setColor(me.GetTheme(true, false));
+        tPaint.setFilterBitmap(false);
         canvas.drawRect(0, 0, w, h, tPaint);
         for (String line: yourText.split("\n")) {
             tPaint.setTextSize(me.GetSize());
@@ -1060,12 +1104,13 @@ public class LegacyBSOD extends AppCompatActivity {
             if (checkExist != 0) {
                 typeface = ResourcesCompat.getFont(this, getWindow().getContext().getResources().getIdentifier(me.GetFamily().toLowerCase().replace(" ", "_"), "font", getWindow().getContext().getPackageName()));
             } else {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     Typeface.Builder tb = new Typeface.Builder("/system/fonts/" + me.GetFamily() + ".ttf");
                     typeface = tb.build();
                 }
             }
-            tPaint.setAntiAlias(true);
+            //tPaint.setAntiAlias(me.GetString("os").equals("Windows 7"));
+            tPaint.setAntiAlias(!NEAREST_NEIGHBOR);
             tPaint.setTypeface(typeface);
             tPaint.setColor(me.GetTheme(false, false));
             tPaint.setStyle(Paint.Style.FILL);
@@ -1076,7 +1121,8 @@ public class LegacyBSOD extends AppCompatActivity {
             //canvas.drawBitmap(bmp, 0f, 0f, null);
             i++;
         }
-        binding.bsodWindow.setImageBitmap(bmp);
+        BufferA = Bitmap.createScaledBitmap(bmp, swidth, sheight, !NEAREST_NEIGHBOR);
+        binding.bsodWindow.setImageBitmap(BufferA);
     }
 
     @Override

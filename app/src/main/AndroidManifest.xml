@@ -11,8 +11,14 @@
         android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/Theme.BlueScreenSimulatorPlus"
         tools:targetApi="31">
+        <activity
+            android:name=".HelpActivity"
+            android:exported="false"
+            android:hardwareAccelerated="false"
+            android:theme="@style/Theme.BlueScreenSimulatorPlus.NoActionBar"  />
         <activity
             android:name=".BOOTMGR"
             android:configChanges="orientation|keyboardHidden|screenSize"

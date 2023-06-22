@@ -679,4 +679,11 @@
     <string name="enableEggDesc">If unchecked, procedures to activate easter eggs will not work.</string>
     <string name="font">Font</string>
     <string name="fontsize">Font size</string>
+    <string name="nearestScaling">Use nearest neighbor scaling</string>
+    <string name="nearestScalingDesc">Allows legacy blue screens to be scaled using a more primitive nearest neighbor scaling algorithm, which looks crisper, but also blockier</string>
+    <string name="help">Help</string>
+    <string name="timer">Timer</string>
+    <string name="helpBasics">Basics</string>
+    <string name="helpUI">UI</string>
+    <string name="helpFullscreen">Fullscreen</string>
 </resources>
