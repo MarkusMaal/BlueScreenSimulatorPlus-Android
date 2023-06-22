@@ -138,4 +138,6 @@
     <string name="nearestScalingDesc">Võimaldab pärandekraane skaleerida primitiivsema algoritmiga, mis näeb välja teravam, kuid samuti kandilisem</string>
     <string name="help">Abi</string>
     <string name="timer">Taimer</string>
+    <string name="helpBasics">Põhitõed</string>
+    <string name="helpUI">Liides</string>
 </resources>

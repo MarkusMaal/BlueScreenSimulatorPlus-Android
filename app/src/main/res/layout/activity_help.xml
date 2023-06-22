@@ -19,6 +19,28 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/basicsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/helpBasics" />
+
+                <Button
+                    android:id="@+id/osOptionsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10sp"
+                    android:layout_weight="0"
+                    android:text="@string/helpUI" />
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"

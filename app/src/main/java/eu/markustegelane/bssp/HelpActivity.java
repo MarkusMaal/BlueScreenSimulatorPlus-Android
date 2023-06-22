@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Html;
 import android.view.Display;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,120 +70,159 @@ public class HelpActivity extends AppCompatActivity {
                 }
             }.start();
         } else {
-            InputStream in_s = getResources().openRawResource(R.raw.help_docs_en);
-            if (Locale.getDefault().getLanguage().equals("et")) {
-                try {
-                    in_s.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                in_s = getResources().openRawResource(R.raw.help_docs_et);
-            }
-            byte[] b = new byte[0];
-            try {
-                b = new byte[in_s.available()];
-                in_s.read(b);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            String markdownText = new String(b);
-            String[] paragraphs = markdownText.split("\n\n");
-            float h1_size = 120f;
-            float h2_size = 80f;
-            float h3_size = 50f;
-            int y = (int)h1_size/2;
-            for (String paragraph: paragraphs) {
-                Canvas canvas = new Canvas(bmp);
-                Paint tPaint = new Paint();
-                tPaint.setColor(text_color);
-                tPaint.setFilterBitmap(false);
-                tPaint.setAntiAlias(true);
-                if (paragraph.startsWith("!")) {
-                    String placeholder = paragraph.split("\\[")[1].split("\\(")[0].split("]")[0];
-                    String url = paragraph.split("\\(")[1].split("\\)")[0];
-                    if (url.startsWith("file:///android_asset")) {
-                        String folder = url.replace("file:///android_asset", "").split("/")[1];
-                        String identifier = url.replace("file:///android_asset", "").split("/")[2];
-                        int resourceId = this.getResources().getIdentifier(identifier, folder, this.getPackageName());
-                        if (resourceId != 0) {
-                            Bitmap img = BitmapFactory.decodeResource(getResources(), resourceId);
-                            Bitmap drawable;
-                            if (swidth < img.getWidth()) {
-                                float ratio = (float) img.getWidth() / (float) img.getHeight();
-                                int height = (int) ((float) swidth / ratio);
-                                drawable = Bitmap.createScaledBitmap(img, swidth, height, true);
-                            } else {
-                                drawable = Bitmap.createScaledBitmap(img, img.getWidth(), img.getHeight(), true);
-                            }
-                            canvas.drawBitmap(drawable, 0, y, tPaint);
-                            y += drawable.getHeight() + 150;
-                            continue;
+            ((Button)findViewById(R.id.basicsButton)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    InputStream in_s = getResources().openRawResource(R.raw.help_docs_en);
+                    if (Locale.getDefault().getLanguage().equals("et")) {
+                        try {
+                            in_s.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
-                        paragraph = placeholder;
+                        in_s = getResources().openRawResource(R.raw.help_docs_et);
                     }
+                    showDocument(in_s);
                 }
-                else if (paragraph.startsWith("*")) {
-                    for (String bullet: paragraph.split("\n")) {
-                        Paint cPaint = new Paint();
-                        cPaint.setColor(text_color);
-                        cPaint.setStyle(Paint.Style.FILL);
-                        canvas.drawCircle(30, y - 15, 10, cPaint);
-                        tPaint.setTextSize(40f);
-                        tPaint.setStyle(Paint.Style.FILL);
-                        //canvas.drawText(paragraph, 0, y, tPaint);
-                        int maxChars = (int) ((float) swidth / (tPaint.measureText("i") * 1.9)) - 6;
-                        List<String> text_lines = MeasureLines(bullet.replace("* ", ""), maxChars);
-                        for (String Line : text_lines) {
-                            canvas.drawText("      "  + Line, 0, y, tPaint);
-                            y += tPaint.getTextSize();
+            });
+            ((Button)findViewById(R.id.osOptionsButton)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    InputStream in_s = getResources().openRawResource(R.raw.specifics_docs_en);
+                    if (Locale.getDefault().getLanguage().equals("et")) {
+                        try {
+                            in_s.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
-                        y += tPaint.getTextSize();
+                        in_s = getResources().openRawResource(R.raw.specifics_docs_et);
                     }
-                    y += tPaint.getTextSize();
-                    continue;
+                    showDocument(in_s);
                 }
-                else if (paragraph.startsWith("#")) {
-                    String title = paragraph.split("\n")[0];
-                    int offset = title.length() + 1;
-                    float f_size = h1_size;
-                    if (title.startsWith("###")) {
-                        f_size = h3_size;
-                        title = title.substring(4);
-                    } else if (title.startsWith("##")) {
-                        f_size = h2_size;
-                        title = title.substring(3);
-                    } else {
-                        title = title.substring(2);
-                    }
-                    y += f_size / 2;
-                    tPaint.setTextSize(f_size);
-                    tPaint.setUnderlineText(true);
-                    tPaint.setStyle(Paint.Style.FILL);
-                    int maxChars = (int)((float)swidth / (tPaint.measureText("i") * 1.9));
-                    List<String> title_lines = MeasureLines(title, maxChars);
-                    for (String title_line: title_lines) {
-                        canvas.drawText(title_line, 0, y, tPaint);
-                        y += f_size;
-                    }
-                    y += f_size / 2;
-                    paragraph = paragraph.substring(offset);
-                }
-                tPaint.setTextSize(40f);
-                tPaint.setUnderlineText(false);
-                tPaint.setStyle(Paint.Style.FILL);
-                //canvas.drawText(paragraph, 0, y, tPaint);
-                int maxChars = (int)((float)swidth / (tPaint.measureText("i") * 1.9));
-                List<String> text_lines = MeasureLines(paragraph, maxChars);
-                for (String Line: text_lines) {
-                    canvas.drawText(Line, 0, y, tPaint);
-                    y += tPaint.getTextSize();
-                }
-                y += tPaint.getTextSize();
-            }
-            ((ImageView) findViewById(R.id.imageView3)).setImageBitmap(bmp);
+            });
         }
         getWindow().setTitle(getString(R.string.help));
 
+    }
+
+
+    void showDocument(InputStream in_s) {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int swidth = size.x;
+        int sheight = size.y * 10;
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        Bitmap bmp = Bitmap.createBitmap(swidth, sheight, conf);
+        final int text_color;
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_NO) {// Night mode is not active, we're using the light theme
+            text_color = Color.rgb(0, 0, 0);
+        } else {// Night mode is active, we're using dark theme
+            text_color = Color.rgb(255, 255, 255);
+        }
+        byte[] b = new byte[0];
+        try {
+            b = new byte[in_s.available()];
+            in_s.read(b);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String markdownText = new String(b);
+        String[] paragraphs = markdownText.split("\n\n");
+        float h1_size = 120f;
+        float h2_size = 80f;
+        float h3_size = 50f;
+        int y = (int)h1_size/2;
+        for (String paragraph: paragraphs) {
+            Canvas canvas = new Canvas(bmp);
+            Paint tPaint = new Paint();
+            tPaint.setColor(text_color);
+            tPaint.setFilterBitmap(false);
+            tPaint.setAntiAlias(true);
+            if (paragraph.startsWith("!")) {
+                String placeholder = paragraph.split("\\[")[1].split("\\(")[0].split("]")[0];
+                String url = paragraph.split("\\(")[1].split("\\)")[0];
+                if (url.startsWith("file:///android_asset")) {
+                    String folder = url.replace("file:///android_asset", "").split("/")[1];
+                    String identifier = url.replace("file:///android_asset", "").split("/")[2];
+                    int resourceId = this.getResources().getIdentifier(identifier, folder, this.getPackageName());
+                    if (resourceId != 0) {
+                        Bitmap img = BitmapFactory.decodeResource(getResources(), resourceId);
+                        Bitmap drawable;
+                        if (swidth < img.getWidth()) {
+                            float ratio = (float) img.getWidth() / (float) img.getHeight();
+                            int height = (int) ((float) swidth / ratio);
+                            drawable = Bitmap.createScaledBitmap(img, swidth, height, true);
+                        } else {
+                            drawable = Bitmap.createScaledBitmap(img, img.getWidth(), img.getHeight(), true);
+                        }
+                        canvas.drawBitmap(drawable, 0, y, tPaint);
+                        y += drawable.getHeight() + 150;
+                        continue;
+                    }
+                    paragraph = placeholder;
+                }
+            }
+            else if (paragraph.startsWith("*")) {
+                for (String bullet: paragraph.split("\n")) {
+                    Paint cPaint = new Paint();
+                    cPaint.setColor(text_color);
+                    cPaint.setStyle(Paint.Style.FILL);
+                    canvas.drawCircle(30, y - 15, 10, cPaint);
+                    tPaint.setTextSize(40f);
+                    tPaint.setStyle(Paint.Style.FILL);
+                    //canvas.drawText(paragraph, 0, y, tPaint);
+                    int maxChars = (int) ((float) swidth / (tPaint.measureText("i") * 1.9)) - 6;
+                    List<String> text_lines = MeasureLines(bullet.replace("* ", ""), maxChars);
+                    for (String Line : text_lines) {
+                        canvas.drawText("      "  + Line, 0, y, tPaint);
+                        y += tPaint.getTextSize();
+                    }
+                    y += tPaint.getTextSize();
+                }
+                y += tPaint.getTextSize();
+                continue;
+            }
+            else if (paragraph.startsWith("#")) {
+                String title = paragraph.split("\n")[0];
+                int offset = title.length() + 1;
+                float f_size = h1_size;
+                if (title.startsWith("###")) {
+                    f_size = h3_size;
+                    title = title.substring(4);
+                } else if (title.startsWith("##")) {
+                    f_size = h2_size;
+                    title = title.substring(3);
+                } else {
+                    title = title.substring(2);
+                }
+                y += f_size / 2;
+                tPaint.setTextSize(f_size);
+                tPaint.setUnderlineText(true);
+                tPaint.setStyle(Paint.Style.FILL);
+                int maxChars = (int)((float)swidth / (tPaint.measureText("i") * 1.9));
+                List<String> title_lines = MeasureLines(title, maxChars);
+                for (String title_line: title_lines) {
+                    canvas.drawText(title_line, 0, y, tPaint);
+                    y += f_size;
+                }
+                y += f_size / 2;
+                paragraph = paragraph.substring(offset);
+            }
+            tPaint.setTextSize(40f);
+            tPaint.setUnderlineText(false);
+            tPaint.setStyle(Paint.Style.FILL);
+            //canvas.drawText(paragraph, 0, y, tPaint);
+            int maxChars = (int)((float)swidth / (tPaint.measureText("i") * 1.9));
+            List<String> text_lines = MeasureLines(paragraph, maxChars);
+            for (String Line: text_lines) {
+                canvas.drawText(Line, 0, y, tPaint);
+                y += tPaint.getTextSize();
+            }
+            y += tPaint.getTextSize();
+        }
+        ((ImageView) findViewById(R.id.imageView3)).setImageBitmap(bmp);
     }
 
     List<String> MeasureLines(String text, int maxChars) {
