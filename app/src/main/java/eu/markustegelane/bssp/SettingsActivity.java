@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -100,11 +102,16 @@ public class SettingsActivity extends AppCompatActivity {
                     p.setSummary(titles.get(s));
                     p.setDefaultValue(titles.get(s));
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
-                        preference.setSummary(newValue.toString());
+                        if (newValue.toString().length() > 0) {
+                            preference.setSummary(newValue.toString());
 
-                        me.SetTitle(preference.getKey().split("/")[0], newValue.toString());
-                        saveSettings(bsods, me, os_id);
-                        return true;
+                            me.SetTitle(preference.getKey().split("/")[0], newValue.toString());
+                            saveSettings(bsods, me, os_id);
+                            return true;
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.errorNumberFormat), Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
                     });
                     p.setOnPreferenceClickListener(preference -> {
                         Map<String, String> inTitles = gson.fromJson(me.GetTitles(), type);
@@ -130,15 +137,37 @@ public class SettingsActivity extends AppCompatActivity {
                     p.setSummary(summary);
                     p.setDefaultValue(texts.get(s));
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
-                        String summary2 = newValue.toString();
-                        if (summary2.length() > 50) {
-                            summary2 = summary2.substring(0, 50) + "...";
+                        if (newValue.toString().length() > 0) {
+                            String summary2 = preference.toString();
+                            if (summary2.length() > 50) {
+                                summary2 = summary2.substring(0, 50) + "...";
+                            }
+                            if (preference.toString().toUpperCase().contains("%S")) {
+                                Pattern pat = Pattern.compile("%S");
+                                Matcher m = pat.matcher(preference.getSummary().toString().toUpperCase());
+                                int og_count = 0;
+                                while (m.find()) {
+                                    og_count ++;
+                                }
+                                Matcher m2 = pat.matcher(newValue.toString().toUpperCase());
+                                int new_count = 0;
+                                while (m2.find()) {
+                                    new_count++;
+                                }
+                                if (new_count != og_count) {
+                                    Toast.makeText(getContext(), getString(R.string.errorSubstitute), Toast.LENGTH_SHORT).show();
+                                    return false;
+                                }
+                            }
+                            preference.setSummary(summary2);
+                            preference.setDefaultValue(newValue.toString());
+                            me.SetText(preference.getKey().split("/")[0], newValue.toString());
+                            saveSettings(bsods, me, os_id);
+                            return true;
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.errorString), Toast.LENGTH_SHORT).show();
+                            return false;
                         }
-                        preference.setSummary(summary2);
-                        preference.setDefaultValue(newValue.toString());
-                        me.SetText(preference.getKey().split("/")[0], newValue.toString());
-                        saveSettings(bsods, me, os_id);
-                        return true;
                     });
                     p.setOnPreferenceClickListener(preference -> {
                         Map<String, String> inTexts = gson.fromJson(me.GetTexts(), type);
@@ -173,11 +202,21 @@ public class SettingsActivity extends AppCompatActivity {
                     p.setSummary(numbers.get(s).toString());
                     p.setDefaultValue(numbers.get(s).toString());
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
-                        preference.setSummary(newValue.toString());
-                        preference.setDefaultValue(newValue.toString());
-                        me.SetInt(preference.getKey().split("/")[0], Integer.parseInt(newValue.toString()));
-                        saveSettings(bsods, me, os_id);
-                        return true;
+                        try {
+                            if (Integer.parseInt(newValue.toString()) > 0) {
+                                preference.setSummary(newValue.toString());
+                                preference.setDefaultValue(newValue.toString());
+                                me.SetInt(preference.getKey().split("/")[0], Integer.parseInt(newValue.toString()));
+                                saveSettings(bsods, me, os_id);
+                                return true;
+                            } else {
+                                Toast.makeText(getContext(), getString(R.string.errorNumberFormat), Toast.LENGTH_SHORT).show();
+                                return false;
+                            }
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(getContext(), getString(R.string.errorNumberFormat), Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
                     });
                     p.setOnPreferenceClickListener(preference -> {
                         preference.setDefaultValue(me.GetInt(preference.getKey().split("/")[0]));
@@ -247,11 +286,39 @@ public class SettingsActivity extends AppCompatActivity {
                     p.setDefaultValue(strings.get(s));
                     p.setPersistent(false);
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
-                        preference.setSummary(newValue.toString());
-                        preference.setDefaultValue(newValue.toString());
-                        me.SetString(preference.getKey().split("/")[0], newValue.toString());
-                        saveSettings(bsods, me, os_id);
-                        return true;
+                        if (newValue.toString().length() > 0) {
+                            if (p.getTitle().toString().equals(getString(R.string.errorCode))) {
+                                if (!(newValue.toString().contains("(0x") && newValue.toString().contains(")"))) {
+                                    Toast.makeText(getContext(), getString(R.string.errorCodeFormat), Toast.LENGTH_SHORT).show();
+                                    return false;
+                                }
+                            }
+                            if (preference.toString().toUpperCase().contains("%S")) {
+                                Pattern pat = Pattern.compile("%S");
+                                Matcher m = pat.matcher(preference.toString().toUpperCase());
+                                int og_count = 0;
+                                while (m.find()) {
+                                    og_count ++;
+                                }
+                                Matcher m2 = pat.matcher(newValue.toString().toUpperCase());
+                                int new_count = 0;
+                                while (m2.find()) {
+                                    new_count++;
+                                }
+                                if (new_count != og_count) {
+                                    Toast.makeText(getContext(), getString(R.string.errorSubstitute), Toast.LENGTH_SHORT).show();
+                                    return false;
+                                }
+                            }
+                            preference.setSummary(newValue.toString());
+                            preference.setDefaultValue(newValue.toString());
+                            me.SetString(preference.getKey().split("/")[0], newValue.toString());
+                            saveSettings(bsods, me, os_id);
+                            return true;
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.errorString), Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
                     });
                     p.setOnPreferenceClickListener(preference -> {
                         preference.setDefaultValue(me.GetString(preference.getKey().split("/")[0]));

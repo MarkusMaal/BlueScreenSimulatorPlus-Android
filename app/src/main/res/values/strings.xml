@@ -686,4 +686,8 @@
     <string name="helpBasics">Basics</string>
     <string name="helpUI">UI</string>
     <string name="helpFullscreen">Fullscreen</string>
+    <string name="errorNumberFormat">The value must be a positive integer</string>
+    <string name="errorString">A string must be at least 1 character long</string>
+    <string name="errorCodeFormat">Error code in invalid format. Must be include paranthesis and error code starting with 0x</string>
+    <string name="errorSubstitute">The count of substitute strings (%s) doesn\'t match</string>
 </resources>

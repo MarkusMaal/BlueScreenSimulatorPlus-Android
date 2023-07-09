@@ -141,4 +141,8 @@
     <string name="helpBasics">Põhitõed</string>
     <string name="helpUI">Liides</string>
     <string name="helpFullscreen">Täisekraan</string>
+    <string name="errorNumberFormat">Sisestatud väärtus peab olema positiivne täisarv</string>
+    <string name="errorString">Sõne peab olema vähemalt ühe tähemärgi pikkune</string>
+    <string name="errorCodeFormat">Veakood on vales vormingus. Peab sisaldama ümarsulge ja veakoodi, mis algab 0x-ga</string>
+    <string name="errorSubstitute">Asendatavate sõnede arv (%s) ei ühti</string>
 </resources>
