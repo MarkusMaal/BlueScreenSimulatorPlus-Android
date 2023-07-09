@@ -338,8 +338,9 @@ public class ModernBSOD extends AppCompatActivity {
                 if (autoClose) {
                     finish();
                 } else {
-                    TextView progressText = (TextView)findViewById(R.id.errorProgress);
-                    progressText.setText(String.format(getResources().getString(R.string.Win11_Progress), "100"));
+                    /* Behaviour in beta versions: switch to 100% if autoclose is disabled and progression has ended */
+                    // TextView progressText = (TextView)findViewById(R.id.errorProgress);
+                    // progressText.setText(String.format(getResources().getString(R.string.Win11_Progress), "100"));
                 }
             }
         }.start();
