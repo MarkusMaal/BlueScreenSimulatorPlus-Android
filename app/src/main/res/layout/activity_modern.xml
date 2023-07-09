@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:layout_gravity="center"
+    android:background="@drawable/ic_launcher_background"
+    android:foregroundGravity="center_vertical|center|center_horizontal"
+    android:theme="@style/ThemeOverlay.BlueScreenSimulatorPlus.FullscreenContainer"
+    app:layout_anchorGravity="center|center_horizontal|center_vertical"
+    tools:context=".ModernBSOD">
+
+    <TextView
+        android:id="@+id/waterMark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="#6fffffff" />
+
+    <TextView
+        android:id="@+id/parameters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="clip_horizontal|clip_vertical|top"
+        android:text="0x0000000000000000\n0x0000000000000000\n0x0000000000000000\n0x0000000000000000"
+        android:textColor="@color/white"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="clip_horizontal|center|center_horizontal|fill_horizontal|top|center_vertical"
+        android:foregroundGravity="fill_horizontal|clip_horizontal|center_horizontal"
+        android:gravity="clip_horizontal|center_horizontal|fill_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:scaleX="0.75"
+        android:scaleY="0.75">
+
+        <TextView
+            android:id="@+id/sadSmile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-20sp"
+            android:fontFamily="@font/ubuntu"
+            android:text="@string/Win11_Emoticon"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/white"
+            android:textSize="100sp"
+            tools:text="@string/Win11_Emoticon" />
+
+        <TextView
+            android:id="@+id/errorDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="clip_horizontal"
+            android:layout_marginTop="30sp"
+            android:fontFamily="@font/ubuntu_light"
+            android:foregroundGravity="clip_horizontal"
+            android:gravity="clip_horizontal"
+            android:text="@string/Win11_Description"
+            android:textColor="@color/white"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/errorProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:fontFamily="@font/ubuntu_light"
+            android:text="@string/Win11_Progress"
+            android:textColor="@color/white"
+            android:textSize="23sp" />
+
+        <LinearLayout
+            android:id="@+id/linLay1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/qrCode"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="15sp"
+                android:layout_weight="1"
+                android:scaleType="fitStart"
+                app:srcCompat="@mipmap/bsod_qr_foreground"
+                tools:srcCompat="@mipmap/bsod_qr_foreground" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/moreInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_light"
+                    android:text="@string/Win11_Moreinfo"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/technicalDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15sp"
+                    android:fontFamily="@font/ubuntu_light"
+                    android:text="@string/Win11_TechnicalInfo"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

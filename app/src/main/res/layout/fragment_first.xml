@@ -4,83 +4,481 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FirstFragment">
+    tools:context=".MainFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="40sp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="50dp"
-        tools:layout_editor_absoluteY="50dp">
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.49"
+        app:layout_constraintVertical_weight="1">
 
-        <TextView
-            android:id="@+id/osLabel"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/os" />
+            android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/winSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:entries="@array/OperatingSystems"
-            android:labelFor="@id/osLabel"
-            android:minWidth="250dp"
-            android:minHeight="50dp" />
+            <TextView
+                android:id="@+id/osLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/os" />
 
-        <TextView
-            android:id="@+id/eCodeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/errorCode" />
+            <Spinner
+                android:id="@+id/winSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:entries="@array/OperatingSystems"
+                android:labelFor="@id/osLabel"
+                android:minWidth="250dp"
+                android:minHeight="50dp" />
 
-        <Spinner
-            android:id="@+id/ecodeSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/ErrorCodes"
-            android:labelFor="@id/eCodeLabel"
-            android:minWidth="250dp"
-            android:minHeight="50dp" />
+            <TextView
+                android:id="@+id/eCodeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/errorCode" />
 
-        <Switch
-            android:id="@+id/insiderCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="60sp"
-            android:text="@string/insiderPreviewCheck"
-            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+            <Spinner
+                android:id="@+id/ecodeSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/ErrorCodes"
+                android:labelFor="@id/eCodeLabel"
+                android:minWidth="250dp"
+                android:minHeight="50dp"
+                android:spinnerMode="dialog" />
 
-        <Switch
-            android:id="@+id/showDetailsCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:minHeight="60sp"
-            android:text="@string/showDetails"
-            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
-        <Switch
-            android:id="@+id/autoCloseCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:minHeight="60sp"
-            android:text="@string/autoClose"
-            tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+            <Spinner
+                android:id="@+id/nineXSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/NineXErrors"
+                android:padding="10sp"
+                android:visibility="gone" />
 
-        <Button
-            android:id="@+id/executeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/execute" />
 
-    </LinearLayout>
+            <Spinner
+                android:id="@+id/oneSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:entries="@array/Win12Splash"
+                android:minWidth="250dp"
+                android:minHeight="50dp"
+                android:visibility="gone" />
+
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:alignContent="flex_start"
+                app:alignItems="flex_start"
+                app:flexWrap="wrap">
+
+                <Switch
+                    android:id="@+id/insiderCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:gravity="center"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/insiderPreviewCheck"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+                <Switch
+                    android:id="@+id/deviceCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:gravity="center"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/deviceNotPC"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+                <Switch
+                    android:id="@+id/autoCloseCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/autoClose"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+                <Switch
+                    android:id="@+id/showDetailsCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/showDetails"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+                <Switch
+                    android:id="@+id/showParCodes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="false"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/showPars"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/serverScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="false"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/serverEdition"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/showWatermark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:text="@string/waterMark"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/playSound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:text="@string/playSound"
+                    android:visibility="gone"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/blinkCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/blinkCursor"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/amdProcessorCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/amdProcessor"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/stackTraceCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/showStackTrace"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/culpritCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/culprit"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/moreFileInfoCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/showMoreInfo"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+                <Switch
+                    android:id="@+id/customErrorCodeCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20sp"
+                    android:checked="true"
+                    android:minHeight="60sp"
+                    android:visibility="gone"
+                    android:text="@string/customError"
+                    tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:alignContent="flex_start"
+                    app:alignItems="flex_start"
+                    app:flexWrap="wrap">
+
+
+                    <Button
+                        android:id="@+id/executeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="0"
+                        android:text="@string/execute" />
+
+
+                    <Button
+                        android:id="@+id/unluckyButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="0"
+                        android:text="@string/feelingunlucky" />
+
+                    <Button
+                        android:id="@+id/helpButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="0"
+                        android:text="@string/help" />
+
+                    <Button
+                        android:id="@+id/ntCodeEditButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:text="@string/ntEdit" />
+
+                    <Button
+                        android:id="@+id/codeEditButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:text="@string/codeEdit" />
+
+                    <Button
+                        android:id="@+id/advancedOptionButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:text="@string/advOption" />
+
+                    <Button
+                        android:id="@+id/setCulpritButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        android:text="@string/setCulpritFile" />
+
+                    <Button
+                        android:id="@+id/progressEditor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20sp"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        android:text="@string/title_activity_error_code_editor" />
+                </com.google.android.flexbox.FlexboxLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+
+
+
+                    <TextView
+                        android:id="@+id/colorOptionsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="0"
+                        android:text="@string/theme" />
+
+                    <com.google.android.flexbox.FlexboxLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:alignContent="flex_start"
+                        app:alignItems="flex_start"
+                        app:flexWrap="wrap">
+
+                        <Button
+                            android:id="@+id/textForeground"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/themeFg" />
+
+                        <Button
+                            android:id="@+id/textBackground"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/themeBg" />
+                        <Button
+                            android:id="@+id/hlForeground"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:visibility="gone"
+                            android:text="@string/themeHfg" />
+                        <Button
+                            android:id="@+id/hlBackground"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:visibility="gone"
+                            android:text="@string/themeHbg" />
+                    </com.google.android.flexbox.FlexboxLayout>
+
+                    <TextView
+                        android:id="@+id/globalSettingsTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="0"
+                        android:text="@string/global" />
+
+
+
+                    <com.google.android.flexbox.FlexboxLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:alignContent="flex_start"
+                        app:alignItems="flex_start"
+                        app:flexWrap="wrap">
+                        <Button
+                            android:id="@+id/delPreset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/delPreset" />
+                        <Button
+                            android:id="@+id/addPreset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/addPreset" />
+                        <Button
+                            android:id="@+id/resetHacks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/resetHacks" />
+                        <Button
+                            android:id="@+id/loadConfig"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/loadPreset" />
+                        <Button
+                            android:id="@+id/saveConfig"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/savePreset" />
+                        <Button
+                            android:id="@+id/resetAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/resetAll" />
+                    </com.google.android.flexbox.FlexboxLayout>
+
+                    <TextView
+                        android:id="@+id/devOpsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="0"
+                        android:visibility="gone"
+                        android:text="@string/developer" />
+
+
+
+                    <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/devOps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:alignContent="flex_start"
+                        app:alignItems="flex_start"
+                        android:visibility="gone"
+                        app:flexWrap="wrap">
+
+
+                        <Button
+                            android:id="@+id/dispJson"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="Display JSON data (DEV)" />
+
+                        <Button
+                            android:id="@+id/settingsButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20sp"
+                            android:layout_weight="0"
+                            android:text="@string/settingsButton" />
+                    </com.google.android.flexbox.FlexboxLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

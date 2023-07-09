@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">BlueScreenSimulatorPlus</string>
+    <string name="app_name">Blue screen simulator plus</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">Blue Screen Simulator Plus</string>
@@ -9,17 +9,39 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string-array name="Win12Splash">
+        <item>Windows 1.01 startup screen</item>
+        <item>Windows 2.03 startup screen</item>
+        <item>No startup screen</item>
+    </string-array>
+    <string-array name="NineXErrors">
+        <item>System error</item>
+        <item>Application error</item>
+        <item>Driver error</item>
+        <item>System is busy</item>
+        <item>System is unresponsive</item>
+    </string-array>
+    <string-array name="types">
+        <item>string</item>
+        <item>boolean</item>
+        <item>integer</item>
+        <item>titles</item>
+        <item>texts</item>
+    </string-array>
     <string-array name="OperatingSystems">
         <item>Windows 11</item>
         <item>Windows 10</item>
-        <item>Windows 8</item>
+        <item>Windows 8/8.1</item>
         <item>Windows 7</item>
         <item>Windows Vista</item>
         <item>Windows XP</item>
+        <item>Windows CE</item>
         <item>Windows 2000</item>
-        <item>Windows 9x/ME</item>
-        <item>Windows NT 3.x/4.x</item>
+        <item>Windows NT 3.x/4.0</item>
+        <item>Windows 9x/Me</item>
         <item>Windows 3.1x</item>
+        <item>Windows 1.x/2.x</item>
+        <item>BOOTMGR</item>
     </string-array>
     <string name="os">Operating system</string>
     <string name="execute">Simulate</string>
@@ -31,7 +53,232 @@
     <string name="insiderPreviewCheck">Preview build</string>
     <string name="showDetails">Display error details</string>
     <string name="autoClose">Auto close</string>
-
+    <string-array name="SettingsList">
+        <item>Setting A</item>
+        <item>Setting B</item>
+        <item>Setting C</item>
+    </string-array>
+    <string-array name="CulpritFiles">
+        <item>ACPI.sys:ACPI Driver for NT</item>
+        <item>acpiex.sys:ACPIEx Driver</item>
+        <item>afd.sys:Ancillary Function Driver for WinSock</item>
+        <item>afunix.sys:AF_UNIX socket provider</item>
+        <item>AgileVpn.sys:RAS Agile Vpn Miniport Call Manager</item>
+        <item>ahcache.sys:Application Compatibility Cache</item>
+        <item>atrfiltr.sys:Example ATR Filter Driver</item>
+        <item>bam.sys:BAM Kernel Driver</item>
+        <item>BasicDisplay.sys:Microsoft Basic Display Driver</item>
+        <item>BasicRender.sys:Microsoft Basic Render Driver</item>
+        <item>BazisVirtualCDBus.sys:WinCDEmu virtual CDROM bus</item>
+        <item>Beep.SYS:BEEP Driver</item>
+        <item>bindflt.sys:Windows Bind Filter Driver</item>
+        <item>BOOTVID.dll:VGA Boot Driver</item>
+        <item>bowser.sys:NT Lan Manager Datagram Receiver Driver</item>
+        <item>buttrfly.sys:Butterfly Device Driver</item>
+        <item>cdd.dll:Canonical Display Driver</item>
+        <item>cdrom.sys:SCSI CD-ROM Driver</item>
+        <item>CEA.sys:Event Aggregation Kernel Mode Library</item>
+        <item>CI.dll:Code Integrity Module</item>
+        <item>CimFS.SYS:</item>
+        <item>CLASSPNP.SYS:SCSI Class System Dll</item>
+        <item>cldflt.sys:Cloud Files Mini Filter Driver</item>
+        <item>CLFS.SYS:Common Log File System Driver</item>
+        <item>clipsp.sys:CLIP Service</item>
+        <item>cmimcext.sys:Kernel Configuration Manager Initial Configuration Extension Host Export Driver</item>
+        <item>cng.sys:Kernel Cryptography, Next Generation</item>
+        <item>CompositeBus.sys:Multi-Transport Composite Bus Enumerator</item>
+        <item>condrv.sys:Console Driver</item>
+        <item>crashdmp.sys:Crash Dump Driver</item>
+        <item>dfsc.sys:DFS Namespace Client Driver</item>
+        <item>disk.sys:PnP Disk Driver</item>
+        <item>drmk.sys:Microsoft Trusted Audio Drivers</item>
+        <item>dump_diskdump.sys:</item>
+        <item>dump_dumpfve.sys:</item>
+        <item>dump_storahci.sys:</item>
+        <item>dxgkrnl.sys:DirectX Graphics Kernel</item>
+        <item>dxgmms2.sys:DirectX Graphics MMS</item>
+        <item>EMVSCARD.sys:USB Smart Card Reader</item>
+        <item>example.sys:Example Driver</item>
+        <item>fastfat.SYS:Fast FAT File System Driver</item>
+        <item>filecrypt.sys:Windows sandboxing and encryption filter</item>
+        <item>fileinfo.sys:FileInfo Filter Driver</item>
+        <item>FLTMGR.SYS:Microsoft Filesystem Filter Manager</item>
+        <item>fltrshy.sys:Filter Management Driver</item>
+        <item>Fs_Rec.sys:File System Recognizer Driver</item>
+        <item>fvevol.sys:BitLocker Drive Encryption Driver</item>
+        <item>fwpkclnt.sys:FWP/IPsec Kernel-Mode API</item>
+        <item>gdrv2.sys:GIGA-BYTE NonPnP Driver</item>
+        <item>gpuenergydrv.sys:GPU Energy Kernel Driver</item>
+        <item>gt680x.sys:USB Scanner Driver</item>
+        <item>hal.dll:Hardware Abstraction Layer DLL</item>
+        <item>hcmon.sys:VMware USB monitor</item>
+        <item>HDAudBus.sys:High Definition Audio Bus Driver</item>
+        <item>HIDCLASS.SYS:Hid Class Library</item>
+        <item>HIDPARSE.SYS:Hid Parsing Library</item>
+        <item>hidusb.sys:USB Miniport Driver for Input Devices</item>
+        <item>hl3eng.sys:A game that doesn\'t and will never exist</item>
+        <item>HTTP.sys:HTTP Protocol Stack</item>
+        <item>hvservice.sys:Hypervisor Boot Driver</item>
+        <item>hvsocket.sys:Microsoft Hyper-V Socket Provider</item>
+        <item>iaLPSS2i_GPIO2_CNL.sys:Intel(R) Serial IO GPIO Driver v2</item>
+        <item>id10t.sys:ID10T Device Driver</item>
+        <item>intelpep.sys:Intel Power Engine Plugin</item>
+        <item>intelppm.sys:Processor Device Driver</item>
+        <item>IntelTA.sys:Intel Telemetry Driver</item>
+        <item>iorate.sys:I/O rate control Filter</item>
+        <item>kbdclass.sys:Keyboard Class Driver</item>
+        <item>kbdhid.sys:HID Keyboard Filter Driver</item>
+        <item>kd.dll:Local Kernel Debugger</item>
+        <item>kdnic.sys:Microsoft Kernel Debugger Network Miniport</item>
+        <item>ks.sys:Kernel CSA Library</item>
+        <item>ksecdd.sys:Kernel Security Support Provider Interface</item>
+        <item>ksecpkg.sys:Kernel Security Support Provider Interface Packages</item>
+        <item>ksthunk.sys:Kernel Streaming WOW Thunk Service</item>
+        <item>kwhite.sys:Kitty White</item>
+        <item>lltdio.sys:Link-Layer Topology Mapper I/O Driver</item>
+        <item>luafv.sys:LUA File Virtualization Filter Driver</item>
+        <item>LXCORE.SYS:LX Core</item>
+        <item>lxss.sys:LXSS</item>
+        <item>mmcss.sys:MMCSS Driver</item>
+        <item>monitor.sys:Monitor Driver</item>
+        <item>mouclass.sys:Mouse Class Driver</item>
+        <item>mouhid.sys:HID Mouse Filter Driver</item>
+        <item>mountmgr.sys:Mount Point Manager</item>
+        <item>mpsdrv.sys:Microsoft Protection Service Driver</item>
+        <item>mrxsmb.sys:Windows NT SMB Minirdr</item>
+        <item>mrxsmb20.sys:Longhorn SMB 2.0 Redirector</item>
+        <item>Msfs.SYS:Mailslot driver</item>
+        <item>msgpioclx.sys:GPIO Class Extension Driver</item>
+        <item>msisadrv.sys:ISA Driver</item>
+        <item>mslldp.sys:Microsoft Link-Layer Discovery Protocol Driver</item>
+        <item>msquic.sys:Windows QUIC Driver</item>
+        <item>msrpc.sys:Kernel Remote Procedure Call Provider</item>
+        <item>mssmbios.sys:System Management BIOS Driver</item>
+        <item>mup.sys:Multiple UNC Provider Driver</item>
+        <item>myfault.sys:Not my fault</item>
+        <item>ndis.sys:Network Driver Interface Specification (NDIS)</item>
+        <item>ndiscap.sys:Microsoft NDIS Packet Capture Filter Driver</item>
+        <item>ndistapi.sys:NDIS 3.0 connection wrapper driver</item>
+        <item>NdisVirtualBus.sys:Microsoft Virtual Network Adapter Enumerator</item>
+        <item>ndiswan.sys:MS PPP Framing Driver (Strong Encryption)</item>
+        <item>NDProxy.sys:NDIS Proxy</item>
+        <item>Ndu.sys:Windows Network Data Usage Monitoring Driver</item>
+        <item>netbios.sys:NetBIOS interface driver</item>
+        <item>netbt.sys:MBT Transport driver</item>
+        <item>NETIO.SYS:Network I/O Subsystem</item>
+        <item>Npfs.SYS:NPFS Driver</item>
+        <item>npsvctrig.sys:Named pipe service triggers</item>
+        <item>nsiproxy.sys:NSI Proxy</item>
+        <item>Ntfs.sys:NT File System Driver</item>
+        <item>ntosext.sys:NTOS extension host driver</item>
+        <item>ntoskrnl.exe:NT Kernel &amp; System</item>
+        <item>Null.SYS:NULL Driver</item>
+        <item>nvhda64v.sys:NVIDIA HDMI Audio Driver</item>
+        <item>nvlddmkm.sys:NVIDIA Windows Kernel Mode Driver, Version 461.40</item>
+        <item>NvModuleTracker.sys:Process and module monitoring driver</item>
+        <item>nvvad64v.sys:NVIDIA Virtual Audio Driver</item>
+        <item>nvvhci.sys:Virtual USB Host Controller driver</item>
+        <item>pacer.sys:QoS Packet Scheduler</item>
+        <item>partmgr.sys:Partition driver</item>
+        <item>pci.sys:NT Plug and Play PCI Enumerator</item>
+        <item>pcw.sys:Performance Counters for Windows Driver</item>
+        <item>pdc.sys:Power Dependency Coordinator Driver</item>
+        <item>peauth.sys:Protected Environment Authentication and Authorization Export Driver</item>
+        <item>portcls.sys:Port Class (Class Driver for Port/Miniport Devices)</item>
+        <item>PSHED.dll:Platform Specific Hardware Error Driver</item>
+        <item>rarity.sys:Rarity</item>
+        <item>rasl2tp.sys:RAS L2TP mini-port/call-manager driver</item>
+        <item>raspppoe.sys:RAS PPPoE mini-port/call-manager driver</item>
+        <item>raspptp.sys:Peer-to-Peer Tunneling Protocol</item>
+        <item>rassstp.sys:RAS SSTP Miniport Call Manager</item>
+        <item>rdbss.sys:Redirected Drive Buffering SubSystem Driver</item>
+        <item>rdpbus.sys:Microsoft RDP Bus Device driver</item>
+        <item>rdpvideominiport.sys:Microsoft RDP Video Miniport driver</item>
+        <item>rdyboost.sys:ReadyBoost Driver</item>
+        <item>rspndr.sys:Link-Layer Topology Responder Driver for NDIS 6</item>
+        <item>rt640x64.sys:Realtek 8125/8136/8168/8169 NDIS 6.40 64-bit Driver</item>
+        <item>RTKVHD64.sys:Realtek(r) High Definition Audio Function Driver</item>
+        <item>scfilter.sys:Microsoft Smart Card Reader Filter Driver</item>
+        <item>SgrmAgent.sys:System Guard Runtime Monitor Agent Driver</item>
+        <item>SleepStudyHelper.sys:Sleep Study Helper</item>
+        <item>SMCLIB.SYS:Smart Card Driver Library</item>
+        <item>spaceport.sys:Storage Spaces Driver</item>
+        <item>srv2.sys:Smb 2.0 Server driver</item>
+        <item>srvnet.sys:Server Network driver</item>
+        <item>storahci.sys:MS AHCI Storport Miniport Driver</item>
+        <item>storport.sys:Microsoft Storage Port Driver</item>
+        <item>storqosflt.sys:Storage QoS Filter</item>
+        <item>storvsp.sys:Storage vsp Driver</item>
+        <item>sweden.sys:Blue And Yellow</item>
+        <item>swenum.sys:Plug and Play Software Device Enumerator</item>
+        <item>tardis.sys:Tardis</item>
+        <item>tbs.sys:Export driver for kernel mode TPM API</item>
+        <item>tcpip.sys:TCP/IP driver</item>
+        <item>tcpipreg.sys:TCP/IP Registry Compatibility Driver</item>
+        <item>TDI.SYS:TDI Wrapper</item>
+        <item>tdx.sys:TDI Translation Driver</item>
+        <item>TeeDriverW10x64.sys:Intel(R) Management Engine Interface</item>
+        <item>tm.sys:Kernel Transaction Manager Driver</item>
+        <item>tmeter.sys:NDIS helper driver</item>
+        <item>ucx01000.sys:USB Controller Extension</item>
+        <item>UEFI.sys:UEFI Driver for NT</item>
+        <item>umbus.sys:User-Mode Bus Enumerator</item>
+        <item>umpass.sys:Generic pass-through driver</item>
+        <item>usbaudio.sys:USB Audio Class Driver</item>
+        <item>usbccgp.sys:USB Common Class Generic Parent Driver</item>
+        <item>USBD.SYS:Universal Serial Bus Driver</item>
+        <item>UsbHub3.sys:USB3 HUB Driver</item>
+        <item>USBSTOR.SYS:USB Mass Storage Class Driver</item>
+        <item>usbvideo.sys:USB Video Class Driver</item>
+        <item>USBXHCI.SYS:USB XHCI Driver</item>
+        <item>VBoxDrv.sys:VirtualBox Support Driver</item>
+        <item>VBoxNetLwf.sys:VirtualBox NDIS 6.0 Lightweight Filter Driver</item>
+        <item>VBoxUSBMon.sys:VirtualBox USB Monitor Driver</item>
+        <item>vdrvroot.sys:Virtual Drive Root Enumerator</item>
+        <item>vfpext.sys:Microsoft Azure VFP Extension</item>
+        <item>Vid.sys:Microsoft Hyper-V Virtualization Infrastructure Driver</item>
+        <item>vmbkmclr.sys:Hyper-V VMBus Root KMCL</item>
+        <item>vmbusr.sys:Microsoft Hyper-V Virtual Machine Bus Root Driver</item>
+        <item>vmci.sys:VMware PCI VMCI Bus Device</item>
+        <item>vmm.sys:Virtual Machine Monitor</item>
+        <item>VMNET.SYS:VMware virtual network driver (64-bit)</item>
+        <item>vmnetadapter.sys:VMware virtual network adapter driver (64-bit)</item>
+        <item>vmnetbridge.sys:VMware bridge driver (64-bit)</item>
+        <item>vmnetuserif.sys:VMware network application interface driver (64-bit)</item>
+        <item>VmsProxy.sys:VMSWITCH Proxy Driver</item>
+        <item>VmsProxyHNic.sys:VmSwitch NIC Proxy Driver</item>
+        <item>vmswitch.sys:Microsoft® Network Virtualization Service Provider</item>
+        <item>vmx86.sys:VMware kernel driver</item>
+        <item>volmgr.sys:Volume Manager Driver</item>
+        <item>volmgrx.sys:Volume Manager Extension Driver</item>
+        <item>volsnap.sys:Volume Shadow Copy driver</item>
+        <item>volume.sys:Volume driver</item>
+        <item>vpcivsp.sys:Virtual PCI VSP Driver</item>
+        <item>vsock.sys:VMware vSockets Service</item>
+        <item>vwififlt.sys:Virtual WiFi Filter Driver</item>
+        <item>wanarp.sys:MS Remote Access and Routing ARP Driver</item>
+        <item>watchdog.sys:Watchdog Driver</item>
+        <item>wcifs.sys:Windows Container Isolation FS Filter Driver</item>
+        <item>Wdf01000.sys:Kernel Mode Driver Framework Runtime</item>
+        <item>WdFilter.sys:Microsoft antimalware file system filter driver</item>
+        <item>WDFLDR.SYS:Kernel Mode Driver Framework Loader</item>
+        <item>WdNisDrv.sys:Windows Defender Network Stream Filter</item>
+        <item>werkernel.sys:Windows Error Reporting Kernel Driver</item>
+        <item>wfplwfs.sys:WFP NDIS 6.30 Lightweight Filter Dsriver</item>
+        <item>win32k.sys:Multi-User Win32 Driver</item>
+        <item>win32kbase.sys:Win32 base kernel driver</item>
+        <item>win32kfull.sys:Full/Desktop Win32k Kernel Driver</item>
+        <item>WindowsTrustedRT.sys:Windows Trusted Runtime Interface Driver</item>
+        <item>WindowsTrustedRTProxy.sys:Windows Trusted Runtime Service Proxy Driver</item>
+        <item>winhvr.sys:Windows Hypervisor Root Interface Driver</item>
+        <item>wmiacpi.sys:Windows Management Interface for ACPI</item>
+        <item>WMILIB.SYS:WMILIB WMI support library Dll</item>
+        <item>Wof.sys:Windows Overlay Filter</item>
+        <item>WpdUpFltr.sys:Windows Portable Device Upper Class Filter Driver</item>
+        <item>WppRecorder.sys:WPP Trace Recorder</item>
+        <item>ws2ifsl.sys:Winsock2 IFS Layer</item>
+        <item>WUDFRd.sys:Windows Driver Foundation - User-mode Driver Framework Reflector</item>
+    </string-array>
     <string-array name="ErrorCodes">
         <item>APC_INDEX_MISMATCH (0x00000001)</item>
         <item>DEVICE_QUEUE_NOT_BUSY (0x00000002)</item>
@@ -304,4 +551,143 @@
         <item tools:ignore="Typos">MANUALLY_INITIATED_CRASH1 (0xDEADDEAD)</item>
     </string-array>
     <string name="errorCode">Error code</string>
+    <string name="settings">Settings for %s</string>
+    <string name="colorpick">Change color</string>
+    <string name="settingsButton" translatable="false">String editor (DEV)</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="notImplemented">Not implemented yet!</string>
+    <string name="developer">Developer options</string>
+    <string name="codeEdit">Parameter editor</string>
+    <string name="ntEdit">NT code editor</string>
+    <string name="advOption">Advanced options</string>
+    <string name="showPars">Show parameters</string>
+    <string name="showFile">Show culprit file</string>
+    <string name="serverEdition">Server blue screen</string>
+    <string name="amdProcessor">AMD processor</string>
+    <string name="showStackTrace">Show stack trace</string>
+    <string name="blinkCursor">Blinking cursor</string>
+    <string name="playSound">Play sound</string>
+    <string name="screenMode">Mode</string>
+    <string name="culprit">Culprit file</string>
+    <string name="showACPI">Show ACPI error</string>
+    <string name="unsupportedDevice">The version of Android this device is using, doesn\'t support certain drawing functions, which are required by this blue screen.</string>
+    <string name="unsupportedTitle">Unsupported device</string>
+    <string name="theme">Theme</string>
+    <string name="themeBg">Background color</string>
+    <string name="themeFg">Text color</string>
+    <string name="themeHbg">Highlight background</string>
+    <string name="themeHfg">Highlight text</string>
+    <string name="title_activity_parameter_editor">Parameter editor</string>
+
+    <!-- Preference Titles -->
+
+    <!-- Messages Preferences -->
+
+    <!-- Sync Preferences -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="strings">Miscellaneous</string>
+    <string name="titles">Titles</string>
+    <string name="texts">Texts</string>
+    <string name="integers">Numbers</string>
+    <string name="emoticon">Emoticon</string>
+    <string name="template">Template name</string>
+    <string name="ecode">Error code</string>
+    <string name="ymargin">Vertical margin</string>
+    <string name="xmargin">Horizontal margin</string>
+    <string name="qrsize">QR size</string>
+    <string name="scaling">Scale (%)</string>
+    <string name="bs">Blink speed (ms)</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="selectColor">Select %s color</string>
+    <string name="highlight_">highlight</string>
+    <string name="backgroundCol">background</string>
+    <string name="foregroundCol">text</string>
+    <string name="title_activity_code_edit">Parameter editor</string>
+    <string name="R" translatable="false">R</string>
+    <string name="nullValue" translatable="false">0</string>
+    <string name="F" translatable="false">F</string>
+    <string name="cancel">Cancel</string>
+    <string name="word">Word %s</string>
+    <string name="random">Random code</string>
+    <string name="nullcode">Null code</string>
+    <string name="global">Preset settings</string>
+    <string name="delPreset">Delete preset</string>
+    <string name="addPreset">Add preset</string>
+    <string name="resetHacks">Reset texts and colors</string>
+    <string name="loadPreset">Load file</string>
+    <string name="savePreset">Save file</string>
+    <string name="resetAll">Reset all settings</string>
+    <string name="ostemplate">Operating system template</string>
+    <string name="allowCustOS">Manually specify OS</string>
+    <string name="hybridWarn">This feature allows you to create \"hybrid\" blue screens, but may cause severe crashing issues, depending on which OS is selected. Are you sure you want to continue?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="danger">Dangerous option</string>
+    <string name="currentReset">Warning: This will reset EVERYTHING for the selected configuration. Are you sure you want to continue?</string>
+    <string name="resetAllConfig">Reset all settings</string>
+    <string name="delConfig">Delete configuration</string>
+    <string name="delConfigWarning">Warning: This will remove this OS configuration from the list. Are you sure you want to continue?</string>
+    <string name="resetAllWarning">Warning: This will reset EVERYTHING and all of your custom preferences will be erased. Are you sure you want to continue?</string>
+    <string name="what">Wait, how?</string>
+    <string name="noChange">No changes have been made</string>
+    <string name="resetFinished">Settings have been reset</string>
+    <string name="presetDelFinished">Preset deleted</string>
+    <string name="cannotDel">Cannot delete last remaining preset</string>
+    <string name="title_activity_ntcode_edit">NT code editor</string>
+    <string name="delFile">Delete file</string>
+    <string name="addFile">Add file</string>
+    <string name="renameFile">Rename file</string>
+    <string name="enterName">Enter file name</string>
+    <string name="isCulprit">4/7 parameters</string>
+    <string name="done">Done</string>
+    <string name="waterMark">Display watermark</string>
+    <string name="version">Version</string>
+    <string name="about">About</string>
+    <string name="devThingie">%s steps to developer</string>
+    <string name="devUnlocked">You are now a developer!</string>
+    <string name="devNoNeed">No need, you are already a developer</string>
+    <string name="devName">Developed by</string>
+    <string name="aboutFonts">Fonts</string>
+    <string name="aboutSource">Source code</string>
+    <string name="aboutSourceDescription">The code for this app is publically available under the GPL-v3 license</string>
+    <string name="setCulpritFile">Set culprit file</string>
+    <string name="filePreset">Choose file</string>
+    <string name="fileCustom">Custom file</string>
+    <string name="showMoreInfo">Show additional info about culprit file</string>
+    <string name="customError">Custom error code</string>
+    <string name="ecDescription">Error description</string>
+    <string name="ecCode">Hex code</string>
+    <string name="deviceNotPC">Replace \"PC\" with \"device\"</string>
+    <string name="title_activity_error_code_editor">Error progress editor</string>
+    <string name="kfPlus">KF+</string>
+    <string name="kfMinus">KF-</string>
+    <string name="delKf">DKF</string>
+    <string name="addKf">AKF</string>
+    <string name="rndShort">Rand</string>
+    <string name="save">Save</string>
+    <string name="auto" translatable="false">Gen</string>
+    <string name="clear">Clear</string>
+    <string name="length">Length (ms)</string>
+    <string name="preview">Preview: %s</string>
+    <string name="feelingunlucky">I\'m feeling unlucky</string>
+    <string name="title_activity_bootmgr" translatable="false">BOOTMGR</string>
+    <string name="immersive">Fullscreen mode</string>
+    <string name="immersiveDesc">Hides navigation bar and status area when simulating blue screens</string>
+    <string name="ignoreNotch">Use notch area</string>
+    <string name="ignoreNotchDesc">Extends the screen below the notch area. This does not affect devices that don\'t have a notch.</string>
+    <string name="enableEgg">Enable easter eggs</string>
+    <string name="enableEggDesc">If unchecked, procedures to activate easter eggs will not work.</string>
+    <string name="font">Font</string>
+    <string name="fontsize">Font size</string>
+    <string name="nearestScaling">Use nearest neighbor scaling</string>
+    <string name="nearestScalingDesc">Allows legacy blue screens to be scaled using a more primitive nearest neighbor scaling algorithm, which looks crisper, but also blockier</string>
+    <string name="help">Help</string>
+    <string name="timer">Timer</string>
+    <string name="helpBasics">Basics</string>
+    <string name="helpUI">UI</string>
+    <string name="helpFullscreen">Fullscreen</string>
+    <string name="errorNumberFormat">The value must be a positive integer</string>
+    <string name="errorString">A string must be at least 1 character long</string>
+    <string name="errorCodeFormat">Error code in invalid format. Must be include paranthesis and error code starting with 0x</string>
+    <string name="errorSubstitute">The count of substitute strings (%s) doesn\'t match</string>
 </resources>
