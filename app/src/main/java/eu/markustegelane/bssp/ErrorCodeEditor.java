@@ -79,6 +79,7 @@ public class ErrorCodeEditor extends AppCompatActivity {
         Gson gson = new Gson();
         Type type = new TypeToken<Map<Integer, Integer>>(){}.getType();
         progression = gson.fromJson(bs.AllProgress(), type);
+        int backup_color = binding.totalMillisEditText.getTextColors().getDefaultColor();
         binding.progressSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -152,6 +153,7 @@ public class ErrorCodeEditor extends AppCompatActivity {
             binding.editTextValue.setText(String.valueOf(rVal));
         });
 
+
         binding.editTextValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -172,7 +174,7 @@ public class ErrorCodeEditor extends AppCompatActivity {
                     }
                     return;
                 }
-                binding.editTextValue.setTextColor(Color.rgb(0, 0, 0));
+                binding.editTextValue.setTextColor(backup_color);
             }
 
             @Override
@@ -228,9 +230,12 @@ public class ErrorCodeEditor extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!charSequence.equals("") && !charSequence.equals("-") && !locked) {
+                if (charSequence.toString().matches("[0-9]+") && !locked) {
+                    binding.totalMillisEditText.setTextColor(backup_color);
                     bs.SetInt("progressmillis", Integer.parseInt(charSequence.toString()) / 10);
                     binding.progressSeekBar.setMax(bs.GetInt("progressmillis"));
+                } else if (!locked) {
+                    binding.totalMillisEditText.setTextColor(Color.rgb(255, 0, 0));
                 }
             }
 
