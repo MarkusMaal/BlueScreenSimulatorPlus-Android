@@ -288,7 +288,7 @@ public class SettingsActivity extends AppCompatActivity {
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
                         if (newValue.toString().length() > 0) {
                             if (p.getTitle().toString().equals(getString(R.string.errorCode))) {
-                                if (!(newValue.toString().contains("(0x") && newValue.toString().contains(")"))) {
+                                if (!(newValue.toString().matches("([A-Za-z0-9]+(_[A-Za-z0-9]+)+) \\(0x[A-Fa-f0-9]+\\)"))) {
                                     Toast.makeText(getContext(), getString(R.string.errorCodeFormat), Toast.LENGTH_SHORT).show();
                                     return false;
                                 }
