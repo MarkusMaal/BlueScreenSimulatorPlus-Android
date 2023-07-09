@@ -629,6 +629,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
         binding.helpButton.setOnClickListener(view1413 -> {
             Intent s = new Intent(getContext(), HelpActivity.class);
+            s.putExtra("egg", (os.GetString("And now, the moment you've been waiting for...").equals("Unicode awesomeness!") && egg));
             startActivity(s);
         });
 

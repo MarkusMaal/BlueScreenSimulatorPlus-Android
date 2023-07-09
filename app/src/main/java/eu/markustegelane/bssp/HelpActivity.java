@@ -27,7 +27,6 @@ import java.util.Random;
 public class HelpActivity extends AppCompatActivity {
 
     Bitmap Buffer;
-    boolean showChars = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +34,7 @@ public class HelpActivity extends AppCompatActivity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
+        boolean showChars = getIntent().getExtras().getBoolean("egg");
         int swidth = size.x;
         int sheight = size.y * 10;
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
@@ -47,6 +47,9 @@ public class HelpActivity extends AppCompatActivity {
             text_color = Color.rgb(255, 255, 255);
         }
         if (showChars) {
+            findViewById(R.id.basicsButton).setVisibility(View.GONE);
+            findViewById(R.id.osOptionsButton).setVisibility(View.GONE);
+            findViewById(R.id.fsOptionsButton).setVisibility(View.GONE);
             Random r = new Random();
             new CountDownTimer(Long.MAX_VALUE, 100) {
                 @Override
