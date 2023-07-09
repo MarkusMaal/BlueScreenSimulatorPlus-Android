@@ -457,6 +457,25 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 } else {
                     binding.setCulpritButton.setVisibility(View.GONE);
                 }
+                if (b) {
+                    Map<String, String[]> cfiles;
+                    Type arrayType = new TypeToken<Map<String, String[]>>() {
+                    }.getType();
+                    Gson gson = new Gson();
+                    cfiles = gson.fromJson(os.GetFiles(), arrayType);
+                    String[] files = getActivity().getResources().getStringArray(R.array.CulpritFiles);
+                    List<String> filenames = new ArrayList<>();
+                    for (String line : files) {
+                        filenames.add(line.split(":")[0]);
+                    }
+                    if ((cfiles.size() == 0) || os.GetString("os").equals("Windows NT 3.x/4.0")) {
+                        int temp = r.nextInt(filenames.size() - 1);
+                        os.SetString("culprit", filenames.get(temp));
+                        os.RenameFile("", filenames.get(temp));
+                    } else {
+                        os.SetString("culprit", cfiles.entrySet().iterator().next().getKey());
+                    }
+                }
                 saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         });
