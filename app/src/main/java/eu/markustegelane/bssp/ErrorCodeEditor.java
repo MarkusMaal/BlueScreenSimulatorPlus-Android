@@ -231,9 +231,15 @@ public class ErrorCodeEditor extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().matches("[0-9]+") && !locked) {
-                    binding.totalMillisEditText.setTextColor(backup_color);
-                    bs.SetInt("progressmillis", Integer.parseInt(charSequence.toString()) / 10);
-                    binding.progressSeekBar.setMax(bs.GetInt("progressmillis"));
+                    int newvalueundivided = Integer.parseInt(charSequence.toString());
+                    int newvalue = Integer.parseInt(charSequence.toString()) / 10;
+                    if ((newvalue > 0) && (newvalueundivided % 10 == 0)) {
+                        binding.totalMillisEditText.setTextColor(backup_color);
+                        bs.SetInt("progressmillis", newvalue);
+                        binding.progressSeekBar.setMax(bs.GetInt("progressmillis"));
+                    } else {
+                        binding.totalMillisEditText.setTextColor(Color.rgb(128, 128, 0));
+                    }
                 } else if (!locked) {
                     binding.totalMillisEditText.setTextColor(Color.rgb(255, 0, 0));
                 }
