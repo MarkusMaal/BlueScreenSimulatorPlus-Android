@@ -179,6 +179,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.unluckyButton.setOnClickListener(view117 -> {
             String[] oses = getResources().getStringArray(R.array.OperatingSystems);
             BlueScreen unlucky = new BlueScreen(oses[r.nextInt(oses.length)], true, getActivity());
+            while (unlucky.GetString("os").equals("BOOTMGR")) {
+                unlucky = new BlueScreen(oses[r.nextInt(oses.length)], true, getActivity());
+            }
             unlucky.Shuffle();
             switch (unlucky.GetString("os")) {
                 case "Windows 8/8.1":
@@ -202,6 +205,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 case "Windows XP":
                 case "Windows Vista":
                 case "Windows 7":
+                case "BOOTMGR":
                     i = new Intent(view117.getContext(), LegacyBSOD.class);
                     b = new Bundle();
                     b.putSerializable("bluescreen", unlucky);
@@ -211,8 +215,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putBoolean("nearestscaling", nearest);
                     i.putExtras(b);
                     startActivity(i);
+                    break;
                 default:
-                    Toast.makeText(getContext(), unlucky.GetString("os"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Unknown OS: " + unlucky.GetString("os"), Toast.LENGTH_SHORT).show();
                     break;
             }
         });
