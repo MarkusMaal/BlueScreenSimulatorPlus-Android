@@ -1281,6 +1281,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             case "Windows CE":
                 details.setVisibility(View.GONE);
                 codesel.setVisibility(View.VISIBLE);
+                ac.setVisibility(View.VISIBLE);
                 binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
                 break;
             default:

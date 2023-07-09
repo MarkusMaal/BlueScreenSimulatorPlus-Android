@@ -370,7 +370,9 @@ public class LegacyBSOD extends AppCompatActivity {
                     }
 
                     public void onFinish() {
-                        finish();
+                        if (me.GetBool("autoclose")) {
+                            finish();
+                        }
                     }
                 }.start();
             }
