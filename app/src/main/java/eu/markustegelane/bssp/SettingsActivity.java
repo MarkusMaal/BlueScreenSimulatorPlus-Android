@@ -177,7 +177,7 @@ public class SettingsActivity extends AppCompatActivity {
                     pc.addPreference(p);
                 }
             }
-            if (numbers.size() > 0) {
+            if ((numbers.size() > 0) && (me.IsModern() || numbers.size() > 1)) {
                 pc = new PreferenceCategory(ps.getContext());
                 pc.setTitle(R.string.integers);
                 ps.addPreference(pc);
@@ -186,7 +186,13 @@ public class SettingsActivity extends AppCompatActivity {
                     boolean ignoreSetting = false;
                     switch (s) {
                         case "blink_speed": p.setTitle(R.string.bs); break;
-                        case "scale": p.setTitle(R.string.scaling); break;
+                        case "scale":
+                            if (me.IsModern()) {
+                                p.setTitle(R.string.scaling);
+                            } else {
+                                continue;
+                            }
+                            break;
                         case "qr_size": p.setTitle(R.string.qrsize); break;
                         case "margin-x": p.setTitle(R.string.xmargin); break;
                         case "margin-y": p.setTitle(R.string.ymargin); break;

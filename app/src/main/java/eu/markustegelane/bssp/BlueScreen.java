@@ -82,6 +82,10 @@ public class BlueScreen implements Serializable {
     }
     public String AllProgress() { return this.progression; }
 
+    public boolean IsModern() {
+        return this.os.equals("Windows 11") || this.os.equals("Windows 10")||this.os.equals("Windows 8/8.1");
+    }
+
     // blue screen properties
     public boolean GetBool(String name) {
         Gson gson = new Gson();
