@@ -531,7 +531,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         } else {
                             os.SetString("culprit", fileSelect.getAdapter().getItem((int)fileSelect.getSelectedItemId()).toString().split(":")[0]);
                         }
-                        if ((os.GetString("os").equals("Windows XP")) || (os.GetString("os").equals("Windows Vista")) || (os.GetString("os").equals("Windows 7"))) {
+                        if ((os.GetString("os").equals("Windows XP")) || (os.GetString("os").equals("Windows Vista")) || (os.GetString("os").equals("Windows 7")) || (os.GetString("os").equals("Windows 2000"))) {
 
                             Map <String, String[]> files;
                             Type arrayType = new TypeToken<Map<String, String[]>>() {}.getType();
