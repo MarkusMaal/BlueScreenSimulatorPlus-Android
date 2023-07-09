@@ -223,6 +223,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         });
 
         binding.executeButton.setOnClickListener(view1 -> {
+            if (egg && !os.GetString("Karrots").equals("")) { Toast.makeText(getContext(), "Karrots are good for your eyesight", Toast.LENGTH_SHORT).show(); }
             switch (bluescreens.get((int)winspin.getSelectedItemId()).GetString("os")) {
                 case "Windows 8/8.1":
                 case "Windows 10":
