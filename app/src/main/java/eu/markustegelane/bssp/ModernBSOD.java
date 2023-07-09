@@ -297,6 +297,7 @@ public class ModernBSOD extends AppCompatActivity {
             binding.parameters.setTextSize((float)me.GetInt("scale") / 9f);
             String codes = "";
             codes += me.GenAddress(4, 16, false).replace(", ", "\n");
+            binding.parameters.setTextColor(me.GetTheme(false, false));
             binding.parameters.setText(codes);
         }
         int length = me.GetInt("progressmillis");
