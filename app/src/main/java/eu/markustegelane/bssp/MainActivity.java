@@ -1,23 +1,19 @@
 package eu.markustegelane.bssp;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import eu.markustegelane.bssp.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import eu.markustegelane.bssp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
