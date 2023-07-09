@@ -1254,6 +1254,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 details.setVisibility(View.VISIBLE);
                 if (os.GetString("os").equals("Windows 7") || os.GetString("os").equals("Windows Vista")) {
                     ac.setVisibility(View.VISIBLE);
+                } else {
+                    ac.setVisibility(View.GONE);
                 }
                 codesel.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
