@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -1206,13 +1207,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Button hfg = binding.hlForeground;
         Spinner codesel = binding.ecodeSpinner;
         Spinner nineXSpinner = binding.nineXSpinner;
-        Switch ac = binding.autoCloseCheck;
-        Switch green = binding.insiderCheck;
-        Switch details = binding.showDetailsCheck;
-        Switch pars = binding.showParCodes;
-        Switch server = binding.serverScreen;
-        Switch waterMark = binding.showWatermark;
-        Switch deviceCheck = binding.deviceCheck;
+        CheckBox ac = binding.autoCloseCheck;
+        CheckBox green = binding.insiderCheck;
+        CheckBox details = binding.showDetailsCheck;
+        CheckBox pars = binding.showParCodes;
+        CheckBox server = binding.serverScreen;
+        CheckBox waterMark = binding.showWatermark;
+        CheckBox deviceCheck = binding.deviceCheck;
         TextView elabel = binding.eCodeLabel;
 
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);

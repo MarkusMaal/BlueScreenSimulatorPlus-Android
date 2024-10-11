@@ -89,7 +89,7 @@
                 app:alignItems="flex_start"
                 app:flexWrap="wrap">
 
-                <Switch
+                <CheckBox
                     android:id="@+id/insiderCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                     android:text="@string/insiderPreviewCheck"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
-                <Switch
+                <CheckBox
                     android:id="@+id/deviceCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                     android:text="@string/deviceNotPC"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
-                <Switch
+                <CheckBox
                     android:id="@+id/autoCloseCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                     android:text="@string/autoClose"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
-                <Switch
+                <CheckBox
                     android:id="@+id/showDetailsCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                     android:text="@string/showDetails"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
 
-                <Switch
+                <CheckBox
                     android:id="@+id/showParCodes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
                     android:visibility="gone"
                     android:text="@string/showPars"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-                <Switch
+                <CheckBox
                     android:id="@+id/serverScreen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -153,7 +153,7 @@
                     android:visibility="gone"
                     android:text="@string/serverEdition"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-                <Switch
+                <CheckBox
                     android:id="@+id/showWatermark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
                     android:minHeight="60sp"
                     android:text="@string/waterMark"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-                <Switch
+                <CheckBox
                     android:id="@+id/playSound"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -172,7 +172,7 @@
                     android:text="@string/playSound"
                     android:visibility="gone"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-                <Switch
+                <CheckBox
                     android:id="@+id/blinkCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
                     android:visibility="gone"
                     android:text="@string/blinkCursor"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-                <Switch
+                <CheckBox
                     android:id="@+id/amdProcessorCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -192,7 +192,7 @@
                     android:visibility="gone"
                     android:text="@string/amdProcessor"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-                <Switch
+                <CheckBox
                     android:id="@+id/stackTraceCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
                     android:visibility="gone"
                     android:text="@string/showStackTrace"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-                <Switch
+                <CheckBox
                     android:id="@+id/culpritCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -212,7 +212,7 @@
                     android:visibility="gone"
                     android:text="@string/culprit"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-                <Switch
+                <CheckBox
                     android:id="@+id/moreFileInfoCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
                     android:visibility="gone"
                     android:text="@string/showMoreInfo"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
-                <Switch
+                <CheckBox
                     android:id="@+id/customErrorCodeCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -321,7 +321,7 @@
                 </com.google.android.flexbox.FlexboxLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -333,7 +333,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:layout_weight="0"
                         android:text="@string/theme" />
 
                     <com.google.android.flexbox.FlexboxLayout
@@ -463,7 +462,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20sp"
                             android:layout_weight="0"
-                            android:text="Display JSON data (DEV)" />
+                            android:text="Display JSON data (DEV)"
+                            tools:ignore="HardcodedText" />
 
                         <Button
                             android:id="@+id/settingsButton"
