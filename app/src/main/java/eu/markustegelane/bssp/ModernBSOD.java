@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -116,35 +117,7 @@ public class ModernBSOD extends AppCompatActivity {
         }
     };
     private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    if (AUTO_HIDE) {
-                        delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    view.performClick();
-                    break;
-                default:
-                    break;
-            }
-            return false;
-        }
-    };
+    private final Runnable mHideRunnable = this::hide;
 
     private void FillCustomGradient(View v) {
         final View view = v;
@@ -175,7 +148,7 @@ public class ModernBSOD extends AppCompatActivity {
         p.setShape(new RectShape());
         p.setShaderFactory(sf);
         p.setCornerRadii(new float[] { 5, 5, 5, 5, 0, 0, 0, 0 });
-        layers[0] = (Drawable) p;
+        layers[0] = p;
 
         LayerDrawable composite = new LayerDrawable(layers);
         view.setBackground(composite);
@@ -211,7 +184,7 @@ public class ModernBSOD extends AppCompatActivity {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(binding.getRoot());
-        FrameLayout fl = (FrameLayout)findViewById(R.id.frameLayout1);
+        FrameLayout fl = findViewById(R.id.frameLayout1);
         insiderPreview = me.GetBool("green");
         autoClose = me.GetBool("autoclose");
         showDetails = me.GetBool("show_description");
@@ -310,7 +283,7 @@ public class ModernBSOD extends AppCompatActivity {
         }
         scale = (float)me.GetInt("scale") / 100;
 
-        LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout);
+        LinearLayout ll = findViewById(R.id.linearLayout);
         ll.setScaleX(scale);
         ll.setScaleY(scale);
         ll.setMinimumWidth((int)((float)ll.getWidth() * scale));
@@ -353,9 +326,9 @@ public class ModernBSOD extends AppCompatActivity {
         new CountDownTimer((long) finalLength * interval, interval) {
             final Map<Integer, Integer> prog = gson.fromJson(me.AllProgress(), proType);
             String proText = "0";
-            List<Integer> ignorable = new ArrayList<>();
+            final List<Integer> ignorable = new ArrayList<>();
             public void onTick(long millisUntilFinished) {
-                Integer cs = (int)((finalLength * interval - millisUntilFinished) / interval);
+                int cs = (int)((finalLength * interval - millisUntilFinished) / interval);
                 String newText = proText;
                 for (Integer i: prog.keySet()) {
                     if ((cs > i) && (!ignorable.contains(i))) {
@@ -364,30 +337,29 @@ public class ModernBSOD extends AppCompatActivity {
                         ignorable.add(i);
                     }
                 }
-                TextView progressText = (TextView)findViewById(R.id.errorProgress);
+                TextView progressText = findViewById(R.id.errorProgress);
                 try {
                     if (me.GetString("os").equals("Windows 8/8.1")) {
                         if (autoClose) {
-                            descripy.setText(String.format(texts.get("Information text with dump"), newText.toString()));
+                            descripy.setText(String.format(texts.get("Information text with dump"), newText));
                         }
                     } else {
-                        progressText.setText(String.format(texts.get("Progress"), newText.toString()));
+                        progressText.setText(String.format(texts.get("Progress"), newText));
                     }
                 } catch (Exception e) {
-                    throw e;
-                    //Toast.makeText(getWindow().getContext(), "Error occoured:\n" + e.toString(), Toast.LENGTH_SHORT).show();
-                    //cancel();
+                    Toast.makeText(getWindow().getContext(), "Error occoured:\n" + e.toString(), Toast.LENGTH_SHORT).show();
+                    cancel();
                 }
             }
 
             public void onFinish() {
                 if (autoClose) {
                     finish();
-                } else {
-                    /* Behaviour in beta versions: switch to 100% if autoclose is disabled and progression has ended */
+                } /*else {
+                    /// Behaviour in beta versions: switch to 100% if autoclose is disabled and progression has ended
                     // TextView progressText = (TextView)findViewById(R.id.errorProgress);
                     // progressText.setText(String.format(getResources().getString(R.string.Win11_Progress), "100"));
-                }
+                } */
             }
         }.start();
     }
@@ -395,14 +367,6 @@ public class ModernBSOD extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-    }
-
-    private void toggle() {
-        if (mVisible) {
-            hide();
-        } else {
-            show();
-        }
     }
 
     private void hide() {
@@ -439,8 +403,8 @@ public class ModernBSOD extends AppCompatActivity {
      * Schedules a call to hide() in delay milliseconds, canceling any
      * previously scheduled calls.
      */
-    private void delayedHide(int delayMillis) {
+    private void delayedHide() {
         mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
+        mHideHandler.postDelayed(mHideRunnable, ModernBSOD.AUTO_HIDE_DELAY_MILLIS);
     }
 }
