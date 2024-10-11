@@ -649,7 +649,7 @@
     <string name="devName">Developed by</string>
     <string name="aboutFonts">Fonts</string>
     <string name="aboutSource">Source code</string>
-    <string name="aboutSourceDescription">The code for this app is publically available under the GPL-v3 license</string>
+    <string name="aboutSourceDescription">The code for this app is publicly available under the GPL-v3 license</string>
     <string name="setCulpritFile">Set culprit file</string>
     <string name="filePreset">Choose file</string>
     <string name="fileCustom">Custom file</string>
@@ -688,6 +688,7 @@
     <string name="helpFullscreen">Fullscreen</string>
     <string name="errorNumberFormat">The value must be a positive integer</string>
     <string name="errorString">A string must be at least 1 character long</string>
-    <string name="errorCodeFormat">Error code in invalid format. Must be include paranthesis and error code starting with 0x</string>
+    <string name="errorCodeFormat">Error code in invalid format. Must be include parenthesis and error code starting with 0x</string>
     <string name="errorSubstitute">The count of substitute strings (%s) doesn\'t match</string>
+    <string name="rainbow">Rainbow</string>
 </resources>

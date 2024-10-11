@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.BlueScreenSimulatorPlus" parent="Theme.Material3.DynamicColors.Dark">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#3333ee</item>
-        <item name="colorPrimaryVariant">#3333ca</item>
+        <item name="colorPrimary">#283593</item>
+        <item name="colorPrimaryVariant">#1a237e</item>
         <item name="colorOnPrimary">#fefefe</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#4444ee</item>
-        <item name="colorSecondaryVariant">#3333ee</item>
+        <item name="colorSecondary">#2962ff</item>
+        <item name="colorSecondaryVariant">#7398ff</item>
         <item name="colorOnSecondary">#fefefe</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>

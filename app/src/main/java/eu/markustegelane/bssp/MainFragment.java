@@ -3,6 +3,7 @@ package eu.markustegelane.bssp;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +13,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,7 +79,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             Bundle savedInstanceState
     ) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
         developer = sharedPreferences.getBoolean("developer", false);
         immersive = sharedPreferences.getBoolean("immersive", false);
         notch = sharedPreferences.getBoolean("ignorenotch", false);
@@ -119,7 +119,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Bundle pb = getActivity().getIntent().getExtras();
 
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
         int selection = 0;
         if (pb != null) {
             selection = pb.getInt("id");
@@ -184,12 +184,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 unlucky = new BlueScreen(oses[r.nextInt(oses.length)], true, getActivity());
             }
             unlucky.Shuffle();
+            Intent i;
+            Bundle b;
             switch (unlucky.GetString("os")) {
                 case "Windows 8/8.1":
                 case "Windows 10":
                 case "Windows 11":
-                    Intent i = new Intent(view117.getContext(), ModernBSOD.class);
-                    Bundle b = new Bundle();
+                    i = new Intent(view117.getContext(), ModernBSOD.class);
+                    b = new Bundle();
                     b.putSerializable("bluescreen", unlucky);
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
@@ -224,14 +226,17 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         });
 
         binding.executeButton.setOnClickListener(view1 -> {
-            if (egg && !os.GetString("Karrots").equals("")) { Toast.makeText(getContext(), "Karrots are good for your eyesight", Toast.LENGTH_SHORT).show(); }
+            if (egg && !os.GetString("Karrots").isEmpty()) { Toast.makeText(getContext(), "Karrots are good for your eyesight", Toast.LENGTH_SHORT).show(); }
+            Intent i;
+            Bundle b;
+            BlueScreen me;
             switch (bluescreens.get((int)winspin.getSelectedItemId()).GetString("os")) {
                 case "Windows 8/8.1":
                 case "Windows 10":
                 case "Windows 11":
-                    Intent i = new Intent(view1.getContext(), ModernBSOD.class);
-                    Bundle b = new Bundle();
-                    BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
+                    i = new Intent(view1.getContext(), ModernBSOD.class);
+                    b = new Bundle();
+                    me = bluescreens.get((int)winspin.getSelectedItemId());
                     b.putSerializable("bluescreen", me);
                     b.putBoolean("immersive", immersive);
                     b.putBoolean("ignorenotch", notch);
@@ -330,7 +335,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.moreFileInfoCheck.setOnCheckedChangeListener((compoundButton, b) -> {
             if ((!locked) && (os != null)) {
                 os.SetBool("extrafile", b);
-                if (os.GetText("Culprit file memory address").equals("")) {
+                if (os.GetText("Culprit file memory address").isEmpty()) {
                     os.PushText("Culprit file memory address", "***  %s - Address %s base at %s, DateStamp %s");
                 }
                 saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
@@ -420,7 +425,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 case DialogInterface.BUTTON_POSITIVE:
                     locked = true;
                     bluescreens.clear();
-                    SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences sharedPreferences1 = getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
                     Gson gson = new Gson();
                     SharedPreferences.Editor editor = sharedPreferences1.edit();
                     bluescreens.add(new BlueScreen("Windows 1.x/2.x", true, getActivity()));
@@ -470,7 +475,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     for (String line : files) {
                         filenames.add(line.split(":")[0]);
                     }
-                    if ((cfiles.size() == 0) || os.GetString("os").equals("Windows NT 3.x/4.0")) {
+                    if ((cfiles.isEmpty()) || os.GetString("os").equals("Windows NT 3.x/4.0")) {
                         int temp = r.nextInt(filenames.size() - 1);
                         os.SetString("culprit", filenames.get(temp));
                         os.RenameFile("", filenames.get(temp));
@@ -539,7 +544,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                             Type arrayType = new TypeToken<Map<String, String[]>>() {}.getType();
                             Gson gson = new Gson();
                             files = gson.fromJson(os.GetFiles(), arrayType);
-                            os.RenameFile(files.keySet().stream().findFirst().get().toString(), os.GetString("culprit"));
+                            if (files.keySet().stream().findFirst().isPresent()) {
+                                os.RenameFile(files.keySet().stream().findFirst().get(), os.GetString("culprit"));
+                            }
                         }
                         saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
                     })
@@ -840,7 +847,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 String[] subsection_tokens = section.split("\\[");
                 if (section.startsWith("*")) { continue; }
                 String os_name = subsection_tokens[0].replace("\n", "").replace("Windows Vista/7", "Windows 7");
-                if (os_name.equals("")) { continue; }
+                if (os_name.isEmpty()) { continue; }
                 BlueScreen bs = new BlueScreen(os_name, false, getActivity());
                 bs.SetString("os", os_name);
                 bs.ClearAllTitleTexts();
@@ -857,7 +864,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                         float size = 16f;
                         String[] entries = subsection_withoutheading.split(";");
                         for (String entry: entries) {
-                            if (!entry.replace("\n", "").equals("")) {
+                            if (!entry.replace("\n", "").isEmpty()) {
                                 String key = entry.split("=")[0].replace("\n", "");
                                 String value = entry.substring(entry.indexOf("=")+1);
                                 switch (type) {
@@ -985,7 +992,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             } else if (format.equals("2.0")) {
                 fileData.append("\n\n\n#").append(bs.GetString("os").replace("Windows Vista", "Windows Vista/7").replace("Windows 7", "Windows Vista/7")).append("\n\n");
             }
-            if (strings.size() > 0) {
+            if (!strings.isEmpty()) {
                 fileData.append("\n\n[string]");
                 for (Map.Entry<String, String> entry : strings.entrySet()) {
                     fileData.append("\n");
@@ -997,13 +1004,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 fileData.append(String.format("\necode%s=", i)).append(bs.GetString(String.format("ecode%s", i))).append(";");
             }
             fileData.append("\nicon=2D Window;");
-            if ((progress.size() > 0) && (format.equals("2.1"))) {
+            if ((!progress.isEmpty()) && (format.equals("2.1"))) {
                 fileData.append("\n\n[progress]");
                 for (Map.Entry<Integer, Integer> entry: progress.entrySet()) {
                     fileData.append(String.format("\n%s=%s;", entry.getKey(), entry.getValue()));
                 }
             }
-            if (files.size() > 0) {
+            if (!files.isEmpty()) {
                 fileData.append("\n\n[nt_codes]");
                 for (Map.Entry<String, String[]> entry: files.entrySet()) {
                     fileData.append("\n")
@@ -1013,7 +1020,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                             .append(";");
                 }
             }
-            if (bools.size() > 0) {
+            if (!bools.isEmpty()) {
                 fileData.append("\n\n[boolean]");
                 for (Map.Entry<String, Boolean> entry: bools.entrySet()) {
                     String outpend = "True";
@@ -1027,7 +1034,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                             .append(";");
                 }
             }
-            if (ints.size() > 0) {
+            if (!ints.isEmpty()) {
                 fileData.append("\n\n[integer]");
                 for (Map.Entry<String, Integer> entry : ints.entrySet()) {
                     fileData.append("\n")
@@ -1050,7 +1057,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             fileData.append("\nhfg=")
                     .append(RGB_String(bs.GetTheme(false, true)))
                     .append(";");
-            if (titles.size() > 0) {
+            if (!titles.isEmpty()) {
                 fileData.append("\n\n[title]");
                 for (Map.Entry<String, String> entry: titles.entrySet()) {
                     fileData.append("\n")
@@ -1060,7 +1067,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                             .append(";");
                 }
             }
-            if (txts.size() > 0) {
+            if (!txts.isEmpty()) {
                 fileData.append("\n\n[text]");
                 for (Map.Entry<String, String> entry: txts.entrySet()) {
                     fileData.append("\n")
@@ -1174,7 +1181,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
         blues.set((int)id, modified);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String json = gson.toJson(blues);
@@ -1183,7 +1190,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     public void saveSelection(int index) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("selectedItem", index);
         editor.apply();

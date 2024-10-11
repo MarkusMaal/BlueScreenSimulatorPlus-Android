@@ -417,7 +417,7 @@ public class BlueScreen implements Serializable {
     public void SetAllProgression(int[] keys, int[] values)
     {
         Gson gson = new Gson();
-        Map <Integer, Integer> progression = new LinkedHashMap<Integer, Integer>();
+        Map <Integer, Integer> progression = new LinkedHashMap<>();
 
         for (int i = 0; i < keys.length; i++)
         {
@@ -436,7 +436,7 @@ public class BlueScreen implements Serializable {
             if (i == 1) { inspir = GetString("ecode2"); }
             if (i == 2) { inspir = GetString("ecode3"); }
             if (i == 3) { inspir = GetString("ecode4"); }
-            if (!ot.toString().equals("")) { ot.append(", "); }
+            if (!ot.toString().isEmpty()) { ot.append(", "); }
             ot.append("0x").append(GenHex(places, inspir));
         }
         if (lower) { return ot.toString().toLowerCase(); }
@@ -508,7 +508,6 @@ public class BlueScreen implements Serializable {
 
     public void RenameFile(String key, String renamed)
     {
-        String[] codes;
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String[]>>(){}.getType();
         Map<String, String[]> codefiles = gson.fromJson(this.codefiles, type);
@@ -810,7 +809,7 @@ public class BlueScreen implements Serializable {
                 SetInt("margin-x", 9);
                 SetInt("margin-y", 12);
                 SetFont("Ubuntu Light", Typeface.NORMAL, 64f / metrics.density);
-                SetInt("scale", (int)(65 + device_height * 5));
+                SetInt("scale", 65 + device_height * 5);
 
                 SetBool("autoclose", true);
                 SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
@@ -830,7 +829,7 @@ public class BlueScreen implements Serializable {
                 SetTheme(RGB(16, 113, 170), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 10 (Native, ClearType)");
                 SetFont("Ubuntu Light", Typeface.NORMAL, 64f / metrics.density);
-                SetInt("scale", (int)(65 + device_height * 5));
+                SetInt("scale", 65 + device_height * 5);
                 SetInt("qr_size", window_height / 8);
                 SetInt("margin-x", 9);
                 SetInt("margin-y", 12);
@@ -854,10 +853,10 @@ public class BlueScreen implements Serializable {
                 PushText("Error code", "If you call a support person, give them this info:\n\nStop code: %s");
                 PushText("Progress", "%s%% complete");
                 SetString("qr_file", "local:0");
-                SetTheme(RGB(0, 0, 128), RGB(255, 255, 255), false);
+                SetTheme(RGB(22, 60, 141), RGB(255, 255, 255), false);
                 SetString("friendlyname", "Windows 11 (Native, ClearType)");
                 SetFont("Ubuntu Light", Typeface.NORMAL, 64f / metrics.density);
-                SetInt("scale", (int)(65 + device_height * 5));
+                SetInt("scale", 65 + device_height * 5);
                 SetInt("qr_size", window_height / 8);
                 SetInt("margin-x", 9);
                 SetInt("margin-y", 12);
@@ -873,6 +872,7 @@ public class BlueScreen implements Serializable {
                 SetBool("font_support", true);
                 break;
         }
+        SetBool("rainbow", false);
 
     }
 }
