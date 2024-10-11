@@ -1,4 +1,5 @@
-# Blue Screen Simulator Plus for Android
+# Blue Screen Simulator Plus for Android (Canary Branch)
+The canary branch contains the latest and the least stable version of Blue Screen Simulator Plus for Android.
 The most authentic and customizable blue screen simulation experience for Android! 
 
 ![screenshot](https://i.imgur.com/cdGqGie.png "Windows 11 blue screen simulation demo")
