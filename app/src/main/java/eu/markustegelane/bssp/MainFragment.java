@@ -332,6 +332,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
+        binding.rainbowCheck.setOnCheckedChangeListener(((compoundButton, b) -> {
+            if ((!locked) && (os != null)) {
+                os.SetBool("rainbow", b);
+                saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
+            }
+        }));
+
         binding.moreFileInfoCheck.setOnCheckedChangeListener((compoundButton, b) -> {
             if ((!locked) && (os != null)) {
                 os.SetBool("extrafile", b);
@@ -1221,6 +1228,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         CheckBox server = binding.serverScreen;
         CheckBox waterMark = binding.showWatermark;
         CheckBox deviceCheck = binding.deviceCheck;
+        CheckBox rainbowCheck = binding.rainbowCheck;
         TextView elabel = binding.eCodeLabel;
 
         ac.setVisibility(View.GONE); green.setVisibility(View.GONE); details.setVisibility(View.GONE); pars.setVisibility(View.GONE);
@@ -1229,7 +1237,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE); binding.blinkCheck.setVisibility(View.GONE);
         binding.amdProcessorCheck.setVisibility(View.GONE); binding.stackTraceCheck.setVisibility(View.GONE);
         binding.setCulpritButton.setVisibility(View.GONE); binding.culpritCheck.setVisibility(View.GONE); binding.moreFileInfoCheck.setVisibility(View.GONE);
-        binding.progressEditor.setVisibility(View.GONE);
+        binding.progressEditor.setVisibility(View.GONE); rainbowCheck.setVisibility(View.GONE);
         deviceCheck.setVisibility(View.GONE);
         binding.customErrorCodeCheck.setVisibility(View.GONE); binding.customErrorCodeCheck.setChecked(false);
         if ("Windows NT 3.x/4.0".equals(os.GetString("os"))) {
@@ -1256,6 +1264,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 server.setVisibility(View.VISIBLE);
                 codesel.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
+                rainbowCheck.setVisibility(View.VISIBLE);
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
                 binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
@@ -1268,6 +1277,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 parEdit.setVisibility(View.VISIBLE);
                 codesel.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
+                rainbowCheck.setVisibility(View.VISIBLE);
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
                 binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
@@ -1328,6 +1338,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         pars.setChecked(os.GetBool("extracodes"));
         server.setChecked(os.GetBool("server"));
         waterMark.setChecked(os.GetBool("watermark"));
+        rainbowCheck.setChecked(os.GetBool("rainbow"));
         binding.playSound.setChecked(os.GetBool("playsound"));
         binding.blinkCheck.setChecked(os.GetBool("blinkblink"));
         binding.amdProcessorCheck.setChecked(os.GetBool("amd"));

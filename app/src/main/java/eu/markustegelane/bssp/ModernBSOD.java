@@ -4,7 +4,14 @@ import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.PaintDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -139,6 +146,41 @@ public class ModernBSOD extends AppCompatActivity {
         }
     };
 
+    private void FillCustomGradient(View v) {
+        final View view = v;
+        Drawable[] layers = new Drawable[1];
+
+        ShapeDrawable.ShaderFactory sf = new ShapeDrawable.ShaderFactory() {
+            @Override
+            public Shader resize(int width, int height) {
+                return new LinearGradient(
+                        -0.125f * view.getWidth(),
+                        -0.125f * view.getHeight(),
+                        1.25f * view.getWidth(),
+                        1.25f * view.getHeight(),
+                        new int[] {
+                                Color.rgb(0xEE, 0x82, 0xEE), // please input your color from resource for color-4
+                                Color.rgb(255,0,0),
+                                Color.rgb(255,0xA5,0),
+                                Color.rgb(255,255,0),
+                                Color.rgb(0,0x80,0),
+                                Color.rgb(0,0,255),
+                                Color.rgb(0x4B,0,0x82),
+                                Color.rgb(0xEE, 0x82, 0xEE)},
+                        new float[] { 0, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f,0.75f, 0.875f },
+                        Shader.TileMode.CLAMP);
+            }
+        };
+        PaintDrawable p = new PaintDrawable();
+        p.setShape(new RectShape());
+        p.setShaderFactory(sf);
+        p.setCornerRadii(new float[] { 5, 5, 5, 5, 0, 0, 0, 0 });
+        layers[0] = (Drawable) p;
+
+        LayerDrawable composite = new LayerDrawable(layers);
+        view.setBackground(composite);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -262,6 +304,9 @@ public class ModernBSOD extends AppCompatActivity {
         }
         if (device) {
             descripy.setText(descripy.getText().toString().replace("PC", "device"));
+        }
+        if (me.GetBool("rainbow")) {
+            FillCustomGradient(binding.frameLayout1);
         }
         scale = (float)me.GetInt("scale") / 100;
 
