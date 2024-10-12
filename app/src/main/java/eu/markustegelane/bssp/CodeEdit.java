@@ -2,6 +2,7 @@ package eu.markustegelane.bssp;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -171,6 +172,7 @@ public class CodeEdit extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
@@ -210,7 +212,7 @@ public class CodeEdit extends AppCompatActivity {
 
     public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
         blues.set((int)id, modified);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String json = gson.toJson(blues);

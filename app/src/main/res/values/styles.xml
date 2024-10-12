@@ -8,4 +8,10 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+
+    <!-- small style hack to allow secondary color to be displayed on checkboxes
+         use android:theme="secondaryPrimary" attribute on desired view to use this -->
+    <style name="secondaryPrimary">
+        <item name="colorPrimary">?attr/colorSecondary</item>
+    </style>
 </resources>

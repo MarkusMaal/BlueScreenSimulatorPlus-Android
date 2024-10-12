@@ -1,5 +1,6 @@
 package eu.markustegelane.bssp;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,6 +51,7 @@ public class NTCodeEdit extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         me = (BlueScreen) bundle.getSerializable("bluescreen");
         bs_id = bundle.getInt("bluescreen_id");
+        //noinspection unchecked
         bluescreens = (List<BlueScreen>)bundle.getSerializable("bluescreens");
         AddListeners(getResources(), this.getPackageName());
         SetWords(7);
@@ -182,71 +184,56 @@ public class NTCodeEdit extends AppCompatActivity {
             View file_view = LayoutInflater.from(this).inflate(R.layout.file_name_view, null);
             alert.setView(file_view);
             file_view.findViewById(R.id.fourSevenCheck).setVisibility(View.GONE);
-            alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    me.RenameFile(binding.errorFileSpinner.getAdapter().getItem((int)binding.errorFileSpinner.getSelectedItemId()).toString().split(" ")[0], ((EditText)file_view.findViewById(R.id.fileName)).getText().toString());
-                    saveSettings(bluescreens, me, bs_id);
-                    RefreshSpinner();
-                }
+            alert.setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                me.RenameFile(binding.errorFileSpinner.getAdapter().getItem((int)binding.errorFileSpinner.getSelectedItemId()).toString().split(" ")[0], ((EditText)file_view.findViewById(R.id.fileName)).getText().toString());
+                saveSettings(bluescreens, me, bs_id);
+                RefreshSpinner();
             });
-            alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+            alert.setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {
 
-                }
             });
             alert.show();
 
         });
-        findViewById(R.id.deleteFileButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                me.DeleteFile(binding.errorFileSpinner.getAdapter().getItem((int)binding.errorFileSpinner.getSelectedItemId()).toString().split(" ")[0]);
-                selected = 0;
-                RefreshSpinner();
-            }
+        findViewById(R.id.deleteFileButton).setOnClickListener(view -> {
+            me.DeleteFile(binding.errorFileSpinner.getAdapter().getItem((int)binding.errorFileSpinner.getSelectedItemId()).toString().split(" ")[0]);
+            selected = 0;
+            RefreshSpinner();
         });
 
-        findViewById(R.id.addFileButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getWindow().getContext());
-                alert.setTitle(getString(R.string.addFile));
-                alert.setMessage(getString(R.string.enterName));
-                View file_view = LayoutInflater.from(getWindow().getContext()).inflate(R.layout.file_name_view, null);
-                alert.setView(file_view);
-                file_view.findViewById(R.id.fourSevenCheck).setVisibility(View.VISIBLE);
-                if (!me.GetString("os").equals("Windows NT 3.x/4.0")) {
-                    ((Switch)file_view.findViewById(R.id.fourSevenCheck)).setClickable(false);
-                    ((Switch)file_view.findViewById(R.id.fourSevenCheck)).setChecked(true);
-                }
-                alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        List<String> codes = new ArrayList<>();
-                        int codeCount = 2;
-                        if (!me.GetString("os").equals("Windows NT 3.x/4.0")) {
-                            codeCount = 4;
-                        } else if (((Switch)file_view.findViewById(R.id.fourSevenCheck)).isChecked()) {
-                            codeCount = 7;
-                        }
-                        for (int k = 0; k < codeCount; k++) {
-                            codes.add("RRRRRRRR");
-                        }
-                        me.PushFile(((EditText)file_view.findViewById(R.id.fileName)).getText().toString(), codes.toArray(new String[0]));
-                        saveSettings(bluescreens, me, bs_id);
-                        RefreshSpinner();
-                    }
-                });
-                alert.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                alert.show();
+        findViewById(R.id.addFileButton).setOnClickListener(view -> {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getWindow().getContext());
+            alert.setTitle(getString(R.string.addFile));
+            alert.setMessage(getString(R.string.enterName));
+            View file_view = LayoutInflater.from(getWindow().getContext()).inflate(R.layout.file_name_view, null);
+            alert.setView(file_view);
+            file_view.findViewById(R.id.fourSevenCheck).setVisibility(View.VISIBLE);
+            if (!me.GetString("os").equals("Windows NT 3.x/4.0")) {
+                ((Switch)file_view.findViewById(R.id.fourSevenCheck)).setClickable(false);
+                ((Switch)file_view.findViewById(R.id.fourSevenCheck)).setChecked(true);
             }
+            alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    List<String> codes = new ArrayList<>();
+                    int codeCount = 2;
+                    if (!me.GetString("os").equals("Windows NT 3.x/4.0")) {
+                        codeCount = 4;
+                    } else if (((Switch)file_view.findViewById(R.id.fourSevenCheck)).isChecked()) {
+                        codeCount = 7;
+                    }
+                    for (int k = 0; k < codeCount; k++) {
+                        codes.add("RRRRRRRR");
+                    }
+                    me.PushFile(((EditText)file_view.findViewById(R.id.fileName)).getText().toString(), codes.toArray(new String[0]));
+                    saveSettings(bluescreens, me, bs_id);
+                    RefreshSpinner();
+                }
+            });
+            alert.setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {
+
+            });
+            alert.show();
         });
     }
 
@@ -269,7 +256,7 @@ public class NTCodeEdit extends AppCompatActivity {
 
     public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
         blues.set((int)id, modified);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String json = gson.toJson(blues);
@@ -279,6 +266,7 @@ public class NTCodeEdit extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);

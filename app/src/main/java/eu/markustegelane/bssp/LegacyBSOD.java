@@ -720,7 +720,9 @@ public class LegacyBSOD extends AppCompatActivity {
                 if (me.GetBool("amd")) {
                     processorText = "AuthenticAMD";
                 }
-                myText.append(String.format(txts.get("CPUID formatting"), processorText)).append("\n\n");
+                if (!me.GetBool("threepointone")) {
+                    myText.append(String.format(txts.get("CPUID formatting"), processorText)).append("\n\n");
+                }
                 myText.append(String.format("%-38.38s %-38.38s", txts.get("Stack trace heading"), txts.get("Stack trace heading"))).append("\n");
                 for (int n = 0; n < culpritfiles.size(); n += 2) {
                     String filename1 = (String) culpritfiles.keySet().toArray()[n];
@@ -1161,6 +1163,7 @@ public class LegacyBSOD extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         if ((mp != null) && (mp.isPlaying())) {
             mp.stop();
             mp.reset();

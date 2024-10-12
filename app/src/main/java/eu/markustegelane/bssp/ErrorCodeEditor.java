@@ -1,5 +1,6 @@
 package eu.markustegelane.bssp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -280,7 +281,7 @@ public class ErrorCodeEditor extends AppCompatActivity {
 
     public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
         blues.set((int)id, modified);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getWindow().getContext());
+        SharedPreferences sharedPreferences = getWindow().getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String json = gson.toJson(blues);
@@ -290,6 +291,7 @@ public class ErrorCodeEditor extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         Intent i = new Intent(getWindow().getContext(), MainActivity.class);
         startActivity(i);
         finish();

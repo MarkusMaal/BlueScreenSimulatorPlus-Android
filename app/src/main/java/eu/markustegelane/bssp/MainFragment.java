@@ -34,6 +34,7 @@ import androidx.fragment.app.Fragment;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -92,11 +93,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             bluescreens.add(new BlueScreen("Windows 3.1x", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows 9x/Me", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows CE", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows NT 3.1", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows 2000", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows XP", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows Vista", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows 7", true, getActivity()));
+            bluescreens.add(new BlueScreen("Windows 8 Beta", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows 8/8.1", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows 10", true, getActivity()));
             bluescreens.add(new BlueScreen("Windows 11", true, getActivity()));
@@ -119,7 +122,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         Bundle pb = getActivity().getIntent().getExtras();
 
 
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("eu.markustegelane.bssp", 0);
         int selection = 0;
         if (pb != null) {
             selection = pb.getInt("id");
@@ -130,9 +133,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             selection = bluescreens.size() - 1;
         }
         Spinner winspin = binding.winSpinner;
-        if (developer) {
+        if (sharedPreferences.getBoolean("developer", false)) {
             binding.devOpsText.setVisibility(View.VISIBLE);
             binding.devOps.setVisibility(View.VISIBLE);
+            System.out.println("******** DEVELOPER MODE ACTIVE ********");
         }
 
         List<String> friendlyNames = new ArrayList<>();
@@ -176,8 +180,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 saveSettings(bluescreens, os, binding.winSpinner.getSelectedItemId());
             }
         });
-
-        binding.unluckyButton.setOnClickListener(view117 -> {
+        getActivity().findViewById(R.id.luckyFloater).setOnClickListener(view117 -> {
             String[] oses = getResources().getStringArray(R.array.OperatingSystems);
             BlueScreen unlucky = new BlueScreen(oses[r.nextInt(oses.length)], true, getActivity());
             while (unlucky.GetString("os").equals("BOOTMGR")) {
@@ -224,8 +227,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     break;
             }
         });
-
-        binding.executeButton.setOnClickListener(view1 -> {
+        getActivity().findViewById(R.id.simulateFloater).setOnClickListener(view1 -> {
             if (egg && !os.GetString("Karrots").isEmpty()) { Toast.makeText(getContext(), "Karrots are good for your eyesight", Toast.LENGTH_SHORT).show(); }
             Intent i;
             Bundle b;
@@ -439,11 +441,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     bluescreens.add(new BlueScreen("Windows 3.1x", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows 9x/Me", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows CE", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows NT 3.1", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows NT 3.x/4.0", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows 2000", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows XP", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows Vista", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows 7", true, getActivity()));
+                    bluescreens.add(new BlueScreen("Windows 8 Beta", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows 8/8.1", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows 10", true, getActivity()));
                     bluescreens.add(new BlueScreen("Windows 11", true, getActivity()));
@@ -615,18 +619,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             getActivity().finish();
         });
 
-        binding.advancedOptionButton.setOnClickListener(view15 -> {
-            Intent s = new Intent(getContext(), SettingsActivity.class);
-            Bundle b = new Bundle();
-            BlueScreen me = bluescreens.get((int)winspin.getSelectedItemId());
-            b.putSerializable("bluescreen", me);
-            b.putInt("bluescreen_id", (int) binding.winSpinner.getSelectedItemId());
-            b.putSerializable("bluescreens", (Serializable) bluescreens);
-            s.putExtras(b);
-            startActivity(s);
-            getActivity().finish();
-        });
-
         binding.textForeground.setOnClickListener(view115 -> ColorChooser(os.GetTheme(false, false), String.format(getString(R.string.selectColor), getString(R.string.foregroundCol)), false, false));
 
         binding.textBackground.setOnClickListener(view114 -> ColorChooser(os.GetTheme(true, false), String.format(getString(R.string.selectColor), getString(R.string.backgroundCol)), true, false));
@@ -641,12 +633,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
             builder.setMessage(getString(R.string.delConfigWarning)).setPositiveButton(getString(R.string.yes), delPresetListener)
                     .setNegativeButton(getString(R.string.no), delPresetListener).setTitle(getString(R.string.delConfig)).setIcon(tv.resourceId).show();
-        });
-
-        binding.helpButton.setOnClickListener(view1413 -> {
-            Intent s = new Intent(getContext(), HelpActivity.class);
-            s.putExtra("egg", (os.GetString("And now, the moment you've been waiting for...").equals("Unicode awesomeness!") && egg));
-            startActivity(s);
         });
 
         binding.addPreset.setOnClickListener(view110 -> {

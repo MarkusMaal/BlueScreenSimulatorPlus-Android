@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainFragment">
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -87,7 +88,8 @@
                 android:layout_height="wrap_content"
                 app:alignContent="flex_start"
                 app:alignItems="flex_start"
-                app:flexWrap="wrap">
+                app:flexWrap="wrap"
+                android:theme="@style/secondaryPrimary">
 
                 <CheckBox
                     android:id="@+id/insiderCheck"
@@ -153,6 +155,7 @@
                     android:visibility="gone"
                     android:text="@string/serverEdition"
                     tools:ignore="RtlHardcoded,UseSwitchCompatOrMaterialXml" />
+
                 <CheckBox
                     android:id="@+id/showWatermark"
                     android:layout_width="wrap_content"
@@ -258,35 +261,6 @@
                     app:alignItems="flex_start"
                     app:flexWrap="wrap">
 
-
-                    <Button
-                        android:id="@+id/executeButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="20sp"
-                        android:layout_weight="0"
-                        android:text="@string/execute" />
-
-
-                    <Button
-                        android:id="@+id/unluckyButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="20sp"
-                        android:layout_weight="0"
-                        android:text="@string/feelingunlucky" />
-
-                    <Button
-                        android:id="@+id/helpButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="20sp"
-                        android:layout_weight="0"
-                        android:text="@string/help" />
-
                     <Button
                         android:id="@+id/ntCodeEditButton"
                         android:layout_width="wrap_content"
@@ -302,14 +276,6 @@
                         android:layout_marginEnd="20sp"
                         android:layout_weight="1"
                         android:text="@string/codeEdit" />
-
-                    <Button
-                        android:id="@+id/advancedOptionButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20sp"
-                        android:layout_weight="1"
-                        android:text="@string/advOption" />
 
                     <Button
                         android:id="@+id/setCulpritButton"

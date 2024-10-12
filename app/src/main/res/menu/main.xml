@@ -1,0 +1,11 @@
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="HardcodedText">
+        <item
+            android:id="@+id/advancedOptionButton"
+            android:title="@string/advOption" />
+        <item
+            android:id="@+id/helpButton"
+            android:title="@string/help"/>
+
+</menu>

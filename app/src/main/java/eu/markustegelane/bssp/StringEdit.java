@@ -1,6 +1,7 @@
 package eu.markustegelane.bssp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -334,7 +335,7 @@ public class StringEdit extends AppCompatActivity {
 
     public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
         blues.set((int)id, modified);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String json = gson.toJson(blues);

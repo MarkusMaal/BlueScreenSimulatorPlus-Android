@@ -16,10 +16,15 @@
     </string-array>
     <string-array name="NineXErrors">
         <item>System error</item>
+        <item>System error (Windows Me beta)</item>
         <item>Application error</item>
+        <item>Application error (Windows 95 beta)</item>
+        <item>Recoverable application error</item>
         <item>Driver error</item>
         <item>System is busy</item>
         <item>System is unresponsive</item>
+        <item>Windows RG (parody)</item>
+        <item>Unsafe eject</item>
     </string-array>
     <string-array name="types">
         <item>string</item>
@@ -32,6 +37,7 @@
         <item>Windows 11</item>
         <item>Windows 10</item>
         <item>Windows 8/8.1</item>
+        <item>Windows 8 Beta</item>
         <item>Windows 7</item>
         <item>Windows Vista</item>
         <item>Windows XP</item>
@@ -691,4 +697,6 @@
     <string name="errorCodeFormat">Error code in invalid format. Must be include parenthesis and error code starting with 0x</string>
     <string name="errorSubstitute">The count of substitute strings (%s) doesn\'t match</string>
     <string name="rainbow">Rainbow</string>
+    <string name="nav_open" translatable="false">nav_open</string>
+    <string name="nav_close" translatable="false">nav_close</string>
 </resources>

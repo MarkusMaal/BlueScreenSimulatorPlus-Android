@@ -1,5 +1,6 @@
 package eu.markustegelane.bssp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -53,6 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
@@ -90,7 +92,7 @@ public class SettingsActivity extends AppCompatActivity {
             Map<String, Integer> numbers = gson.fromJson(me.AllInts(), inType);
             Map<String, String> strings = gson.fromJson(me.AllStrings(), type);
 
-            if (titles.size() > 0) {
+            if (!titles.isEmpty()) {
                 pc = new PreferenceCategory(ps.getContext());
                 pc.setTitle(R.string.titles);
                 ps.addPreference(pc);
@@ -102,7 +104,7 @@ public class SettingsActivity extends AppCompatActivity {
                     p.setSummary(titles.get(s));
                     p.setDefaultValue(titles.get(s));
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
-                        if (newValue.toString().length() > 0) {
+                        if (!newValue.toString().isEmpty()) {
                             preference.setSummary(newValue.toString());
 
                             me.SetTitle(preference.getKey().split("/")[0], newValue.toString());
@@ -121,7 +123,7 @@ public class SettingsActivity extends AppCompatActivity {
                     pc.addPreference(p);
                 }
             }
-            if (texts.size() > 0) {
+            if (!texts.isEmpty()) {
                 pc = new PreferenceCategory(ps.getContext());
                 pc.setTitle(R.string.texts);
                 ps.addPreference(pc);
@@ -137,7 +139,7 @@ public class SettingsActivity extends AppCompatActivity {
                     p.setSummary(summary);
                     p.setDefaultValue(texts.get(s));
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
-                        if (newValue.toString().length() > 0) {
+                        if (!newValue.toString().isEmpty()) {
                             String summary2 = preference.toString();
                             if (summary2.length() > 50) {
                                 summary2 = summary2.substring(0, 50) + "...";
@@ -177,7 +179,7 @@ public class SettingsActivity extends AppCompatActivity {
                     pc.addPreference(p);
                 }
             }
-            if ((numbers.size() > 0) && (me.IsModern() || numbers.size() > 1)) {
+            if ((!numbers.isEmpty()) && (me.IsModern() || numbers.size() > 1)) {
                 pc = new PreferenceCategory(ps.getContext());
                 pc.setTitle(R.string.integers);
                 ps.addPreference(pc);
@@ -235,7 +237,7 @@ public class SettingsActivity extends AppCompatActivity {
             pc = new PreferenceCategory(ps.getContext());
             pc.setTitle(R.string.strings);
             ps.addPreference(pc);
-            if (strings.size() > 0) {
+            if (!strings.isEmpty()) {
                 for (String s : strings.keySet()) {
                     EditTextPreference p = new EditTextPreference(ps.getContext());
                     boolean ignoreSetting = false;
@@ -292,7 +294,7 @@ public class SettingsActivity extends AppCompatActivity {
                     p.setDefaultValue(strings.get(s));
                     p.setPersistent(false);
                     p.setOnPreferenceChangeListener((preference, newValue) -> {
-                        if (newValue.toString().length() > 0) {
+                        if (!newValue.toString().isEmpty()) {
                             if (p.getTitle().toString().equals(getString(R.string.errorCode))) {
                                 if (!(newValue.toString().matches("([A-Za-z0-9]+(_[A-Za-z0-9]+)+) \\(0x[A-Fa-f0-9]+\\)"))) {
                                     Toast.makeText(getContext(), getString(R.string.errorCodeFormat), Toast.LENGTH_SHORT).show();
@@ -373,7 +375,7 @@ public class SettingsActivity extends AppCompatActivity {
                 });
                 pc.addPreference(ts);
             }
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
             SwitchPreference ip = new SwitchPreference(ps.getContext());
             ip.setTitle(getString(R.string.immersive));
             ip.setSummary(getString(R.string.immersiveDesc));
@@ -463,7 +465,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         public void setToast() {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
             boolean dev = sharedPreferences.getBoolean("developer", false);
             if (!dev) {
                 devProgress += 1;
@@ -504,7 +506,7 @@ public class SettingsActivity extends AppCompatActivity {
                         return original;
                     }
                 }
-                if (!font.equals("")) {
+                if (!font.isEmpty()) {
                     if (newList.chars().filter(ch -> ch == '\n').count() < original.split("\n").length - 1) {
                         newList.append(font).append("\n");
                     } else{
@@ -519,7 +521,7 @@ public class SettingsActivity extends AppCompatActivity {
             List<Character> original_letters = original.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
             StringBuilder newName = new StringBuilder();
             Random r = new Random();
-            while (original_letters.size() > 0) {
+            while (!original_letters.isEmpty()) {
                 Character letter = original_letters.get(r.nextInt(original_letters.size()));
                 if (r.nextBoolean()) {
                     newName.append(letter.toString().toUpperCase());
@@ -533,12 +535,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         public void saveSettings(List<BlueScreen> blues, BlueScreen modified, long id) {
             blues.set((int)id, modified);
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("eu.markustegelane.bssp", Context.MODE_PRIVATE);
             Gson gson = new Gson();
             SharedPreferences.Editor editor = sharedPreferences.edit();
             String json = gson.toJson(blues);
             editor.putString("bluescreens", json);
             editor.apply();
+            editor.commit();
         }
     }
 }

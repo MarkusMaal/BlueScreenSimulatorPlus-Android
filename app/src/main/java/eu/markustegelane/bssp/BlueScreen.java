@@ -650,12 +650,17 @@ public class BlueScreen implements Serializable {
                 PushTitle("Main", "Windows");
                 PushTitle("System is busy", "System is busy. ");
                 PushTitle("Warning", "WARNING!");
-                PushText("System error", "An error has occurred. To continue:\n\nPress Enter to return to Windows, or\n\nPress CTRL + ALT + DEL to restart your computer. If you do this,\nyou will lose any unsaved information in all open applications.\n\nError: %s : %s : %s");
+                PushText("System error", "An error has occurred. To continue:\n\nPress Enter to return to Windows, or\n\nPress CTRL + ALT + DEL to restart your computer. If you do this,\nyou will lose any unsaved information in all open applications.\n\nError: {0}");
+                PushText("System error (Windows Me beta)", "An error has occurred.\n\nTo continue:\n\n*  Press any key to return to Windows, or\n\n*  Press CTRL+ALT+DEL to restart your computer.\n   If you do this, you will lose any unsaved information in all\n   open applications.\n\n\n                     Error: %s");
                 PushText("Application error", "A fatal exception %s has occurred at %s:%s. The current\napplication will be terminated.\n\n* Press any key to terminate current application\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in all applications.");
+                PushText("Application error (Windows 95 beta)", "A fatal exception %s has occurred at %s:%s. The current\napplication will be terminated.");
+                PushText("Recoverable application error", "An exception %s has occurred at %s:%s in VxD HSFLOP(03) +\n%s.  This was called from %s:%s in VxD HSFLOP(03) +\n%s.  It may be possible to continue normally.\n\n*  Press any key to attempt to continue.\n*  Press CTRL+ALT+DEL to restart your computer.  You will\n   lose any unsaved information in all applications. ");
                 PushText("Driver error", "A fatal exception %s has occurred at %s:%s in VXD VMM(01) +\n%s. The current application will be terminated.\n\n* Press any key to terminate current application\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in all applications.");
                 PushText("System is busy", "The system is busy waiting for the Close Program dialog box to be\ndisplayed. You can wait and see if it appears, or you can restart\nyour computer.\n\n* Press any key to return to Windows and wait.\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in programs that are running.");
                 PushText("System is unresponsive", "The system is either busy or has become unstable. You can wait and\nsee if it becomes available again, or you can restart your computer.\n\n* Press any key to return to Windows and wait.\n* Press CTRL + ALT + DEL again to restart your computer. You will\n  lose any unsaved information in programs that are running.");
+                PushText("Windows RG (parody)", "WINDOWS IS BROKEN\nPLEASE REINSTALL WINDOWS");
                 PushText("Prompt", "Press any key to continue");
+                PushText("Unsafe eject", "The volume that was removed has open\nfiles on it. Next time please check first\nto see if the volume can really be removed.");
                 SetString("friendlyname", "Windows 9x/Millennium Edition (Text mode, Standard)");
                 SetBool("font_support", false);
                 SetBool("blinkblink", true);
@@ -674,6 +679,38 @@ public class BlueScreen implements Serializable {
 
                 SetInt("scale", 75);
                 SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
+                break;
+            case "Windows NT 3.1":
+                this.os = "Windows NT 3.x/4.0";
+                SetString("friendlyname", "Windows NT 3.1 (Text mode, Standard)");
+                SetTheme(RGB(0, 0, 160), RGB(170, 170, 170), false);
+                SetBool("threepointone", true);
+                PushText("Bootscreen", "Microsoft (R) Windows NT (TM) Version 3.1 [32320 Kb Memory]");
+                PushText("Error code formatting", "*** STOP: %s (%s)");
+                PushText("Stack trace heading", "Dll Base DateStmp - Name");
+                PushText("Stack trace table formatting", "%s %s - %s");
+                PushText("Memory address dump heading", "Address  dword dump   Build [v1.528]                         - Name");
+                PushText("Memory address dump table", "%s %s %s %s %s %s %s - %s");
+                PushText("Troubleshooting text", "Restart your computer. If this message reappears, do not restart.\nContact your system administrator or technical support group, and/or\nperipheral device vendor.");
+                SetInt("blink_speed", 100);
+                for (int n = 0; n < 10; n++)
+                {
+                    String[] inspirn = { "RRRRRRRR", "RRRRRRRR" };
+                    PushFile(GenFile(true, this.activity), inspirn);
+                }
+                for (int n = 0; n < 30 - this.codefiles.length() / 2; n++)
+                {
+                    String[] inspirn = {  "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
+                    PushFile(GenFile(true, this.activity), inspirn);
+                }
+                SetBool("font_support", false);
+                SetBool("blinkblink", true);
+                SetBool("blink", true);
+                SetBool("bootscreen", true);
+                SetBool("troubleshoot", true);
+
+                SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
+                SetBool("stack_trace", true);
                 break;
             case "Windows NT 3.x/4.0":
                 SetTheme(RGB(0, 0, 160), RGB(170, 170, 170), false);
@@ -815,6 +852,22 @@ public class BlueScreen implements Serializable {
                 SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
                 SetDefaultProgression();
                 SetBool("show_description", true);
+                SetBool("font_support", true);
+                break;
+            case "Windows 8 Beta":
+                SetString("friendlyname", "Windows 8 Beta (Native, ClearType)");
+                PushText("Your computer needs to restart", "Your computer needs to restart.");
+                PushText("Information text with dump", "It encountered a problem and will restart automatically.");
+                PushText("Error code", "Error: {0}");
+                PushText("Progress", "Collecting problem information:    {0} seconds remaining");
+                SetFont("Segoe UI", Typeface.NORMAL, 26f / metrics.density);
+                SetTheme(RGB(0, 0, 0), RGB(255, 255, 255), false);
+                SetInt("margin-x", 250);
+                SetInt("margin-y", 220);
+                SetInt("timer", 10);
+                SetBool("autoclose", true);
+                SetBool("countdown", true);
+                SetString("code", "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)");
                 SetBool("font_support", true);
                 break;
             case "Windows 10":
