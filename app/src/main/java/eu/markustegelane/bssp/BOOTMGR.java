@@ -55,13 +55,12 @@ public class BOOTMGR extends AppCompatActivity {
             }
         }
     };
-    private ActivityBootmgrBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityBootmgrBinding.inflate(getLayoutInflater());
+        eu.markustegelane.bssp.databinding.ActivityBootmgrBinding binding = ActivityBootmgrBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Bundle bundle = getIntent().getExtras();
         if (bundle.getBoolean("immersive")) {
@@ -142,7 +141,7 @@ public class BOOTMGR extends AppCompatActivity {
             tPaint.setStyle(Paint.Style.FILL);
             float height = tPaint.measureText("yY");
             float width = tPaint.measureText(line);
-            if (!extra.equals("")) {
+            if (!extra.isEmpty()) {
                 DrawText(extra, shift, x_coord + width + tPaint.measureText(" "), canvas, bmp, themehl, "", themehl, tf);
             }
             canvas.drawText(line, x_coord, (height + 24f * i) + shift, tPaint); // 15f is to put space between top edge and the text, if you want to change it, you can

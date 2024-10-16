@@ -29,6 +29,7 @@ import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -98,7 +99,7 @@ public class LegacyBSOD extends AppCompatActivity {
     private int tbg;
     private int tfg;
 
-    List<Bitmap> characters = new ArrayList<>();
+    final List<Bitmap> characters = new ArrayList<>();
 
     Map<String, String> texts;
 
@@ -122,35 +123,27 @@ public class LegacyBSOD extends AppCompatActivity {
         }
     };
     private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
+    private final Runnable mHideRunnable = this::hide;
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    if (AUTO_HIDE) {
-                        delayedHide(AUTO_HIDE_DELAY_MILLIS);
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    view.performClick();
-                    break;
-                default:
-                    break;
-            }
-            return false;
+    private final View.OnTouchListener mDelayHideTouchListener = (view, motionEvent) -> {
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (AUTO_HIDE) {
+                    delayedHide(AUTO_HIDE_DELAY_MILLIS);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                view.performClick();
+                break;
+            default:
+                break;
         }
+        return false;
     };
     private ActivityLegacyBinding binding;
 
@@ -186,6 +179,18 @@ public class LegacyBSOD extends AppCompatActivity {
         }
         binding.bsodWindow.setDrawingCacheEnabled(false);
         setContentView(binding.getRoot());
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if ((mp != null) && (mp.isPlaying())) {
+                    mp.stop();
+                    mp.reset();
+                }
+                finish();
+            }
+        });
+
         /* for fun stuff */
         if (bundle.getBoolean("egg")) {
             try {
@@ -221,7 +226,7 @@ public class LegacyBSOD extends AppCompatActivity {
             }.getType();
             Map<String, String[]> codes;
             codes = gson.fromJson(me.GetFiles(), arrayType);
-            fileCodes = codes.get(codes.keySet().stream().findFirst().get().toString());
+            fileCodes = codes.get(codes.keySet().stream().findFirst().get());
             for (int i = 0; i < fileCodes.length; i++) {
                 fileCodes[i] = me.GenHex(8, fileCodes[i]);
             }
@@ -472,13 +477,7 @@ public class LegacyBSOD extends AppCompatActivity {
         return sb.toString();
     }
     private void Draw12Canvas(BlueScreen me, Integer shift, boolean newImage, String type) {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        };
+        DialogInterface.OnClickListener dialogClickListener = (dialogInterface, i) -> finish();
 
         Bitmap rasters = BitmapFactory.decodeResource(getResources(), R.drawable.doscii);
         rasters.setPremultiplied(false);
@@ -499,7 +498,7 @@ public class LegacyBSOD extends AppCompatActivity {
             canvas.drawRect(0, 0, bmp.getWidth(), bmp.getHeight(), tPaint);
             canvas.drawBitmap(BufferA, 0, -shift, null);
         }
-        int i = 0;
+        int i;
         if (newImage || rb) {
             int[] pixels;
             int bg;
@@ -635,12 +634,7 @@ public class LegacyBSOD extends AppCompatActivity {
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void DrawNTCanvas(BlueScreen me) {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        };
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> finish();
 
         Bitmap rasters = BitmapFactory.decodeResource(getResources(), R.drawable.rasternt);
         Gson gson = new Gson();
@@ -687,7 +681,7 @@ public class LegacyBSOD extends AppCompatActivity {
                 .append(me.GenHex(8, "RRRRRRRR").toLowerCase())
                 .append(" - ")
                 .append(me.GetString("culprit").toLowerCase().substring(0, 14));
-            if (me.GetString("culprit").toLowerCase().substring(14).length() > 0) {
+            if (!me.GetString("culprit").toLowerCase().substring(14).isEmpty()) {
                 myText.append("\n").append(me.GetString("culprit").toLowerCase().substring(14));
             } } else {
                 myText.append("*** Address ")
@@ -800,18 +794,11 @@ public class LegacyBSOD extends AppCompatActivity {
         BufferB = Bitmap.createScaledBitmap(bmp2, swidth, sheight, !NEAREST_NEIGHBOR);
         bmp.recycle();
         bmp2.recycle();
-        bmp = null;
-        bmp2 = null;
         binding.bsodWindow.setImageBitmap(BufferA);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void Draw9xCanvas(BlueScreen me) {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        };
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> finish();
         Bitmap rasters = BitmapFactory.decodeResource(getResources(), R.drawable.rasters3);
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, String>>() {
@@ -853,7 +840,8 @@ public class LegacyBSOD extends AppCompatActivity {
             x += w;
             i++;
         }
-        String windowsText = titles.get("Main");
+        titles.get("Main");
+        String windowsText;
         switch (me.GetString("Screen mode")) {
             case "System is unresponsive":
                 windowsText = titles.get("Warning");
@@ -876,7 +864,7 @@ public class LegacyBSOD extends AppCompatActivity {
             test_Message.add("?" + letter);
         }
         errorMessage = String.join("", test_Message).split("\n");*/
-        if (me.GetString("Screen mode").equals("")) {
+        if (me.GetString("Screen mode").isEmpty()) {
             me.SetString("Screen mode", "Application error");
         }
         if (me.GetString("os").equals("Windows 3.1x")) {
@@ -948,9 +936,7 @@ public class LegacyBSOD extends AppCompatActivity {
             BufferB = bmp2.copy(bmp.getConfig(), true);
         }
         bmp.recycle();
-        bmp = null;
         bmp2.recycle();
-        bmp2 = null;
         binding.bsodWindow.setImageBitmap(BufferA);
     }
 
@@ -1086,7 +1072,7 @@ public class LegacyBSOD extends AppCompatActivity {
                     }
                     yourText += "\n\n\n" + texts.get("Collecting data for crash dump") + "\n";
                     yourText += texts.get("Initializing crash dump") + "\n" + texts.get("Begin dump") + "\n";
-                    yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", String.valueOf(progress)));
+                    yourText += String.format(texts.get("Physical memory dump"), String.format("%3s", progress));
                     break;
             }
         if (!me.GetString("os").equals("Windows XP")) {
@@ -1161,15 +1147,6 @@ public class LegacyBSOD extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if ((mp != null) && (mp.isPlaying())) {
-            mp.stop();
-            mp.reset();
-        }
-        finish();
-    }
     private void show() {
         // Show the system bar
         if (Build.VERSION.SDK_INT >= 30) {

@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.EditTextPreference;
@@ -50,21 +50,21 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
-        finish();
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent i = new Intent(SettingsActivity.this, MainActivity.class);
+                startActivity(i);
+                overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
+                finish();
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -339,7 +339,7 @@ public class SettingsActivity extends AppCompatActivity {
                 ListPreference fp = new ListPreference(ps.getContext());
                 String path = "/system/fonts";
                 File file = new File(path);
-                File ff[] = file.listFiles();
+                File[] ff = file.listFiles();
                 StringBuilder fonts = new StringBuilder();
                 fonts.append("Ubuntu").append("\n");
                 fonts.append("Ubuntu Light").append("\n");
@@ -477,7 +477,6 @@ public class SettingsActivity extends AppCompatActivity {
                 devToast = Toast.makeText(getContext(), String.format(getString(R.string.devThingie), String.valueOf(8 - devProgress)), Toast.LENGTH_SHORT);
                 devToast.show();
             } else if (devProgress < 2) {
-                return;
             } else if (devProgress == 8) {
                 devToast.cancel();
                 devToast = Toast.makeText(getContext(), getString(R.string.devUnlocked), Toast.LENGTH_SHORT);

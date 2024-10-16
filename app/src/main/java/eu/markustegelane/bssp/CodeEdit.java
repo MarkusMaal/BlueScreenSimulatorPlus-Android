@@ -7,11 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -28,12 +28,11 @@ import eu.markustegelane.bssp.databinding.ActivityCodeEditBinding;
 public class CodeEdit extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityCodeEditBinding binding;
     BlueScreen me;
     int bs_id;
     int selected = 0;
     List<BlueScreen> bluescreens;
-    List<String> words = new ArrayList<>();
+    final List<String> words = new ArrayList<>();
 
     @SuppressLint("DiscouragedApi")
     @SuppressWarnings("unchecked")
@@ -41,7 +40,7 @@ public class CodeEdit extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityCodeEditBinding.inflate(getLayoutInflater());
+        eu.markustegelane.bssp.databinding.ActivityCodeEditBinding binding = ActivityCodeEditBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
@@ -59,6 +58,15 @@ public class CodeEdit extends AppCompatActivity {
                 blockSize = 8;
                 break;
         }
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent i = new Intent(CodeEdit.this, MainActivity.class);
+                startActivity(i);
+                overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
+                finish();
+            }
+        });
         HideElements(blockSize);
         UpdateValues(this, "");
     }
@@ -112,10 +120,10 @@ public class CodeEdit extends AppCompatActivity {
                 UpdateValues(a, "");
             });
         }
-        RadioButton radio1 = (RadioButton)a.findViewById(R.id.wordRadio1);
-        RadioButton radio2 = (RadioButton)a.findViewById(R.id.wordRadio2);
-        RadioButton radio3 = (RadioButton)a.findViewById(R.id.wordRadio3);
-        RadioButton radio4 = (RadioButton)a.findViewById(R.id.wordRadio4);
+        RadioButton radio1 = a.findViewById(R.id.wordRadio1);
+        RadioButton radio2 = a.findViewById(R.id.wordRadio2);
+        RadioButton radio3 = a.findViewById(R.id.wordRadio3);
+        RadioButton radio4 = a.findViewById(R.id.wordRadio4);
 
         if (radio1 != null) {
             radio1.setText(String.format(getString(R.string.word), "1"));
@@ -170,14 +178,6 @@ public class CodeEdit extends AppCompatActivity {
         me.SetCodes(words[0], words[1], words[2], words[3]);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
-        finish();
-    }
     @SuppressLint("DiscouragedApi")
     public void HideElements(int blockSize) {
         for (int i = 16 - blockSize + 1; i <= 16; i++) {

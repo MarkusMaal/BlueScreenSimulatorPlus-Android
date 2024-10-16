@@ -2,18 +2,15 @@ package eu.markustegelane.bssp;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -34,7 +31,6 @@ import eu.markustegelane.bssp.databinding.FragmentFirstBinding;
 
 public class StringEdit extends AppCompatActivity {
 
-    private FragmentFirstBinding binding;
     BlueScreen os;
     List<BlueScreen> bsods;
     int os_id;
@@ -63,129 +59,113 @@ public class StringEdit extends AppCompatActivity {
             finish();
         });
 
-        findViewById(R.id.removeButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String selectedItem = ((Spinner)findViewById(R.id.settingList)).getSelectedItem().toString();
-                String[] fullnamearr = selectedItem.split(" ");
-                List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
-                String key = "";
-                key = String.join(" ", ls.subList(0, ls.size() - 1));
-                String type = ls.get(ls.size() - 1);
-                switch (type) {
-                    case "[boolean]":
-                        os.DelBool(key);
+        findViewById(R.id.removeButton).setOnClickListener(view -> {
+            String selectedItem = slist.getSelectedItem().toString();
+            String[] fullnamearr = selectedItem.split(" ");
+            List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
+            String key;
+            key = String.join(" ", ls.subList(0, ls.size() - 1));
+            String type = ls.get(ls.size() - 1);
+            switch (type) {
+                case "[boolean]":
+                    os.DelBool(key);
+                    break;
+                case "[integer]":
+                    os.DelInt(key);
+                    break;
+                case "[string]":
+                    os.DelString(key);
+                    break;
+                case "[text]":
+                    os.DelText(key);
+                    break;
+                case "[title]":
+                    os.DelTitle(key);
+                    break;
+            }
+            saveSettings(bsods, os, os_id);
+            bsods.set(os_id, os);
+            RefreshSpinner(os);
+        });
+
+        findViewById(R.id.addButton).setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            View hashtable_maker = LayoutInflater.from(view.getContext()).inflate(R.layout.add_hashtable, null);
+            ((Spinner)hashtable_maker.findViewById(R.id.typeSpinner)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    switch (adapterView.getItemAtPosition(i).toString()) {
+                        case "string":
+                        case "titles":
+                        case "texts":
+                            hashtable_maker.findViewById(R.id.stringEditText).setVisibility(View.VISIBLE);
+                            hashtable_maker.findViewById(R.id.integerEditText).setVisibility(View.GONE);
+                            hashtable_maker.findViewById(R.id.booleanSwitch).setVisibility(View.GONE);
+                            break;
+                        case "integer":
+                            hashtable_maker.findViewById(R.id.stringEditText).setVisibility(View.GONE);
+                            hashtable_maker.findViewById(R.id.integerEditText).setVisibility(View.VISIBLE);
+                            hashtable_maker.findViewById(R.id.booleanSwitch).setVisibility(View.GONE);
+                            break;
+                        case "boolean":
+                            hashtable_maker.findViewById(R.id.stringEditText).setVisibility(View.GONE);
+                            hashtable_maker.findViewById(R.id.integerEditText).setVisibility(View.GONE);
+                            hashtable_maker.findViewById(R.id.booleanSwitch).setVisibility(View.VISIBLE);
+                            break;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+            builder.setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                Spinner spin = hashtable_maker.findViewById(R.id.typeSpinner);
+                String key = ((EditText)hashtable_maker.findViewById(R.id.keyText)).getText().toString();
+                String strValue = ((EditText)hashtable_maker.findViewById(R.id.stringEditText)).getText().toString();
+                switch (spin.getAdapter().getItem((int)spin.getSelectedItemId()).toString()) {
+                    case "string":
+                        os.SetString(key, strValue);
                         break;
-                    case "[integer]":
-                        os.DelInt(key);
+                    case "titles":
+                        os.PushTitle(key, strValue);
                         break;
-                    case "[string]":
-                        os.DelString(key);
+                    case "texts":
+                        os.PushText(key, strValue);
                         break;
-                    case "[text]":
-                        os.DelText(key);
+                    case "integer":
+                        int intValue = Integer.parseInt(((EditText)hashtable_maker.findViewById(R.id.integerEditText)).getText().toString());
+                        os.SetInt(key, intValue);
                         break;
-                    case "[title]":
-                        os.DelTitle(key);
+                    case "boolean":
+                        boolean boolValue = ((Switch)hashtable_maker.findViewById(R.id.booleanSwitch)).isChecked();
+                        os.SetBool(key, boolValue);
                         break;
                 }
                 saveSettings(bsods, os, os_id);
                 bsods.set(os_id, os);
+
                 RefreshSpinner(os);
-            }
+            });
+            builder.setCancelable(false);
+            builder.setView(hashtable_maker);
+            AlertDialog ad = builder.create();
+            ad.show();
         });
 
-        findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                View hashtable_maker = LayoutInflater.from(view.getContext()).inflate(R.layout.add_hashtable, null);
-                ((Spinner)hashtable_maker.findViewById(R.id.typeSpinner)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        switch (adapterView.getItemAtPosition(i).toString()) {
-                            case "string":
-                            case "titles":
-                            case "texts":
-                                hashtable_maker.findViewById(R.id.stringEditText).setVisibility(View.VISIBLE);
-                                hashtable_maker.findViewById(R.id.integerEditText).setVisibility(View.GONE);
-                                hashtable_maker.findViewById(R.id.booleanSwitch).setVisibility(View.GONE);
-                                break;
-                            case "integer":
-                                hashtable_maker.findViewById(R.id.stringEditText).setVisibility(View.GONE);
-                                hashtable_maker.findViewById(R.id.integerEditText).setVisibility(View.VISIBLE);
-                                hashtable_maker.findViewById(R.id.booleanSwitch).setVisibility(View.GONE);
-                                break;
-                            case "boolean":
-                                hashtable_maker.findViewById(R.id.stringEditText).setVisibility(View.GONE);
-                                hashtable_maker.findViewById(R.id.integerEditText).setVisibility(View.GONE);
-                                hashtable_maker.findViewById(R.id.booleanSwitch).setVisibility(View.VISIBLE);
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
-                builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Spinner spin = hashtable_maker.findViewById(R.id.typeSpinner);
-                        String key = ((EditText)hashtable_maker.findViewById(R.id.keyText)).getText().toString();
-                        String strValue = ((EditText)hashtable_maker.findViewById(R.id.stringEditText)).getText().toString();
-                        switch (spin.getAdapter().getItem((int)spin.getSelectedItemId()).toString()) {
-                            case "string":
-                                os.SetString(key, strValue);
-                                break;
-                            case "titles":
-                                os.PushTitle(key, strValue);
-                                break;
-                            case "texts":
-                                os.PushText(key, strValue);
-                                break;
-                            case "integer":
-                                int intValue = Integer.parseInt(((EditText)hashtable_maker.findViewById(R.id.integerEditText)).getText().toString());
-                                os.SetInt(key, intValue);
-                                break;
-                            case "boolean":
-                                boolean boolValue = ((Switch)hashtable_maker.findViewById(R.id.booleanSwitch)).isChecked();
-                                os.SetBool(key, boolValue);
-                                break;
-                        }
-                        saveSettings(bsods, os, os_id);
-                        bsods.set(os_id, os);
-
-                        RefreshSpinner(os);
-                    }
-                });
-                builder.setCancelable(false);
-                builder.setView(hashtable_maker);
-                AlertDialog ad = builder.create();
-                ad.show();
-            }
-        });
-
-        ((Switch)findViewById(R.id.boolValue)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!locked) {
-                    String selectedItem = ((Spinner)findViewById(R.id.settingList)).getSelectedItem().toString();
-                    String[] fullnamearr = selectedItem.split(" ");
-                    List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
-                    String key = "";
-                    key = String.join(" ", ls.subList(0, ls.size() - 1));
-                    String type = ls.get(ls.size() - 1);
-                    switch (type) {
-                        case "[boolean]":
-                            os.SetBool(key, b);
-                            break;
-                        default:
-                            break;
-                    }
-                    saveSettings(bsods, os, os_id);
+        ((Switch)findViewById(R.id.boolValue)).setOnCheckedChangeListener((compoundButton, b) -> {
+            if (!locked) {
+                String selectedItem = slist.getSelectedItem().toString();
+                String[] fullnamearr = selectedItem.split(" ");
+                List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
+                String key;
+                key = String.join(" ", ls.subList(0, ls.size() - 1));
+                String type = ls.get(ls.size() - 1);
+                if (type.equals("[boolean]")) {
+                    os.SetBool(key, b);
                 }
+                saveSettings(bsods, os, os_id);
             }
         });
 
@@ -236,7 +216,7 @@ public class StringEdit extends AppCompatActivity {
                     String selectedItem = ((Spinner)findViewById(R.id.settingList)).getSelectedItem().toString();
                     String[] fullnamearr = selectedItem.split(" ");
                     List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
-                    String key = "";
+                    String key;
                     key = String.join(" ", ls.subList(0, ls.size() - 1));
                     String type = ls.get(ls.size() - 1);
                     switch (type) {
@@ -263,7 +243,7 @@ public class StringEdit extends AppCompatActivity {
                 String selectedItem = adapterView.getItemAtPosition(i).toString();
                 String[] fullnamearr = selectedItem.split(" ");
                 List<String> ls = new ArrayList<>(Arrays.asList(fullnamearr));
-                String key = "";
+                String key;
                 key = String.join(" ", ls.subList(0, ls.size() - 1));
                 String type = ls.get(ls.size() - 1);
                 Gson gson = new Gson();
@@ -317,7 +297,7 @@ public class StringEdit extends AppCompatActivity {
     @SuppressWarnings("unchecked")
     private void RefreshSpinner(BlueScreen os) {
         Spinner slist = findViewById(R.id.settingList);
-        List<String> strings = new ArrayList<String>();
+        List<String> strings = new ArrayList<>();
         Gson gson = new Gson();
         Type typeStringString = new TypeToken<Map<String, String>>(){}.getType();
         Type typeStringBool = new TypeToken<Map<String, Boolean>>(){}.getType();

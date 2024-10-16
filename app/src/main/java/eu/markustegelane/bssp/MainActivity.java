@@ -1,7 +1,6 @@
 package eu.markustegelane.bssp;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,10 +9,7 @@ import android.view.MenuItem;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.gson.Gson;
 
@@ -26,13 +22,9 @@ import eu.markustegelane.bssp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
-
-    public List<BlueScreen> bluescreens = new ArrayList<>();
+    final public List<BlueScreen> bluescreens = new ArrayList<>();
 
     boolean egg = true;
 

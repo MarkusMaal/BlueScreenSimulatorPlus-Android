@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.TypedValue;
@@ -28,13 +27,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -56,11 +55,11 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     private FragmentFirstBinding binding;
 
-    public List<BlueScreen> bluescreens = new ArrayList<>();
+    final public List<BlueScreen> bluescreens = new ArrayList<>();
 
     private Boolean locked = false;
 
-    boolean hasFileAccess = true;
+    final boolean hasFileAccess = true;
 
     boolean developer = false;
     boolean immersive = false;
@@ -70,7 +69,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
 
     boolean nearest = false;
 
-    Random r = new Random();
+    final Random r = new Random();
+
+    private ActivityResultLauncher<Intent> saveResultLauncher;
+    private ActivityResultLauncher<Intent> loadResultLauncher;
 
     BlueScreen os;
 
@@ -112,6 +114,50 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             bluescreens.addAll(Arrays.asList(bss));
         }
         binding = FragmentFirstBinding.inflate(inflater, container, false);
+        saveResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                o -> {
+                    if (o.getResultCode() == Activity.RESULT_OK) {
+                        String content = GenerateSaveData("2.1");
+                        Uri uri = o.getData().getData();
+                        try {
+                            OutputStream os = getContext().getContentResolver().openOutputStream(uri);
+                            os.write(content.getBytes());
+                            os.flush();
+                            os.close();
+                            Toast.makeText(getContext(), getString(R.string.done), Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
+
+        loadResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                o -> {
+                    if (o.getResultCode() == Activity.RESULT_OK) {
+                        Uri uri = o.getData().getData();
+                        InputStream is;
+                        try {
+                            is = getActivity().getContentResolver().openInputStream(uri);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                        StringBuilder strBuilder = new StringBuilder();
+                        String line;
+                        while (true) {
+                            try {
+                                if ((line = reader.readLine()) == null) break;
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            strBuilder.append(line)
+                                    .append("\n");
+                        }
+                        ParseSaveData(strBuilder.toString());
+                    }
+                });
         return binding.getRoot();
 
     }
@@ -731,7 +777,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().toString()), "*/*");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(Intent.createChooser(intent, "Open .."), 21);
+                loadResultLauncher.launch(Intent.createChooser(intent, "Open .."));
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 TypedValue tv = new TypedValue();
@@ -745,7 +791,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
             intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().toString()), "text/bs2cfg");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(Intent.createChooser(intent, "Save as .."), 22);
+            saveResultLauncher.launch(Intent.createChooser(intent, "Save as .."));
         });
 
         binding.resetAll.setOnClickListener(view16 -> {
@@ -777,52 +823,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 }
             }
         });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onActivityResult(int req_code, int res_code, Intent data) {
-        if (res_code == Activity.RESULT_OK) {
-            String content;
-            Uri uri;
-            switch (req_code) {
-                case 22:
-                    content = GenerateSaveData("2.1");
-                    uri = data.getData();
-                    try {
-                        OutputStream os = getContext().getContentResolver().openOutputStream(uri);
-                        os.write(content.getBytes());
-                        os.flush();
-                        os.close();
-                        Toast.makeText(getContext(), getString(R.string.done), Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
-                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case 21:
-                    uri = data.getData();
-                    InputStream is;
-                    try {
-                        is = getActivity().getContentResolver().openInputStream(uri);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                    StringBuilder strBuilder = new StringBuilder();
-                    String line;
-                    while (true) {
-                        try {
-                            if ((line = reader.readLine()) == null) break;
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        strBuilder.append(line)
-                                .append("\n");
-                    }
-                    ParseSaveData(strBuilder.toString());
-                    break;
-            }
-        }
     }
 
     public void ParseSaveData(String fileData) {

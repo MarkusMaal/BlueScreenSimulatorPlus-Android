@@ -32,7 +32,7 @@ public class BlueScreen implements Serializable {
     public String os;
 
     transient Typeface font;
-    transient Activity activity;
+    final transient Activity activity;
 
     String titles;
     String texts;

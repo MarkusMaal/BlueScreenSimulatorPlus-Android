@@ -18,7 +18,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -77,7 +76,7 @@ public class ModernBSOD extends AppCompatActivity {
     public static Boolean server = false;
     public static Boolean show_file = false;
 
-    public static int interval = 10;
+    public final static int interval = 10;
     public static float scale = 0.75f;
     public static String errorCode = "IRQL_NOT_LESS_OR_EQUAL (0x0000000a)";
     private View mContentView;
@@ -347,7 +346,7 @@ public class ModernBSOD extends AppCompatActivity {
                         progressText.setText(String.format(texts.get("Progress"), newText));
                     }
                 } catch (Exception e) {
-                    Toast.makeText(getWindow().getContext(), "Error occoured:\n" + e.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getWindow().getContext(), "Error occoured:\n" + e, Toast.LENGTH_SHORT).show();
                     cancel();
                 }
             }

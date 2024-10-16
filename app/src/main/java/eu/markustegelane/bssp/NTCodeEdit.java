@@ -1,12 +1,10 @@
 package eu.markustegelane.bssp;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -63,8 +62,7 @@ public class NTCodeEdit extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Type type = new TypeToken<Map<String, String[]>>(){}.getType();
                 Map<String, String[]> codeFiles = gson.fromJson(me.GetFiles(), type);
-                String[] cfiles = codeFiles.get(((String)adapterView.getAdapter().getItem(adapterView.getSelectedItemPosition())).split(" ")[0]);
-                words = cfiles;
+                words = codeFiles.get(((String)adapterView.getAdapter().getItem(adapterView.getSelectedItemPosition())).split(" ")[0]);
                 SetWords(words.length);
                 selected = 0;
                 UpdateValues();
@@ -88,6 +86,16 @@ public class NTCodeEdit extends AppCompatActivity {
             }
         });
         UpdateValues();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent i = new Intent(NTCodeEdit.this, MainActivity.class);
+                startActivity(i);
+                overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
+                finish();
+            }
+        });
     }
 
 
@@ -175,7 +183,7 @@ public class NTCodeEdit extends AppCompatActivity {
         });
         findViewById(R.id.codeEditOkButton).setOnClickListener(view -> {
             saveSettings(bluescreens, me, bs_id);
-            onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
         });
         findViewById(R.id.renameFileButton).setOnClickListener(view -> {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -209,26 +217,23 @@ public class NTCodeEdit extends AppCompatActivity {
             alert.setView(file_view);
             file_view.findViewById(R.id.fourSevenCheck).setVisibility(View.VISIBLE);
             if (!me.GetString("os").equals("Windows NT 3.x/4.0")) {
-                ((Switch)file_view.findViewById(R.id.fourSevenCheck)).setClickable(false);
+                file_view.findViewById(R.id.fourSevenCheck).setClickable(false);
                 ((Switch)file_view.findViewById(R.id.fourSevenCheck)).setChecked(true);
             }
-            alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    List<String> codes = new ArrayList<>();
-                    int codeCount = 2;
-                    if (!me.GetString("os").equals("Windows NT 3.x/4.0")) {
-                        codeCount = 4;
-                    } else if (((Switch)file_view.findViewById(R.id.fourSevenCheck)).isChecked()) {
-                        codeCount = 7;
-                    }
-                    for (int k = 0; k < codeCount; k++) {
-                        codes.add("RRRRRRRR");
-                    }
-                    me.PushFile(((EditText)file_view.findViewById(R.id.fileName)).getText().toString(), codes.toArray(new String[0]));
-                    saveSettings(bluescreens, me, bs_id);
-                    RefreshSpinner();
+            alert.setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                List<String> codes = new ArrayList<>();
+                int codeCount = 2;
+                if (!me.GetString("os").equals("Windows NT 3.x/4.0")) {
+                    codeCount = 4;
+                } else if (((Switch)file_view.findViewById(R.id.fourSevenCheck)).isChecked()) {
+                    codeCount = 7;
                 }
+                for (int k = 0; k < codeCount; k++) {
+                    codes.add("RRRRRRRR");
+                }
+                me.PushFile(((EditText)file_view.findViewById(R.id.fileName)).getText().toString(), codes.toArray(new String[0]));
+                saveSettings(bluescreens, me, bs_id);
+                RefreshSpinner();
             });
             alert.setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {
 
@@ -264,12 +269,4 @@ public class NTCodeEdit extends AppCompatActivity {
         editor.apply();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        overridePendingTransition(androidx.navigation.ui.R.anim.nav_default_enter_anim, androidx.navigation.ui.R.anim.nav_default_exit_anim);
-        finish();
-    }
 }

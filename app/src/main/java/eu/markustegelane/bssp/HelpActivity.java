@@ -9,13 +9,12 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.Html;
 import android.view.Display;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +25,6 @@ import java.util.Random;
 
 public class HelpActivity extends AppCompatActivity {
 
-    Bitmap Buffer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +61,7 @@ public class HelpActivity extends AppCompatActivity {
                     tPaint.setStyle(Paint.Style.FILL);
                     int symbol = r.nextInt(9999);
                     String htmlSymbol = String.format("&#%s", symbol);
-                    canvas.drawText(String.valueOf(Html.fromHtml(htmlSymbol)), r.nextInt(swidth) - 100, r.nextInt(sheight + 100) - 100, tPaint);
+                    canvas.drawText(String.valueOf(HtmlCompat.fromHtml(htmlSymbol, HtmlCompat.FROM_HTML_MODE_LEGACY)), r.nextInt(swidth) - 100, r.nextInt(sheight + 100) - 100, tPaint);
                     ((ImageView) findViewById(R.id.imageView3)).setImageBitmap(bmp);
                 }
 
@@ -73,60 +71,51 @@ public class HelpActivity extends AppCompatActivity {
                 }
             }.start();
         } else {
-            ((Button)findViewById(R.id.basicsButton)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    InputStream in_s = getResources().openRawResource(R.raw.help_docs_en);
-                    if (Locale.getDefault().getLanguage().equals("et")) {
-                        try {
-                            in_s.close();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        in_s = getResources().openRawResource(R.raw.help_docs_et);
+            findViewById(R.id.basicsButton).setOnClickListener(view -> {
+                InputStream in_s = getResources().openRawResource(R.raw.help_docs_en);
+                if (Locale.getDefault().getLanguage().equals("et")) {
+                    try {
+                        in_s.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
-                    Display display = getWindowManager().getDefaultDisplay();
-                    Point size = new Point();
-                    display.getSize(size);
-                    showDocument(in_s, size.y * 4);
+                    in_s = getResources().openRawResource(R.raw.help_docs_et);
                 }
+                Display display1 = getWindowManager().getDefaultDisplay();
+                Point size1 = new Point();
+                display1.getSize(size1);
+                showDocument(in_s, size1.y * 4);
             });
-            ((Button)findViewById(R.id.osOptionsButton)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    InputStream in_s = getResources().openRawResource(R.raw.specifics_docs_en);
-                    if (Locale.getDefault().getLanguage().equals("et")) {
-                        try {
-                            in_s.close();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        in_s = getResources().openRawResource(R.raw.specifics_docs_et);
+            findViewById(R.id.osOptionsButton).setOnClickListener(view -> {
+                InputStream in_s = getResources().openRawResource(R.raw.specifics_docs_en);
+                if (Locale.getDefault().getLanguage().equals("et")) {
+                    try {
+                        in_s.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
-                    Display display = getWindowManager().getDefaultDisplay();
-                    Point size = new Point();
-                    display.getSize(size);
-                    showDocument(in_s, size.y * 8);
+                    in_s = getResources().openRawResource(R.raw.specifics_docs_et);
                 }
+                Display display12 = getWindowManager().getDefaultDisplay();
+                Point size12 = new Point();
+                display12.getSize(size12);
+                showDocument(in_s, size12.y * 8);
             });
 
-            ((Button)findViewById(R.id.fsOptionsButton)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    InputStream in_s = getResources().openRawResource(R.raw.fullscreen_docs_en);
-                    if (Locale.getDefault().getLanguage().equals("et")) {
-                        try {
-                            in_s.close();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        in_s = getResources().openRawResource(R.raw.fullscreen_docs_et);
+            findViewById(R.id.fsOptionsButton).setOnClickListener(view -> {
+                InputStream in_s = getResources().openRawResource(R.raw.fullscreen_docs_en);
+                if (Locale.getDefault().getLanguage().equals("et")) {
+                    try {
+                        in_s.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
-                    Display display = getWindowManager().getDefaultDisplay();
-                    Point size = new Point();
-                    display.getSize(size);
-                    showDocument(in_s, size.y * 16);
+                    in_s = getResources().openRawResource(R.raw.fullscreen_docs_et);
                 }
+                Display display13 = getWindowManager().getDefaultDisplay();
+                Point size13 = new Point();
+                display13.getSize(size13);
+                showDocument(in_s, size13.y * 16);
             });
         }
         getWindow().setTitle(getString(R.string.help));
@@ -139,9 +128,8 @@ public class HelpActivity extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         int swidth = size.x;
-        int sheight = size_y;
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-        Bitmap bmp = Bitmap.createBitmap(swidth, sheight, conf);
+        Bitmap bmp = Bitmap.createBitmap(swidth, size_y, conf);
         final int text_color;
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (currentNightMode == Configuration.UI_MODE_NIGHT_NO) {// Night mode is not active, we're using the light theme
@@ -149,7 +137,7 @@ public class HelpActivity extends AppCompatActivity {
         } else {// Night mode is active, we're using dark theme
             text_color = Color.rgb(255, 255, 255);
         }
-        byte[] b = new byte[0];
+        byte[] b;
         try {
             b = new byte[in_s.available()];
             in_s.read(b);
@@ -205,11 +193,11 @@ public class HelpActivity extends AppCompatActivity {
                     List<String> text_lines = MeasureLines(bullet.replace("* ", ""), maxChars);
                     for (String Line : text_lines) {
                         canvas.drawText("      "  + Line, 0, y, tPaint);
-                        y += tPaint.getTextSize();
+                        y += (int) tPaint.getTextSize();
                     }
-                    y += tPaint.getTextSize();
+                    y += (int) tPaint.getTextSize();
                 }
-                y += tPaint.getTextSize();
+                y += (int) tPaint.getTextSize();
                 continue;
             }
             else if (paragraph.startsWith("#")) {
@@ -225,7 +213,7 @@ public class HelpActivity extends AppCompatActivity {
                 } else {
                     title = title.substring(2);
                 }
-                y += f_size / 2;
+                y += (int) (f_size / 2);
                 tPaint.setTextSize(f_size);
                 tPaint.setUnderlineText(true);
                 tPaint.setStyle(Paint.Style.FILL);
@@ -233,9 +221,9 @@ public class HelpActivity extends AppCompatActivity {
                 List<String> title_lines = MeasureLines(title, maxChars);
                 for (String title_line: title_lines) {
                     canvas.drawText(title_line, 0, y, tPaint);
-                    y += f_size;
+                    y += (int) f_size;
                 }
-                y += f_size / 2;
+                y += (int) (f_size / 2);
                 paragraph = paragraph.substring(offset);
             }
             tPaint.setTextSize(40f);
@@ -246,9 +234,9 @@ public class HelpActivity extends AppCompatActivity {
             List<String> text_lines = MeasureLines(paragraph, maxChars);
             for (String Line: text_lines) {
                 canvas.drawText(Line, 0, y, tPaint);
-                y += tPaint.getTextSize();
+                y += (int) tPaint.getTextSize();
             }
-            y += tPaint.getTextSize();
+            y += (int) tPaint.getTextSize();
         }
         ((ImageView) findViewById(R.id.imageView3)).setImageBitmap(bmp);
     }
@@ -273,7 +261,7 @@ public class HelpActivity extends AppCompatActivity {
                 line.append(word.substring(maxChars + 1));
             }
         }
-        if (!line.toString().equals("")) {
+        if (!line.toString().isEmpty()) {
             text_lines.add(line.toString());
         }
         return text_lines;

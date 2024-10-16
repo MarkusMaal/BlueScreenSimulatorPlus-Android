@@ -7,13 +7,13 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -37,7 +37,7 @@ public class ErrorCodeEditor extends AppCompatActivity {
 
     int selected_id;
 
-    int interval = 10;
+    final int interval = 10;
     boolean locked = false;
 
     @Override
@@ -71,8 +71,18 @@ public class ErrorCodeEditor extends AppCompatActivity {
             public void onFinish() {
                 cancel[0] = true;
             }
+
+
         };
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent i = new Intent(getWindow().getContext(), MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
         bs = (BlueScreen) b.getSerializable("bluescreen");
         bluescreens = (List<BlueScreen>)b.getSerializable("bluescreens");
         selected_id = b.getInt("bluescreen_id");
@@ -112,7 +122,7 @@ public class ErrorCodeEditor extends AppCompatActivity {
         binding.addKfButton.setOnClickListener(view -> {
             int progress = binding.progressSeekBar.getProgress();
             String textVal = binding.editTextValue.getText().toString();
-            if (!textVal.equals("")) {
+            if (!textVal.isEmpty()) {
                 int value = Integer.parseInt(textVal);
                 if (!progression.containsKey(binding.progressSeekBar.getProgress())) {
                     progression.put(progress, value);
@@ -217,7 +227,7 @@ public class ErrorCodeEditor extends AppCompatActivity {
 
         binding.saveButton.setOnClickListener(view -> {
             saveSettings(bluescreens, bs, selected_id);
-            onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
         });
 
         locked = true;
@@ -287,13 +297,5 @@ public class ErrorCodeEditor extends AppCompatActivity {
         String json = gson.toJson(blues);
         editor.putString("bluescreens", json);
         editor.apply();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent i = new Intent(getWindow().getContext(), MainActivity.class);
-        startActivity(i);
-        finish();
     }
 }

@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/First2Fragment"
-        android:name="eu.markustegelane.bssp.First2Fragment"
+        android:name="eu.markustegelane.bssp.SecondFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first2">
+        tools:layout="@layout/fragment_second">
 
         <action
             android:id="@+id/action_First2Fragment_to_SecondFragment"
