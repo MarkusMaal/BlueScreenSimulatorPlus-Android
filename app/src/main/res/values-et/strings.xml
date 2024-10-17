@@ -146,4 +146,5 @@
     <string name="errorCodeFormat">Veakood on vales vormingus. Peab sisaldama ümarsulge ja veakoodi, mis algab 0x-ga</string>
     <string name="errorSubstitute">Asendatavate sõnede arv (%s) ei ühti</string>
     <string name="rainbow">Vikerkaar</string>
+    <string name="countdown">Loendur</string>
 </resources>

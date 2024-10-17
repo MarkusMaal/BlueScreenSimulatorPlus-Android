@@ -669,7 +669,16 @@ public class LegacyBSOD extends AppCompatActivity {
             i++;
         }
         String[] errorMessage;
-        StringBuilder myText = new StringBuilder(String.format(txts.get("Error code formatting"), me.GetString("code").split(" ")[1].substring(1, 11), me.GenAddress(4, 8, false).replace(", ", ",")) + "\n");
+        StringBuilder myText = null;
+        if (me.GetBool("threepointone") && me.GetBool("bootscreen")) {
+            myText = new StringBuilder(me.GetText("Bootscreen")).append("\n\n");
+        }
+        String codeTexty = String.format(txts.get("Error code formatting"), me.GetString("code").split(" ")[1].substring(1, 11), me.GenAddress(4, 8, false).replace(", ", ","));
+        if (myText != null) {
+            myText.append(codeTexty).append("\n");
+        } else {
+            myText = new StringBuilder(codeTexty).append("\n");
+        }
         String errorDescripy = me.GetString("code").split(" ")[0];
         myText.append(errorDescripy);
         int linelen = errorDescripy.length() + 44;
@@ -741,7 +750,10 @@ public class LegacyBSOD extends AppCompatActivity {
                     }
                     myText.append("\n");
                 }
-                myText.append("\n\n");
+                myText.append("\n");
+                if (!me.GetBool("threepointone")) {
+                    myText.append("\n");
+                }
                 if (txts.get("Memory address dump table") != null) {
                     myText.append(txts.get("Memory address dump heading")).append("\n");
                     for (int n = 0; n < culpritfiles.size(); n++) {
@@ -758,12 +770,14 @@ public class LegacyBSOD extends AppCompatActivity {
                         }
                     }
                 }
-                myText.append("\n");
+                if (!me.GetBool("threepointone")) {
+                    myText.append("\n");
+                }
             }
             myText.append(txts.get("Troubleshooting text"));
         }
         errorMessage = myText.toString().split("\n");
-        int y_offset = 0;
+        int y_offset = -h;
         Paint tPaint = new Paint();
         tPaint.setFilterBitmap(false);
         tPaint.setColor(me.GetTheme(true, false));

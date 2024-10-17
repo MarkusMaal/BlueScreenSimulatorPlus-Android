@@ -8,17 +8,23 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="Blue Screen Simulator Plus"
+        android:largeHeap="true"
         android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:largeHeap="true"
         android:theme="@style/Theme.BlueScreenSimulatorPlus"
         tools:targetApi="31">
+        <activity
+            android:name=".JupiterBSOD"
+            android:exported="false"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.BlueScreenSimulatorPlus.NoActionBar" />
         <activity
             android:name=".HelpActivity"
             android:exported="false"
             android:hardwareAccelerated="false"
-            android:theme="@style/Theme.BlueScreenSimulatorPlus.NoActionBar"  />
+            android:theme="@style/Theme.BlueScreenSimulatorPlus.NoActionBar" />
         <activity
             android:name=".BOOTMGR"
             android:configChanges="orientation|keyboardHidden|screenSize"

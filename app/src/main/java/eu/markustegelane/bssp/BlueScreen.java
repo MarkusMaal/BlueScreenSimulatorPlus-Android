@@ -693,12 +693,12 @@ public class BlueScreen implements Serializable {
                 PushText("Memory address dump table", "%s %s %s %s %s %s %s - %s");
                 PushText("Troubleshooting text", "Restart your computer. If this message reappears, do not restart.\nContact your system administrator or technical support group, and/or\nperipheral device vendor.");
                 SetInt("blink_speed", 100);
-                for (int n = 0; n < 10; n++)
+                for (int n = 0; n < 40; n++)
                 {
                     String[] inspirn = { "RRRRRRRR", "RRRRRRRR" };
                     PushFile(GenFile(true, this.activity), inspirn);
                 }
-                for (int n = 0; n < 30 - this.codefiles.length() / 2; n++)
+                for (int n = 0; n < this.r.nextInt(20) + 5; n++)
                 {
                     String[] inspirn = {  "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR", "RRRRRRRR" };
                     PushFile(GenFile(true, this.activity), inspirn);
@@ -858,8 +858,8 @@ public class BlueScreen implements Serializable {
                 SetString("friendlyname", "Windows 8 Beta (Native, ClearType)");
                 PushText("Your computer needs to restart", "Your computer needs to restart.");
                 PushText("Information text with dump", "It encountered a problem and will restart automatically.");
-                PushText("Error code", "Error: {0}");
-                PushText("Progress", "Collecting problem information:    {0} seconds remaining");
+                PushText("Error code", "Error: %s");
+                PushText("Progress", "Collecting problem information:    %s seconds remaining");
                 SetFont("Segoe UI", Typeface.NORMAL, 26f / metrics.density);
                 SetTheme(RGB(0, 0, 0), RGB(255, 255, 255), false);
                 SetInt("margin-x", 250);

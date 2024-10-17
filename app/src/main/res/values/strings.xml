@@ -44,6 +44,7 @@
         <item>Windows CE</item>
         <item>Windows 2000</item>
         <item>Windows NT 3.x/4.0</item>
+        <item>Windows NT 3.1</item>
         <item>Windows 9x/Me</item>
         <item>Windows 3.1x</item>
         <item>Windows 1.x/2.x</item>
@@ -699,4 +700,6 @@
     <string name="rainbow">Rainbow</string>
     <string name="nav_open" translatable="false">nav_open</string>
     <string name="nav_close" translatable="false">nav_close</string>
+    <string name="title_activity_jupiter_bsod" translatable="false">JupiterBSOD</string>
+    <string name="countdown">Countdown</string>
 </resources>

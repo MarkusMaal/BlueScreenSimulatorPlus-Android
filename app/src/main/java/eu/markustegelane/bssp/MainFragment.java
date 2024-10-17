@@ -182,7 +182,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         if (sharedPreferences.getBoolean("developer", false)) {
             binding.devOpsText.setVisibility(View.VISIBLE);
             binding.devOps.setVisibility(View.VISIBLE);
-            System.out.println("******** DEVELOPER MODE ACTIVE ********");
         }
 
         List<String> friendlyNames = new ArrayList<>();
@@ -268,6 +267,16 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     i.putExtras(b);
                     startActivity(i);
                     break;
+                case "Windows 8 Beta":
+                    i = new Intent(view117.getContext(), JupiterBSOD.class);
+                    b = new Bundle();
+                    b.putSerializable("bluescreen", unlucky);
+                    b.putBoolean("immersive", immersive);
+                    b.putBoolean("ignorenotch", notch);
+                    b.putBoolean("egg", egg);
+                    i.putExtras(b);
+                    startActivity(i);
+                    break;
                 default:
                     Toast.makeText(getContext(), "Unknown OS: " + unlucky.GetString("os"), Toast.LENGTH_SHORT).show();
                     break;
@@ -321,6 +330,14 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b.putBoolean("ignorenotch", notch);
                     b.putBoolean("egg", egg);
                     b.putBoolean("nearestscaling", nearest);
+                    i.putExtras(b);
+                    startActivity(i);
+                    break;
+                case "Windows 8 Beta":
+                    i = new Intent(view1.getContext(), JupiterBSOD.class);
+                    b = new Bundle();
+                    me = bluescreens.get((int)winspin.getSelectedItemId());
+                    b.putSerializable("bluescreen", me);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -760,7 +777,12 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
             getActivity().getTheme().resolveAttribute(android.R.attr.alertDialogIcon, tv, true);
             builder.setMessage(getString(R.string.currentReset)).setPositiveButton(R.string.yes, (dialogInterface, i) -> {
                 String backupName = os.GetString("friendlyname");
-                bluescreens.set((int)winspin.getSelectedItemId(), new BlueScreen(os.GetString("os"), true, getActivity()));
+                String osname = os.GetString("os");
+                /* specific case for resetting hacks in Windows NT 3.1 */
+                if (os.GetBool("threepointone")) {
+                    osname = "Windows NT 3.1";
+                }
+                bluescreens.set((int)winspin.getSelectedItemId(), new BlueScreen(osname, true, getActivity()));
                 os = bluescreens.get((int)winspin.getSelectedItemId());
                 os.SetString("friendlyname", backupName);
                 saveSettings(bluescreens, os, winspin.getSelectedItemId());
@@ -823,6 +845,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 }
             }
         });
+
+        binding.countdownCheck.setOnCheckedChangeListener(((compoundButton, b) -> {
+            os.SetBool("countdown", b);
+        }));
     }
 
     public void ParseSaveData(String fileData) {
@@ -1223,7 +1249,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE); binding.blinkCheck.setVisibility(View.GONE);
         binding.amdProcessorCheck.setVisibility(View.GONE); binding.stackTraceCheck.setVisibility(View.GONE);
         binding.setCulpritButton.setVisibility(View.GONE); binding.culpritCheck.setVisibility(View.GONE); binding.moreFileInfoCheck.setVisibility(View.GONE);
-        binding.progressEditor.setVisibility(View.GONE); rainbowCheck.setVisibility(View.GONE);
+        binding.progressEditor.setVisibility(View.GONE); rainbowCheck.setVisibility(View.GONE); binding.countdownCheck.setVisibility(View.GONE);
         deviceCheck.setVisibility(View.GONE);
         binding.customErrorCodeCheck.setVisibility(View.GONE); binding.customErrorCodeCheck.setChecked(false);
         if ("Windows NT 3.x/4.0".equals(os.GetString("os"))) {
@@ -1311,6 +1337,13 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 ac.setVisibility(View.VISIBLE);
                 binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
                 break;
+            case "Windows 8 Beta":
+                codesel.setVisibility(View.VISIBLE);
+                binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
+                elabel.setVisibility(View.VISIBLE);
+                rainbowCheck.setVisibility(View.VISIBLE);
+                binding.countdownCheck.setVisibility(View.VISIBLE);
+                break;
             default:
                 details.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
@@ -1331,6 +1364,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.stackTraceCheck.setChecked(os.GetBool("stack_trace"));
         binding.culpritCheck.setChecked(os.GetBool("show_file"));
         binding.moreFileInfoCheck.setChecked(os.GetBool("extrafile"));
+        binding.countdownCheck.setChecked(os.GetBool("countdown"));
         deviceCheck.setChecked(os.GetBool("device"));
         if (!binding.culpritCheck.isChecked()) {
             binding.setCulpritButton.setVisibility(View.GONE);
