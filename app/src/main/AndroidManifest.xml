@@ -24,7 +24,7 @@
             android:name=".HelpActivity"
             android:exported="false"
             android:hardwareAccelerated="false"
-            android:theme="@style/Theme.BlueScreenSimulatorPlus.NoActionBar" />
+            android:theme="@style/Theme.BlueScreenSimulatorPlus.Fullscreen" />
         <activity
             android:name=".BOOTMGR"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -50,7 +50,8 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:theme="@style/Theme.BlueScreenSimulatorPlus" />
         <activity
             android:name=".LegacyBSOD"
             android:configChanges="orientation|keyboardHidden|screenSize"

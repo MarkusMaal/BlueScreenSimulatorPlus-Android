@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorPrimaryVariant"
+        android:id="@+id/appBarLayoutMain"
+
         android:theme="@style/Theme.BlueScreenSimulatorPlus.AppBarOverlay">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -30,9 +35,11 @@
         android:layout_width="50sp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/default_slider_margin"
         android:backgroundTint="?attr/colorSecondary"
         android:contentDescription="@string/execute"
+        android:fitsSystemWindows="false"
         android:foreground="@mipmap/playbutton_foreground"
         app:rippleColor="?attr/colorSecondaryVariant" />
 
@@ -42,9 +49,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="80dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/default_slider_margin"
+
         android:backgroundTint="?attr/colorSecondary"
         android:contentDescription="@string/random"
+        android:fitsSystemWindows="false"
         android:foreground="@mipmap/question_foreground"
         app:layout_dodgeInsetEdges="left|bottom"
         app:rippleColor="?attr/colorSecondaryVariant" />

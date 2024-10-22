@@ -5,6 +5,7 @@
         <item name="colorPrimary">#283593</item>
         <item name="colorPrimaryVariant">#1a237e</item>
         <item name="colorOnPrimary">#fefefe</item>
+        <item name="backgroundColor">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#2962ff</item>
         <item name="colorSecondaryVariant">#7398ff</item>

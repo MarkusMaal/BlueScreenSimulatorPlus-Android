@@ -1,5 +1,6 @@
 package eu.markustegelane.bssp;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,8 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.gson.Gson;
 
@@ -22,6 +25,7 @@ import eu.markustegelane.bssp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
+    private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
     final public List<BlueScreen> bluescreens = new ArrayList<>();
@@ -35,11 +39,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(
+                CoordinatorLayout.LayoutParams.MATCH_PARENT,
+                CoordinatorLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(0, -(int) getResources().getDimension(com.flask.colorpicker.R.dimen.default_slider_margin), 0, 0);
+        binding.appBarLayoutMain.setLayoutParams(params);
+        binding.appBarLayoutMain.setPadding(0, (int) getResources().getDimension(com.flask.colorpicker.R.dimen.default_slider_margin), 0,0);
 
         setSupportActionBar(binding.toolbar);
-        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        //appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        //Navigation.setViewNavController(binding.getRoot(), new NavController(this));
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

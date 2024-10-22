@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".HelpActivity">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,6 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
+            android:id="@+id/buttonNavScroll"
+            android:background="?attr/backgroundColor"
             android:scrollbars="horizontal">
 
             <LinearLayout
@@ -57,6 +59,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
+            android:id="@+id/contentScroll"
+            android:background="?attr/backgroundColor"
             android:layout_height="match_parent">
 
             <LinearLayout
@@ -92,5 +96,6 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

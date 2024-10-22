@@ -5,6 +5,7 @@
         <item name="colorPrimary">#283593</item>
         <item name="colorPrimaryVariant">#1a237e</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="backgroundColor">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#2962ff</item>
         <item name="colorSecondaryVariant">#7398ff</item>
@@ -17,6 +18,11 @@
     <style name="Theme.BlueScreenSimulatorPlus.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.BlueScreenSimulatorPlus.ForceActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
     </style>
 
     <style name="Theme.BlueScreenSimulatorPlus.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

@@ -32,9 +32,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import eu.markustegelane.bssp.databinding.ActivityMainBinding;
+import eu.markustegelane.bssp.databinding.SettingsActivityBinding;
+
 public class SettingsActivity extends AppCompatActivity {
 
     static int devProgress = 0;
+    SettingsActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
