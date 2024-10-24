@@ -49,8 +49,19 @@
             android:id="@+id/bottomText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4sp"
             android:text="It encountered a problem and will restart automatically.\nError: 0x0000000A"
             android:textColor="@color/white"
             android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/countdownText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80sp"
+            android:fontFamily="@font/ubuntu"
+            android:text="Collecting problem information:   10 seconds remaining"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

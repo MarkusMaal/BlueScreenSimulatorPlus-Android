@@ -217,6 +217,11 @@ public class LegacyBSOD extends AppCompatActivity {
                 me.SetTheme(Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), Color.rgb(r.nextInt(256), r.nextInt(256), r.nextInt(256)), true);
             }
         }
+        if (me.GetBool("rainbow")) {
+            // set the background color to 100% transparent, so that we can see the rainbow gradient, which we apply to frame layout behind the canvas
+            me.SetTheme(Color.argb(0, 0,0,0), me.GetTheme(false, false), false);
+            ModernBSOD.FillCustomGradient(binding.frameLayout1);
+        }
         if (!me.GetBool("watermark")) {
             binding.watermark.setVisibility(View.GONE);
         }

@@ -338,6 +338,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                     b = new Bundle();
                     me = bluescreens.get((int)winspin.getSelectedItemId());
                     b.putSerializable("bluescreen", me);
+                    b.putBoolean("immersive", immersive);
+                    b.putBoolean("ignorenotch", notch);
                     i.putExtras(b);
                     startActivity(i);
                     break;
@@ -847,7 +849,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         });
 
         binding.countdownCheck.setOnCheckedChangeListener(((compoundButton, b) -> {
-            os.SetBool("countdown", b);
+            if (os != null) {
+                os.SetBool("countdown", b);
+            }
         }));
     }
 
@@ -1249,7 +1253,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
         binding.playSound.setVisibility(View.GONE); binding.oneSpinner.setVisibility(View.GONE); binding.blinkCheck.setVisibility(View.GONE);
         binding.amdProcessorCheck.setVisibility(View.GONE); binding.stackTraceCheck.setVisibility(View.GONE);
         binding.setCulpritButton.setVisibility(View.GONE); binding.culpritCheck.setVisibility(View.GONE); binding.moreFileInfoCheck.setVisibility(View.GONE);
-        binding.progressEditor.setVisibility(View.GONE); rainbowCheck.setVisibility(View.GONE); binding.countdownCheck.setVisibility(View.GONE);
+        binding.progressEditor.setVisibility(View.GONE); rainbowCheck.setVisibility(View.VISIBLE); binding.countdownCheck.setVisibility(View.GONE);
         deviceCheck.setVisibility(View.GONE);
         binding.customErrorCodeCheck.setVisibility(View.GONE); binding.customErrorCodeCheck.setChecked(false);
         if ("Windows NT 3.x/4.0".equals(os.GetString("os"))) {
@@ -1276,7 +1280,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 server.setVisibility(View.VISIBLE);
                 codesel.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
-                rainbowCheck.setVisibility(View.VISIBLE);
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
                 binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
@@ -1289,7 +1292,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 parEdit.setVisibility(View.VISIBLE);
                 codesel.setVisibility(View.VISIBLE);
                 elabel.setVisibility(View.VISIBLE);
-                rainbowCheck.setVisibility(View.VISIBLE);
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
                 binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
@@ -1313,6 +1315,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 binding.setCulpritButton.setVisibility(View.VISIBLE);
                 binding.culpritCheck.setVisibility(View.VISIBLE);
                 binding.customErrorCodeCheck.setVisibility(View.VISIBLE);
+                rainbowCheck.setVisibility(View.VISIBLE);
                 break;
             case "Windows 1.x/2.x":
                 binding.oneSpinner.setVisibility(View.VISIBLE);

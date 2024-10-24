@@ -118,7 +118,7 @@ public class ModernBSOD extends AppCompatActivity {
     private boolean mVisible;
     private final Runnable mHideRunnable = this::hide;
 
-    private void FillCustomGradient(View v) {
+    public static void FillCustomGradient(View v) {
         final View view = v;
         Drawable[] layers = new Drawable[1];
 
