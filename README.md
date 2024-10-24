@@ -5,10 +5,11 @@ The most authentic and customizable blue screen simulation experience for Androi
 ![screenshot](https://i.imgur.com/cdGqGie.png "Windows 11 blue screen simulation demo")
 
 ## Highlight features
-* Simulate blue screens from Windows 1.x/2.x, 3.1, 9x/Me, CE, NT 3.x/4.0, 2000, XP, Vista, 7, 8/8.1, 10 and 11!
+* Simulate blue screens from Windows 1.x/2.x, 3.1, 9x/Me, CE, NT 3.1, NT 3.5x/4.0, 2000, XP, Vista, 7, 8 Beta, 8/8.1, 10 and 11!
 * Choose an error code from a list or specify a custom one!
 * Change any text displayed
 * Change colors and fonts!
+* Rainbow mode!
 * Hide watermark
 * Toggle different settings and oddities for each blue screen
 * Template based system - make different custom configurations per operating system!
@@ -27,4 +28,4 @@ The most authentic and customizable blue screen simulation experience for Androi
 * 512MB of available RAM
 
 ## Development tools
-This project uses Android Studio (Flamingo) for development and testing.
+This project uses Android Studio (Ladybug) for development and testing.
