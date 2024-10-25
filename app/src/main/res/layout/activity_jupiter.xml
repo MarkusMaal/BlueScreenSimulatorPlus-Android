@@ -12,15 +12,17 @@
 
     <TextView
         android:id="@+id/waterMark"
-        android:layout_width="193dp"
-        android:layout_height="0dp"
+        android:layout_width="308dp"
+        android:layout_height="22dp"
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textAllCaps="false"
+        android:visibility="visible"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -41,7 +43,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/ubuntu"
-            android:text="Your computer needs to restart."
             android:textColor="@color/white"
             android:textSize="26sp" />
 
@@ -50,9 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4sp"
-            android:text="It encountered a problem and will restart automatically.\nError: 0x0000000A"
             android:textColor="@color/white"
-            android:textSize="10sp" />
+            android:textSize="11sp" />
 
         <TextView
             android:id="@+id/countdownText"
@@ -60,7 +60,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="80sp"
             android:fontFamily="@font/ubuntu"
-            android:text="Collecting problem information:   10 seconds remaining"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
     </LinearLayout>

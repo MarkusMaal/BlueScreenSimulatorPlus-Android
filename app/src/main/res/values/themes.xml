@@ -15,6 +15,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.BlueScreenSimulatorPlus.BlueActionBar" parent="Theme.BlueScreenSimulatorPlus.NoActionBar">
+        <item name="colorPrimary">#283593</item>
+    </style>
+
     <style name="Theme.BlueScreenSimulatorPlus.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

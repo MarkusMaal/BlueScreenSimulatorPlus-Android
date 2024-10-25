@@ -3,6 +3,7 @@ package eu.markustegelane.bssp;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -78,6 +79,9 @@ public class BOOTMGR extends AppCompatActivity {
             }
         }
         me = (BlueScreen)bundle.getSerializable("bluescreen");
+        if (me.GetBool("rainbow")) {
+            ModernBSOD.FillCustomGradient(findViewById(R.id.main));
+        }
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -95,8 +99,10 @@ public class BOOTMGR extends AppCompatActivity {
         Bitmap bmp = Bitmap.createBitmap(w, h, conf);
         Canvas canvas = new Canvas (bmp);
         Paint tPaint = new Paint();
-        tPaint.setColor(me.GetTheme(true, false));
-        canvas.drawRect(0, 0, w, h, tPaint);
+        if (!me.GetBool("rainbow")) {
+            tPaint.setColor(me.GetTheme(true, false));
+            canvas.drawRect(0, 0, w, h, tPaint);
+        }
         tPaint.setColor(me.GetTheme(false, false));
         canvas.drawRect(20, 10, w - 40, 44, tPaint);
         canvas.drawRect(20, h - 44, w - 40, h - 10, tPaint);

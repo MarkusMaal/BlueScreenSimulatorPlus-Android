@@ -720,8 +720,12 @@ public class MainFragment extends Fragment implements AdapterView.OnItemSelected
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view110, int i, long l) {
                     if (!allowCust.isChecked()) {
-                        osSelector.setSelection(i);
-                        friendlyText.setText(friendlyTemplateNames[i]);
+                        try {
+                            osSelector.setSelection(i);
+                            friendlyText.setText(friendlyTemplateNames[i]);
+                        } catch (Exception e) {
+                            return;
+                        }
                     }
                 }
 
