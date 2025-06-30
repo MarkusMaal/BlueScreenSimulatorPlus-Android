@@ -3,6 +3,9 @@ The most authentic and customizable blue screen simulation experience for Androi
 
 ![screenshot](https://i.imgur.com/cdGqGie.png "Windows 11 blue screen simulation demo")
 
+## IMPORTANT: Project discontinued
+See my reasons and some other announcements [here](https://github.com/MarkusMaal/BlueScreenSimulatorPlus/discussions/9).
+
 ## Highlight features
 * Simulate blue screens from Windows 1.x/2.x, 3.1, 9x/Me, CE, NT 3.x/4.0, 2000, XP, Vista, 7, 8/8.1, 10 and 11!
 * Choose an error code from a list or specify a custom one!
